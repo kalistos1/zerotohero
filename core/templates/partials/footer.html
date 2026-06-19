@@ -1,0 +1,120 @@
+{% load static %}
+<!-- Start Footer Section -->
+<footer class="footer-three">
+    <img src="{% static 'frontend/assets/img/bg/platrom-bg.png' %}" alt="platrom" class="img-fluid bg-img-1">
+    <div class="container">
+
+        <div class="subscribe-item-three" style="box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+            <!-- start row -->
+            <div class="row row-gap-4 align-items-center">
+                <div class="col-lg-6">
+                    <div class="subscribe-text">
+                        <div>
+                            <h3 class="custom-title">Subscribe to get latest updates</h3>
+                            <p>Be the first to know whats going on</p>
+                        </div>
+                        <div class="d-none d-xl-block">
+                            <img src="{% static 'frontend/assets/img/icon/footer-icon-1.svg' %}" alt="icon"
+                                class="img-fluid img-1">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="footer-subscribe">
+                        <input type="email" class="form-control form-control-lg" placeholder="Enter your email">
+                        <button class="secondary-btn">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+        </div>
+
+        <!-- Footer Top -->
+        <div class="footer-top">
+            <div class="row g-4">
+
+
+                <div class="col-xxl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+                    <!-- Footer Widget -->
+                    <div class="footer-widget footer-menu">
+                        <h3 class="footer-title">Quick links</h3>
+                        <ul>
+                            <li><a href="{% url 'core:index' %}">Home</a></li>
+                            <li><a href="{% url 'core:about' %}">About Us</a></li>
+                            <li><a href="{% url 'core:contact' %}">Contact</a></li>
+                            <li><a href="{% url 'core:faqs' %}">FAQs</a></li>
+                            <li><a href="{% url 'blog:blog-list' %}">Blog</a></li>
+                        </ul>
+                    </div>
+                    <!-- /Footer Widget -->
+                </div>
+
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+
+                    <!-- Footer Widget -->
+                    <div class="footer-widget footer-menu">
+                        <h3 class="footer-title">Popular </h3>
+                        <ul>
+                            <li><a href="#">Nigeria</a></li>
+                            <li><a href="#">Ghana</a></li>
+                            <li><a href="#">Togo</a></li>
+                            <li><a href="#">Kenya</a></li>
+                            <li><a href="#">Canada</a></li>
+                        </ul>
+                    </div>
+                    <!-- /Footer Widget -->
+                </div>
+
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+                    <div class="footer-widget footer-menu">
+                        <h3 class="footer-title">Contact Info</h3>
+                        <div class="footer-support">
+                            <div class="footer-icon"><i class="icon-mail-open"></i></div>
+                            <div class="support-content">
+                                <p>Email</p>
+                                <a href="mailto:{% if site_settings and site_settings.support_email %}{{ site_settings.support_email }}{% else %}helpdesk@zerotohero.com{% endif %}"
+                                    class="link">
+                                    {% if site_settings and site_settings.support_email %}{{ site_settings.support_email
+                                    }}{% else %}helpdesk@zerotohero.com{% endif %}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="footer-support">
+                            <div class="footer-icon"><i class="icon-phone"></i></div>
+                            <div class="support-content">
+                                <p>Call Us</p>
+                                <a href="tel:{% if site_settings and site_settings.support_phone %}{{ site_settings.support_phone }}{% else %}+2348115897450{% endif %}"
+                                    class="link">
+                                    {% if site_settings and site_settings.support_phone %}{{ site_settings.support_phone
+                                    }}{% else %}+2348115897450{% endif %}
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Footer Top -->
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="social-icon">
+                <a href="{% if site_settings and site_settings.facebook_url %}{{ site_settings.facebook_url }}{% else %}#{% endif %}"
+                    class="icon" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="{% if site_settings and site_settings.twitter_url %}{{ site_settings.twitter_url }}{% else %}#{% endif %}"
+                    class="icon" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="{% if site_settings and site_settings.instagram_url %}{{ site_settings.instagram_url }}{% else %}#{% endif %}"
+                    class="icon" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i></a>
+                <a href="{% if site_settings and site_settings.youtube_url %}{{ site_settings.youtube_url }}{% else %}#{% endif %}"
+                    class="icon" target="_blank" rel="noopener"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+            <div class="copyright">
+                <p>&copy; {% now "Y" %} Python Zero to Hero. All rights reserved.</p>
+            </div>
+        </div>
+        <!-- Footer Bottom -->
+    </div>
+
+</footer>
+<!-- End Footer Section -->

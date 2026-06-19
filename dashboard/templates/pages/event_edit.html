@@ -1,0 +1,38 @@
+{% extends "dashbard_base.html" %}
+{% block title %}Edit Event — Zero to Hero{% endblock %}
+{% block page_title %}Edit Event{% endblock %}
+
+{% block extra_css %}
+{{ form.media }}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-xxl">
+  <div class="page-title-box d-flex align-items-center justify-content-between">
+    <h4 class="mb-0">Edit Event</h4>
+    <a href="{% url 'dashboard:event-list' %}" class="btn btn-outline-secondary btn-sm">Back</a>
+  </div>
+  <div class="card" style="max-width:800px;">
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:event-edit' event.pk %}">
+        {% csrf_token %}
+        <div class="row g-3">
+          {% for field in form %}
+          <div class="col-md-6">
+            <label class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|join:', ' }}</div>{% endif %}
+          </div>
+          {% endfor %}
+          <div class="col-12 text-end">
+            <button type="submit" class="btn btn-primary">Update Event</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}{% endblock %}

@@ -1,0 +1,138 @@
+{% extends 'core_base.html' %}
+{% load static %}
+
+{% block title %}Terms & Conditions | Python Zero to Hero{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar">
+    <div class="container">
+        <h1 class="breadcrumb-title">Terms & Conditions</h1>
+        <nav aria-label="breadcrumb" class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-items"><a href="{% url 'core:index' %}" class="icon"><i
+                            class="icon-house"></i></a></li>
+                <li class="breadcrumb-items active" aria-current="page">Terms & Conditions</li>
+            </ol>
+        </nav>
+    </div>
+    <img src="{% static 'frontend/assets/img/bg/breadcrumb-wave.png' %}" alt="wave" class="img-fluid img-1">
+</div>
+<!-- /Breadcrumb -->
+
+<div class="content">
+    <div class="container">
+        <!-- Start Content -->
+        <div class="terms-privacy">
+            <div class="container">
+                <!-- Terms Content -->
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <div class="mb-2 mb-lg-3">
+                            <h2 class="mb-3 title">Introduction</h2>
+                            <p class="mb-0"> Welcome to Python Zero to Hero! Please read these Terms and Conditions
+                                carefully
+                                before using our website and services. By accessing or using our platform, you agree to
+                                comply with and be bound by these Terms.</p>
+                        </div>
+
+                        <div class="mb-2 mb-lg-3">
+                            <h2 class="mb-3 title">Use of the Platform</h2>
+                            <ul class="list-styled">
+                                <li class="mb-2"> You must be at least 18 years old to use this platform.</li>
+                                <li class="mb-2"> You agree to use the website only for lawful, educational, and
+                                    professional development purposes, specifically in relation to learning Python and
+                                    software engineering. </li>
+                                <li class="mb-0"> Account registration is required to access mentorship sessions,
+                                    programs, or community features.</li>
+                                <li class="mb-0"> You are responsible for maintaining the confidentiality of your login
+                                    credentials and all activities under your account.</li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-2 mb-lg-3">
+                            <h2 class="mb-3 title">Mentorship Sessions & Bookings</h2>
+                            <ul class="list-styled">
+                                <li class="mb-2">Mentees may book mentorship sessions based on mentor availability.</li>
+                                <li class="mb-2"> Session reschedules or cancellations must be made within the time
+                                    limit stated in the mentor’s policy. </li>
+                                <li class="mb-0"> No shows or late cancellations may lead to partial or full session
+                                    charges. </li>
+                                <li class="mb-0"> The platform reserves the right to modify or cancel sessions due to
+                                    unforeseen circumstances. </li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-2 mb-lg-3">
+                            <h2 class="mb-3 title">Mentor Responsibilities</h2>
+                            <ul class="list-styled">
+                                <li class="mb-2"> Mentors must maintain accurate information about their expertise,
+                                    availability, and fees.</li>
+                                <li class="mb-2"> Mentors are expected to provide professional, respectful, and ethical
+                                    guidance to help mentees master Python. </li>
+                                <li class="mb-0"> Misrepresentation or violation of mentoring ethics may result in
+                                    suspension or removal from the platform. </li>
+                                <li class="mb-0"> Mentors are responsible for maintaining communication and delivering
+                                    sessions as scheduled. </li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-2 mb-lg-3">
+                            <h2 class="mb-3 title">Payments & Fees</h2>
+                            <ul class="list-styled">
+                                <li class="mb-0"> All payments are securely processed through our trusted payment
+                                    gateway.</li>
+                                <li class="mb-0"> The platform may apply a service fee or commission before transferring
+                                    earnings to mentors.</li>
+                                <li class="mb-0"> Prices listed for mentoring sessions or programs are inclusive of
+                                    applicable taxes unless stated otherwise.</li>
+                                <li class="mb-0"> Mentors and mentees are responsible for ensuring accurate payment
+                                    information.</li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-2 mb-lg-3">
+                            <h2 class="mb-3 title">Refund Policy</h2>
+                            <ul class="list-styled">
+                                <li class="mb-0"> Refund eligibility is determined by the mentor’s or program’s
+                                    individual refund policy.</li>
+                                <li class="mb-0"> Refunds may be issued only for valid cancellations made within the
+                                    eligible window.</li>
+                                <li class="mb-0"> If approved, refunds will be processed within 7–10 business days.</li>
+                                <li class="mb-0"> The platform reserves the right to deny refunds in case of policy
+                                    violations or misuse.</li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-2 mb-lg-3">
+                            <h2 class="mb-3 title">Changes to Terms</h2>
+                            <ul class="list-styled">
+                                <li class="mb-0"> We may update these Terms at any time.</li>
+                                <li class="mb-0"> Continued use of the platform after updates implies your acceptance of
+                                    the revised Terms and Conditions.</li>
+                                <li class="mb-0"> It is your responsibility to review these Terms periodically for
+                                    changes.</li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-2 mb-lg-3">
+                            <h2 class="mb-3 title">Contact Us</h2>
+                            <ul class="list-styled">
+                                <li class="mb-0"> If you have any questions or concerns regarding these Terms and
+                                    Conditions, please contact us at: <a
+                                        href="mailto:{% if site_settings and site_settings.support_email %}{{ site_settings.support_email }}{% else %}helpdesk@zerotohero.com{% endif %}">{%
+                                        if site_settings and site_settings.support_email %}{{
+                                        site_settings.support_email }}{% else %}helpdesk@zerotohero.com{% endif %}</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Terms Content End -->
+            </div>
+        </div>
+        <!-- End Content -->
+    </div>
+</div>
+{% endblock %}

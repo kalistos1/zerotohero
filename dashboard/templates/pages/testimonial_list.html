@@ -1,0 +1,151 @@
+{% extends "dashbard_base.html" %}
+{% block title %}Testimonials — Zero to Hero{% endblock %}
+{% block page_title %}Testimonials{% endblock %}
+
+{% block extra_css %}{% endblock %}
+
+{% block content %}
+<div class="container-xxl">
+  <div class="page-title-box d-flex align-items-center justify-content-between">
+    <h4 class="mb-0">Testimonials</h4>
+  </div>
+
+  {% if messages %}{% for m in messages %}
+  <div class="alert alert-{{ m.tags }} alert-dismissible fade show">{{ m }}<button class="btn-close" data-bs-dismiss="alert"></button></div>
+  {% endfor %}{% endif %}
+
+  <div class="row g-4">
+    {# ── Add form ── #}
+    <div class="col-lg-5">
+      <div class="card">
+        <div class="card-header"><h5 class="card-title mb-0">Add Testimonial</h5></div>
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:testimonial-create' %}">
+            {% csrf_token %}
+
+            {# Person details #}
+            <div class="mb-3">
+              <label class="form-label">Full Name</label>
+              {{ form.name }}
+              {% if form.name.errors %}<div class="invalid-feedback d-block">{{ form.name.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Role / Title</label>
+              {{ form.role }}
+              {% if form.role.errors %}<div class="invalid-feedback d-block">{{ form.role.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Profile Photo</label>
+              {{ form.image }}
+              {% if form.image.errors %}<div class="invalid-feedback d-block">{{ form.image.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Rating (1–5)</label>
+              {{ form.rating }}
+              {% if form.rating.errors %}<div class="invalid-feedback d-block">{{ form.rating.errors|join:', ' }}</div>{% endif %}
+            </div>
+
+            {# Media type selector #}
+            <div class="mb-3">
+              <label class="form-label">Testimonial Type</label>
+              {{ form.media_type }}
+              <div class="form-text">{{ form.media_type.help_text }}</div>
+            </div>
+
+            {# Conditional fields — toggled by JS #}
+            <div id="field-review_text" class="mb-3">
+              <label class="form-label">Text Review</label>
+              {{ form.review_text }}
+              <div class="form-text">{{ form.review_text.help_text }}</div>
+              {% if form.review_text.errors %}<div class="invalid-feedback d-block">{{ form.review_text.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div id="field-chat_screenshot" class="mb-3 d-none">
+              <label class="form-label">Chat / DM Screenshot</label>
+              {{ form.chat_screenshot }}
+              <div class="form-text">{{ form.chat_screenshot.help_text }}</div>
+              {% if form.chat_screenshot.errors %}<div class="invalid-feedback d-block">{{ form.chat_screenshot.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div id="field-video_file" class="mb-3 d-none">
+              <label class="form-label">Video File</label>
+              {{ form.video_file }}
+              <div class="form-text">{{ form.video_file.help_text }}</div>
+              {% if form.video_file.errors %}<div class="invalid-feedback d-block">{{ form.video_file.errors|join:', ' }}</div>{% endif %}
+            </div>
+
+            <div class="mb-3 form-check">
+              {{ form.is_active }}
+              <label class="form-check-label">Active (visible on site)</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Testimonial</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    {# ── List ── #}
+    <div class="col-lg-7">
+      <div class="card">
+        <div class="card-body p-0">
+          <table class="table table-hover mb-0">
+            <thead class="bg-light">
+              <tr><th>Person</th><th>Type</th><th>Rating</th><th>Active</th><th></th></tr>
+            </thead>
+            <tbody>
+              {% for t in testimonials %}
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    {% if t.image %}
+                    <img src="{{ t.image.url }}" class="rounded-circle" width="36" height="36" style="object-fit:cover;" alt="{{ t.name }}">
+                    {% endif %}
+                    <div>
+                      <div class="fw-semibold">{{ t.name }}</div>
+                      <small class="text-muted">{{ t.role }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge bg-secondary">{{ t.get_media_type_display }}</span></td>
+                <td>
+                  {% for i in "12345" %}{% if forloop.counter <= t.rating %}<i class="fas fa-star text-warning small"></i>{% else %}<i class="far fa-star text-muted small"></i>{% endif %}{% endfor %}
+                </td>
+                <td>
+                  {% if t.is_active %}<span class="badge bg-success">Yes</span>{% else %}<span class="badge bg-secondary">No</span>{% endif %}
+                </td>
+                <td class="text-nowrap">
+                  <a href="{% url 'dashboard:testimonial-edit' t.pk %}" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                  <form method="post" action="{% url 'dashboard:testimonial-delete' t.pk %}"
+                        onsubmit="return confirm('Delete this testimonial?');" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Del</button>
+                  </form>
+                </td>
+              </tr>
+              {% empty %}
+              <tr><td colspan="5" class="text-center text-muted py-4">No testimonials yet.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}<script>
+(function () {
+  const sel = document.getElementById('id_media_type');
+  if (!sel) return;
+
+  function toggle(val) {
+    document.getElementById('field-review_text').classList.toggle('d-none', val === 'screenshot' || val === 'video');
+    document.getElementById('field-chat_screenshot').classList.toggle('d-none', val !== 'screenshot');
+    document.getElementById('field-video_file').classList.toggle('d-none', val !== 'video');
+  }
+
+  sel.addEventListener('change', () => toggle(sel.value));
+  toggle(sel.value); // run on page load to handle re-display after validation errors
+}());
+</script>
+{% endblock %}

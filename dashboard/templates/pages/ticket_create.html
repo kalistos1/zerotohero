@@ -1,0 +1,24 @@
+{% extends "dashbard_base.html" %}
+{% block title %}New Ticket — Zero to Hero{% endblock %}
+{% block page_title %}New Support Ticket{% endblock %}
+{% block content %}
+<div class="container-xxl">
+  <div class="page-title-box d-flex align-items-center justify-content-between">
+    <h4 class="mb-0">Create Support Ticket</h4>
+    <a href="{% url 'dashboard:ticket-list' %}" class="btn btn-outline-secondary btn-sm">Back</a>
+  </div>
+  <div class="card" style="max-width:500px;">
+    <div class="card-body">
+      <form method="post" action="{% url 'dashboard:ticket-create' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label">Subject</label>
+          {{ form.subject }}
+          {% if form.subject.errors %}<div class="invalid-feedback d-block">{{ form.subject.errors|join:', ' }}</div>{% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Open Ticket</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

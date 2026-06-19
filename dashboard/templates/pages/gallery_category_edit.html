@@ -1,0 +1,29 @@
+{% extends "dashbard_base.html" %}
+{% block title %}Edit Gallery Category — Zero to Hero{% endblock %}
+{% block page_title %}Edit Gallery Category{% endblock %}
+{% block content %}
+<div class="container-xxl">
+  <div class="page-title-box d-flex align-items-center justify-content-between">
+    <h4 class="mb-0">Edit Category</h4>
+    <a href="{% url 'dashboard:gallery-category-list' %}" class="btn btn-outline-secondary btn-sm">Back</a>
+  </div>
+  <div class="card" style="max-width:500px;">
+    <div class="card-body">
+      <form method="post" action="{% url 'dashboard:gallery-category-edit' category.pk %}">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="mb-3">
+          <label class="form-label">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|join:', ' }}</div>{% endif %}
+        </div>
+        {% endfor %}
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Update</button>
+          <a href="{% url 'dashboard:gallery-category-list' %}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

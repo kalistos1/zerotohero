@@ -1,0 +1,284 @@
+{% extends 'core_base.html' %}
+{% load static %}
+{% block title %}Python Mentorship FAQs — Zero to Hero{% endblock %}
+
+{% block meta_description %}Got questions about the Zero to Hero Python Mentorship Programme? Find answers about eligibility, schedule, mentorship structure, certificates, and more. Open to learners worldwide.{% endblock %}
+
+{% block og_title %}Python Mentorship FAQs — Zero to Hero{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for faq in faqs %}
+    {
+      "@type": "Question",
+      "name": "{{ faq.question|escapejs }}",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "{{ faq.answer|striptags|escapejs }}"
+      }
+    }{% if not forloop.last %},{% endif %}
+    {% empty %}
+    {
+      "@type": "Question",
+      "name": "What is the Zero to Hero Python Mentorship Program?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The From Zero to Hero Python Mentorship Program is a comprehensive virtual mentorship initiative designed to transform beginners and career switchers into confident, job-ready Python developers. The program combines structured classes, hands-on projects, personalized mentorship, and career guidance."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the program completely free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, the program is entirely free for all selected participants. We are committed to making quality Python education accessible to aspiring developers worldwide."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is eligible to apply?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The program is open to beginners and intermediate learners worldwide. Whether you are a student, working professional, or career switcher with little to no prior coding experience, you are welcome to apply."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long is the program and what is the class schedule?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The program runs for 6 months. Classes are held three times a week on Mondays, Wednesdays, and Saturdays from 8:00 PM to 10:00 PM WAT via Google Meet."
+      }
+    }
+    {% endfor %}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar">
+    <div class="container">
+        <h1 class="breadcrumb-title">FAQs</h1>
+        <nav aria-label="breadcrumb" class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-items"><a href="{% url 'core:index' %}" class="icon"><i class="icon-house"></i></a></li>
+                <li class="breadcrumb-items active" aria-current="page">FAQs</li>
+            </ol>
+        </nav>
+    </div>
+    <img src="{% static 'frontend/assets/img/bg/breadcrumb-wave.png' %}" alt="wave" class="img-fluid img-1">
+</div>
+<!-- /Breadcrumb -->
+
+<div class="content">
+    <div class="container">
+
+        <!-- start row -->
+        <div class="row g-3 justify-content-center">
+
+            <!-- start col -->
+            <div class="col-lg-10">
+
+                <!-- Start FAQ Accordion-->
+                <div class="accordion faq-accordion faq-accordion-page" id="accordionFaq">
+
+                    {% if faqs %}
+                    {# ── DB-driven FAQs (replaces hardcoded once data exists) ── #}
+                    {% for faq in faqs %}
+                    <div class="accordion-item {% if forloop.first %}show{% endif %}">
+                        <div class="accordion-header">
+                            <span>{{ forloop.counter|stringformat:"02d" }}</span>
+                            <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}"
+                                    type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq-db-{{ forloop.counter }}"
+                                    aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                                    aria-controls="faq-db-{{ forloop.counter }}">
+                                {{ faq.question }}
+                            </button>
+                        </div>
+                        <div id="faq-db-{{ forloop.counter }}"
+                             class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
+                             data-bs-parent="#accordionFaq">
+                            <div class="accordion-body">
+                                <div class="mb-0">{{ faq.answer|safe }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    {% else %}
+                    {# ── Hardcoded fallback — stays visible until DB has data ── #}
+                    <div class="accordion-item show">
+                        <div class="accordion-header">
+                            <span>01</span>
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-collapseOne" aria-expanded="true" aria-controls="faq-collapseOne">
+                                What is the From Zero to Hero Python Mentorship Program?
+                            </button>
+                        </div>
+                        <div id="faq-collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionFaq">
+                            <div class="accordion-body">
+                                <p class="mb-0">The From Zero to Hero Python Mentorship Program is a comprehensive 6-month virtual
+                                    mentorship initiative designed to transform beginners and career switchers into
+                                    confident, job-ready Python developers. The program combines structured classes,
+                                    hands-on projects, personalized mentorship, and career guidance.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>02</span>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-collapsetwo" aria-expanded="false" aria-controls="faq-collapsetwo">
+                                Is the program completely free?
+                            </button>
+                        </div>
+                        <div id="faq-collapsetwo" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                            <div class="accordion-body">
+                                <p class="mb-0">Yes, the program is entirely free for all selected participants. We are committed to
+                                    making quality Python education accessible to aspiring developers across Africa and the world.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>03</span>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-collapsthree" aria-expanded="false" aria-controls="faq-collapsthree">
+                                Who is eligible to apply?
+                            </button>
+                        </div>
+                        <div id="faq-collapsthree" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                            <div class="accordion-body">
+                                <p class="mb-0">The program is open to beginners and intermediate learners. Whether you
+                                    are a student, working professional, or career switcher with little to no prior
+                                    coding experience, you are welcome to apply.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>04</span>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-collapsefour" aria-expanded="false" aria-controls="faq-collapsefour">
+                                Are mentors experienced professionals?
+                            </button>
+                        </div>
+                        <div id="faq-collapsefour" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                            <div class="accordion-body">
+                                <p class="mb-0">Yes, all mentors are experienced professionals who bring real-world
+                                    knowledge and practical insights to support mentee growth.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>05</span>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-collapsefive" aria-expanded="false" aria-controls="faq-collapsefive">
+                                How long is the program and what is the class schedule?
+                            </button>
+                        </div>
+                        <div id="faq-collapsefive" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                            <div class="accordion-body">
+                                <p class="mb-0">The program runs for 6 months. Classes are held three times a week on
+                                    Mondays, Wednesdays, and Saturdays from 8:00 PM to 10:00 PM WAT via Google Meet.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>06</span>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-collapsesix" aria-expanded="false" aria-controls="faq-collapsesix">
+                                How does the mentorship component work?
+                            </button>
+                        </div>
+                        <div id="faq-collapsesix" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                            <div class="accordion-body">
+                                <p class="mb-0">Each participant is placed in a small group of maximum 7 mentees with a
+                                    dedicated mentor. Mentors provide personalized support, code reviews, and career guidance.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>07</span>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-collapseseven" aria-expanded="false" aria-controls="faq-collapseseven">
+                                What will I learn during the program?
+                            </button>
+                        </div>
+                        <div id="faq-collapseseven" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                            <div class="accordion-body">
+                                <p class="mb-0">You will master Python fundamentals and progress to advanced topics including Data
+                                    Structures, OOP, Data Analysis, Backend Development, and introductory ML and Cybersecurity.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>08</span>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-collapseeight" aria-expanded="false" aria-controls="faq-collapseeight">
+                                Will I receive a certificate upon completion?
+                            </button>
+                        </div>
+                        <div id="faq-collapseeight" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                            <div class="accordion-body">
+                                <p class="mb-0">Yes. Participants who successfully complete the program will receive a Certificate
+                                    of Completion endorsed by From Zero to Hero and Black Python Dev.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>09</span>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-collapsenine" aria-expanded="false" aria-controls="faq-collapsenine">
+                                What if I miss a class?
+                            </button>
+                        </div>
+                        <div id="faq-collapsenine" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                            <div class="accordion-body">
+                                <p class="mb-0">All classes are recorded and made available to participants. However,
+                                    consistent attendance is highly encouraged as the program is intensive.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>10</span>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-collapseten" aria-expanded="false" aria-controls="faq-collapseten">
+                                How competitive is the selection process?
+                            </button>
+                        </div>
+                        <div id="faq-collapseten" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                            <div class="accordion-body">
+                                <p class="mb-0">We receive a high volume of applications. Selection is based on motivation,
+                                    commitment, and potential impact.</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                </div>
+                <!-- End FAQ Accordion-->
+
+            </div>
+            <!-- end col -->
+
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+
+{% endblock %}

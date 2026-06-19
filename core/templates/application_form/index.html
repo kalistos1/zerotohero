@@ -1,0 +1,628 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>"From Zero to Hero" — Free Python Mentorship Application</title>
+  <meta name="description"
+    content="Apply for the free 5-month Python Zero to Hero Mentorship Program. Master Python, Backend Development, Data Science, and Cybersecurity. Virtual classes and hands-on projects." />
+  <meta name="keywords"
+    content="Python mentorship, free Python course, learn Python, backend development, data science, cybersecurity, zero to hero" />
+  <link rel="canonical" href="{{ safe_base_url }}{% url 'core:application_form' %}" />
+
+  <meta property="og:title" content='"From Zero to Hero" Free Python Mentorship Program' />
+  <meta property="og:description"
+    content="A free 5-month virtual program to help beginners master Python. Apply now." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ safe_base_url }}{% url 'core:application_form' %}" />
+  <meta property="og:image"
+    content="{{ safe_base_url }}{% static 'frontend/assets/img/zerotohero_logo3.webp' %}" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content='"From Zero to Hero" Free Python Mentorship Program' />
+  <meta name="twitter:description"
+    content="A free 5-month virtual program to help beginners master Python. Apply now." />
+  <meta name="twitter:image"
+    content="{{ safe_base_url }}{% static 'frontend/assets/img/zerotohero_logo3.webp' %}" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --green-dark: #0F6E56;
+      --green-mid: #1D9E75;
+      --green-light: #E1F5EE;
+      --green-pale: #f0faf6;
+      --gray-ink: #1a1a1a;
+      --gray-mid: #555;
+      --gray-line: #e8e8e8;
+      --red-err: #dc2626;
+      --white: #ffffff;
+      --font-display: 'Sora', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--gray-ink);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--green-dark);
+      padding: 2.5rem 1.5rem 2rem;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #9FE1CB;
+      margin-bottom: 0.75rem;
+    }
+
+    header h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.25;
+      max-width: 680px;
+      margin: 0 auto 1rem;
+    }
+
+    header h1 span {
+      color: #5DCAA5;
+    }
+
+    .header-desc {
+      font-size: 0.925rem;
+      color: #9FE1CB;
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .header-desc a {
+      color: #5DCAA5;
+    }
+
+    /* ── Outer form section ── */
+    .form-section {
+      max-width: 760px;
+      margin: 2.5rem auto;
+      padding: 0 1.25rem 3rem;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-mid);
+      margin-bottom: 1rem;
+      display: block;
+      text-align: center;
+    }
+
+    .form-wrapper {
+      border: 1px solid var(--gray-line);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ── Loading overlay ── */
+    .loading-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.88);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      border-radius: 12px;
+      z-index: 10;
+    }
+
+    .loading-overlay.active {
+      display: flex;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--green-light);
+      border-top-color: var(--green-dark);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-overlay p {
+      font-size: 14px;
+      color: var(--green-dark);
+      font-weight: 500;
+    }
+
+    /* ── Form body ── */
+    .form-body {
+      padding: 2rem;
+      background: var(--white);
+    }
+
+    /* ── Section titles ── */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green-dark);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--green-light);
+      margin: 2rem 0 1.25rem;
+    }
+
+    .section-title:first-of-type {
+      margin-top: 0;
+    }
+
+    /* ── Field layout ── */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .field-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-ink);
+    }
+
+    .field-hint {
+      font-size: 12px;
+      color: var(--gray-mid);
+      line-height: 1.45;
+    }
+
+    /* ── Text inputs / selects / textareas ── */
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--gray-ink);
+      border: 1px solid var(--gray-line);
+      border-radius: 8px;
+      background: var(--green-pale);
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--green-mid);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.12);
+    }
+
+    textarea.form-control {
+      resize: vertical;
+    }
+
+    /* ── Radio / Checkbox widgets ─────────────────────────────────────────
+       Django renders RadioSelect / CheckboxSelectMultiple as:
+         <div id="id_field">
+           <div><label><input type="radio|checkbox"> Label text</label></div>
+           ...
+         </div>
+       We wrap that output in .radio-field / .checkbox-field to scope styles.
+    ── */
+    .radio-field>div>div,
+    .checkbox-field>div>div {
+      margin-bottom: 0.15rem;
+    }
+
+    .radio-field label,
+    .checkbox-field label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      padding: 0.45rem 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--gray-ink);
+      transition: background 0.15s;
+    }
+
+    .radio-field label:hover,
+    .checkbox-field label:hover {
+      background: var(--green-pale);
+    }
+
+    .radio-field label:has(input:checked),
+    .checkbox-field label:has(input:checked) {
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-weight: 500;
+    }
+
+    .radio-field input[type="radio"],
+    .checkbox-field input[type="checkbox"] {
+      accent-color: var(--green-dark);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── Errors ── */
+    ul.errorlist {
+      list-style: none;
+      color: var(--red-err);
+      font-size: 12px;
+      margin-top: 0.3rem;
+    }
+
+    .alert-error {
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      background: #fee2e2;
+      color: #b91c1c;
+      font-size: 14px;
+      font-weight: 500;
+      border-left: 3px solid #dc2626;
+    }
+
+    /* ── Agreement block ── */
+    .agreement-block {
+      margin-top: 1.75rem;
+      border: 1px solid var(--green-light);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      background: var(--green-pale);
+    }
+
+    .agreement-block>label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 14px;
+      color: var(--gray-ink);
+      cursor: pointer;
+      font-weight: 400;
+      line-height: 1.55;
+    }
+
+    .agreement-block input[type="checkbox"] {
+      accent-color: var(--green-dark);
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── Submit button ── */
+    .submit-btn {
+      width: 100%;
+      margin-top: 1.75rem;
+      padding: 1rem;
+      background: var(--green-dark);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .submit-btn:hover {
+      background: var(--green-mid);
+    }
+
+    .submit-btn:active {
+      transform: scale(0.99);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--green-pale);
+      border-top: 1px solid var(--gray-line);
+      padding: 1.25rem;
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray-mid);
+    }
+
+    footer a {
+      color: var(--green-dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      header {
+        padding: 2rem 1rem 1.5rem;
+      }
+
+      .form-section {
+        padding: 0 0.75rem 2rem;
+      }
+
+      .form-body {
+        padding: 1.25rem;
+      }
+
+      .field-row-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a href="{% url 'core:index' %}">
+      <img src="{% static 'frontend/assets/img/zerotohero_logo3.webp' %}" alt="From Zero to Hero Logo"
+        style="max-width: 220px; margin: 0 auto 1.5rem; display: block;" />
+    </a>
+
+    <h1>"From Zero to Hero"<br><span>Free Python Mentorship Program</span></h1>
+
+  </header>
+
+  <section class="form-section">
+    <span class="form-label">Complete the form below to apply — fields marked * are required</span>
+    <div class="form-wrapper">
+
+      <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Submitting your application…</p>
+      </div>
+
+      <form method="post" action="{% url 'core:application_form' %}" class="form-body">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="alert-error">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        {% if form.errors and not form.non_field_errors %}
+        <div class="alert-error">Please correct the errors highlighted below.</div>
+        {% endif %}
+
+        <!-- ── Section 1: Personal Information ── -->
+        <p class="section-title">Personal Information</p>
+
+        <div class="form-group">
+          <label for="{{ form.full_name.id_for_label }}">Full Name *</label>
+          {{ form.full_name }}
+          <span class="field-hint">Please provide your full name as you'd like it to appear on your certificate.</span>
+          {{ form.full_name.errors }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.email.id_for_label }}">Email Address *</label>
+          {{ form.email }}
+          <span class="field-hint">We'll use this email to contact you about your application and program
+            updates.</span>
+          {{ form.email.errors }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.address.id_for_label }}">Address *</label>
+          {{ form.address }}
+          {{ form.address.errors }}
+        </div>
+
+        <div class="field-row-2">
+          <div class="form-group">
+            <label for="{{ form.phone_number.id_for_label }}">Phone Number (with Country Code) *</label>
+            {{ form.phone_number }}
+            <span class="field-hint">Include your country code (e.g. +234). Used for the program's WhatsApp/Telegram
+              channel if selected.</span>
+            {{ form.phone_number.errors }}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.country.id_for_label }}">Country of Residence *</label>
+            {{ form.country }}
+            <span class="field-hint">Helps us understand your time zone for scheduling.</span>
+            {{ form.country.errors }}
+          </div>
+        </div>
+
+        <!-- ── Section 2: Python Background ── -->
+        <p class="section-title">Python Background</p>
+
+        <div class="form-group">
+          <label>Are you a member of a Python community? *</label>
+          <div class="radio-field">{{ form.python_community_member }}</div>
+          {{ form.python_community_member.errors }}
+        </div>
+
+        <div class="form-group" id="community-name-field" style="display:none;">
+          <label for="{{ form.python_community_name.id_for_label }}">Which Python community? *</label>
+          {{ form.python_community_name }}
+          {{ form.python_community_name.errors }}
+        </div>
+
+        <div class="form-group">
+          <label>What is your current level of experience with Python? *</label>
+          <div class="radio-field">{{ form.experience_level }}</div>
+          {{ form.experience_level.errors }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.programming_experience.id_for_label }}">What is your experience with programming in
+            general? (Optional)</label>
+          {{ form.programming_experience }}
+          <span class="field-hint">Tell us about any programming experience (other languages, projects, courses).
+            Complete beginners can leave this blank.</span>
+          {{ form.programming_experience.errors }}
+        </div>
+
+        <!-- ── Section 3: Program Selection ── -->
+        <p class="section-title">Program Selection</p>
+
+        <div class="form-group">
+          <label>Choose the stream of mentorship you are interested in *</label>
+          <span class="field-hint" style="margin-bottom:0.5rem;">
+            Stream 1 — Beginner Zero to Hero: no initial Python knowledge needed.<br>
+            Stream 2 — Specialty Zero to Hero: must have at least intermediate Python knowledge.
+          </span>
+          <div class="radio-field">{{ form.mentorship_stream }}</div>
+          {{ form.mentorship_stream.errors }}
+        </div>
+
+        <div class="form-group">
+          <label>What tech field are you most interested in pursuing? *</label>
+          <span class="field-hint" style="margin-bottom:0.5rem;">
+            Select all that apply. If you choose Stream 2, your selection here becomes your mentorship specialisation.
+          </span>
+          <div class="checkbox-field">{{ form.tech_interests }}</div>
+          {{ form.tech_interests.errors }}
+        </div>
+
+        <!-- ── Section 4: Motivation ── -->
+        <p class="section-title">Motivation</p>
+
+        <div class="form-group">
+          <label for="{{ form.reason_for_joining.id_for_label }}">Why do you want to join this mentorship program?
+            *</label>
+          {{ form.reason_for_joining }}
+          <span class="field-hint">Share your goals, what you hope to gain, and why this opportunity is important to
+            you. (100–200 words)</span>
+          {{ form.reason_for_joining.errors }}
+        </div>
+
+        <!-- ── Section 5: Availability & Logistics ── -->
+        <p class="section-title">Availability &amp; Logistics</p>
+
+        <div class="form-group">
+          <label>Can you commit to virtual classes 3 times per week (Mon, Wed, Fri — 1.5 hrs each) for 5 months?
+            *</label>
+          <span class="field-hint" style="margin-bottom:0.5rem;">Classes are held via Google Meet. Please ensure you can
+            commit to this schedule.</span>
+          <div class="radio-field">{{ form.schedule_commitment }}</div>
+          {{ form.schedule_commitment.errors }}
+        </div>
+
+        <div class="form-group">
+          <label>Do you have access to a reliable internet connection and a device (laptop/computer) for virtual
+            classes? *</label>
+          <div class="radio-field">{{ form.device_access }}</div>
+          {{ form.device_access.errors }}
+        </div>
+
+        <!-- ── Section 6: About You ── -->
+        <p class="section-title">About You</p>
+
+        <div class="form-group">
+          <label>How did you hear about this program? *</label>
+          <div class="radio-field">{{ form.referral_source }}</div>
+          {{ form.referral_source.errors }}
+        </div>
+
+        <div class="form-group" id="referral-other-field" style="display:none;">
+          <label for="{{ form.referral_other.id_for_label }}">Please specify *</label>
+          {{ form.referral_other }}
+          {{ form.referral_other.errors }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.questions_concerns.id_for_label }}">Do you have any questions or concerns about the
+            program? (Optional)</label>
+          {{ form.questions_concerns }}
+          {{ form.questions_concerns.errors }}
+        </div>
+
+        {% if not debug %}
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <div class="g-recaptcha mb-3" data-sitekey="{{ RECAPTCHA_SITE_KEY }}"></div>
+        {% endif %}
+
+        <!-- ── Agreement ── -->
+        <div class="agreement-block">
+          <label for="{{ form.agreed_to_terms.id_for_label }}">
+            {{ form.agreed_to_terms }}
+            I understand that this is a free program, and I agree to actively participate, complete assignments, and
+            follow the program's guidelines. *
+          </label>
+          {{ form.agreed_to_terms.errors }}
+        </div>
+
+        <button type="submit" id="submitBtn" class="submit-btn">Submit Application</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    Questions? Contact us at <a href="tel:+2348115897450">+234 811 589 7450</a>
+  </footer>
+
+  <script>
+    // ── Conditional field visibility ──────────────────────────────────────
+    function bindConditional(radioName, targetId, triggerValue) {
+      var target = document.getElementById(targetId);
+      var radios = document.querySelectorAll('input[name="' + radioName + '"]');
+
+      function update() {
+        var checked = document.querySelector('input[name="' + radioName + '"]:checked');
+        target.style.display = (checked && checked.value === triggerValue) ? 'block' : 'none';
+      }
+
+      radios.forEach(function (r) { r.addEventListener('change', update); });
+      update(); // set correct state on page load (handles form re-render with errors)
+    }
+
+    bindConditional('python_community_member', 'community-name-field', 'yes');
+    bindConditional('referral_source', 'referral-other-field', 'other');
+
+    // ── Loading overlay — only fires after browser validates the form ─────
+    document.querySelector('form').addEventListener('submit', function () {
+      document.getElementById('loadingOverlay').classList.add('active');
+    });
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+{% for faq in faqs %}
+<tr>
+  <td>{{ forloop.counter }}</td>
+  <td class="text-truncate" style="max-width:300px;" title="{{ faq.question }}">{{ faq.question }}</td>
+  <td>
+    <form method="post" action="{% url 'dashboard:faq-toggle' faq.pk %}"
+          hx-post="{% url 'dashboard:faq-toggle' faq.pk %}"
+          hx-target="#faq-list-body"
+          hx-swap="innerHTML"
+          class="d-inline">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm {% if faq.is_active %}btn-success{% else %}btn-outline-secondary{% endif %}">
+        {% if faq.is_active %}Yes{% else %}No{% endif %}
+      </button>
+    </form>
+  </td>
+  <td>
+    <button class="btn btn-sm btn-outline-primary me-1"
+            hx-get="{% url 'dashboard:faq-edit' faq.pk %}"
+            hx-target="#faq-form-area"
+            hx-swap="innerHTML">Edit</button>
+    <form method="post" action="{% url 'dashboard:faq-delete' faq.pk %}"
+          hx-post="{% url 'dashboard:faq-delete' faq.pk %}"
+          hx-target="#faq-list-body"
+          hx-swap="innerHTML"
+          hx-confirm="Delete this FAQ?"
+          class="d-inline">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+    </form>
+  </td>
+</tr>
+{% empty %}
+<tr><td colspan="4" class="text-center text-muted py-4">No FAQs yet.</td></tr>
+{% endfor %}

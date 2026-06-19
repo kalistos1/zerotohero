@@ -1,0 +1,33 @@
+{% extends "dashbard_base.html" %}
+{% block title %}Edit Gallery Item — Zero to Hero{% endblock %}
+{% block page_title %}Edit Gallery Item{% endblock %}
+{% block content %}
+<div class="container-xxl">
+  <div class="page-title-box d-flex align-items-center justify-content-between">
+    <h4 class="mb-0">Edit Gallery Item</h4>
+    <a href="{% url 'dashboard:gallery-list' %}" class="btn btn-outline-secondary btn-sm">Back</a>
+  </div>
+  <div class="card" style="max-width:700px;">
+    <div class="card-body">
+      {% if item.image %}
+      <img src="{{ item.image.url }}" class="img-thumbnail mb-3" style="max-height:200px;" alt="Current image">
+      {% endif %}
+      <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:gallery-edit' item.pk %}">
+        {% csrf_token %}
+        <div class="row g-3">
+          {% for field in form %}
+          <div class="col-md-6">
+            <label class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|join:', ' }}</div>{% endif %}
+          </div>
+          {% endfor %}
+          <div class="col-12 text-end">
+            <button type="submit" class="btn btn-primary">Update Item</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

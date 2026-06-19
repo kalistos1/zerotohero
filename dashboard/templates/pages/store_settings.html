@@ -1,0 +1,25 @@
+{% extends 'dashbard_base.html' %}
+{% load static %}
+{% block title %}Site Settings — Zero to Hero{% endblock %}
+{% block page_title %}Site Settings{% endblock %}
+{% block content %}
+<div class="container-xxl">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header d-flex align-items-center gap-1">
+          <h4 class="card-title flex-grow-1">
+            <iconify-icon icon="solar:shop-2-bold-duotone" class="text-primary fs-20"></iconify-icon>
+            Store Settings
+          </h4>
+        </div>
+        <div class="card-body">
+          <div id="store-settings-formwrap">
+            {% include 'pages/partials/_store_settings_form.html' %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% for msg in ticket.messages.all %}
+<div class="d-flex mb-3 {% if msg.sender == request.user %}justify-content-end{% endif %}">
+  <div class="bg-{% if msg.sender == request.user %}primary text-white{% else %}light{% endif %} rounded p-3" style="max-width:85%;">
+    <div class="small {% if msg.sender == request.user %}text-white-50{% else %}text-muted{% endif %} mb-1">
+      {{ msg.sender.get_full_name|default:msg.sender.username }} &mdash; {{ msg.created_at|date:"d M, H:i" }}
+    </div>
+    {{ msg.content }}
+  </div>
+</div>
+{% empty %}
+<p class="text-muted text-center py-3">No messages yet. Send the first one below.</p>
+{% endfor %}

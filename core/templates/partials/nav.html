@@ -1,0 +1,96 @@
+{% load static %}
+
+<!-- Start Banner Section -->
+<section class="hero-section-three">
+
+    <!-- Header Start -->
+    <header class="header header-three">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg header-nav" aria-label="header navigation">
+                <div class="navbar-header">
+                    <a href="{% url 'core:index' %}" class="navbar-brand logo">
+                        <img src="{% static 'frontend/assets/img/zerotohero_logo3.webp' %}" class="img-fluid" alt="Logo"
+                            width="200px">
+                    </a>
+                    <a href="{% url 'core:index' %}" class="navbar-brand logo-white">
+                        <img src="{% static 'frontend/assets/img/zerotohero_logo3.webp' %}" class="img-fluid"
+                            alt="Logo-white" width="200px">
+                    </a>
+                    <div id="mobile_btn">
+                        <i class="icon-menu"></i>
+                    </div>
+                </div>
+                <div class="menu-wrapper">
+                    <div class="main-menu-wrapper">
+                        <div class="menu-header">
+                            <a href="{% url 'core:index' %}" class="menu-logo">
+                                <img src="{% static 'frontend/assets/img/zerotohero_logo3.webp' %}"
+                                    class="img-fluid logo" alt="Logo" width="200px">
+                                <img src="{% static 'frontend/assets/img/zerotohero_logo3.webp' %}"
+                                    class="img-fluid logo-white" alt="Logo-white" width="200px">
+                            </a>
+                            <div class="d-flex align-items-center gap-2">
+                                <button class="topbar-link light-dark-mode" aria-label="Toggle light and dark mode">
+                                    <i class="icon-sun"></i>
+                                </button>
+                                <div id="menu_close" class="menu-close">
+                                    <i class="icon-x"></i>
+                                </div>
+                            </div>
+
+                        </div>
+                        <ul class="main-nav">
+                            <li>
+                                <a href="{% url 'core:index' %}">Home </a>
+                            </li>
+
+                            <li> <a href="{% url 'core:about' %}">About Us</a></li>
+                            <li> <a href="{% url 'core:faqs' %}">Faq</a></li>
+                            <li> <a href="{% url 'core:contact' %}">Contact Us</a></li>
+                            <li> <a href="{% url 'core:testimonials' %}">testimonial</a></li>
+                            <li> <a href="{% url 'core:events' %}">Events</a></li>
+                            <li> <a href="{% url 'core:sponsorship' %}">Sponsorship</a></li>
+
+                            <li>
+                                <a href="{% url 'blog:blog-list' %}">Blogs</span></a>
+                            </li>
+
+                        </ul>
+                        <div class="menu-bottom">
+                            <div class="folllow-us">
+                                <p class="title">Follow Us</p>
+                                <div class="social-icon">
+                                    <a href="#" class="icon"><i class="icon-facebook"></i></a>
+                                    <a href="#" class="icon"><i class="fa-brands fa-x-twitter"></i></a>
+                                    <a href="#" class="icon"><i class="icon-instagram"></i></a>
+                                    <a href="#" class="icon"><i class="icon-youtube"></i></a>
+                                </div>
+                            </div>
+                            <div class="menu-login">
+                                <a href="{% url 'accounts:signup' %}"
+                                    class="primary-btn w-100 d-flex align-items-center gap-2"><i
+                                        class="icon-lock me-1"></i>SignUp</a>
+                                <a href="{% url 'accounts:login' %}"
+                                    class="secondary-btn w-100 d-flex align-items-center gap-2 text-dark"><i
+                                        class="icon-log-in me-1"></i>Signin</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav header-items">
+                    <button class="topbar-link light-dark-mode" aria-label="Toggle light and dark mode">
+                        <i class="icon-sun"></i>
+                    </button>
+                    <a href="{% url 'accounts:signup' %}" class="secondary-btn text-dark">Get Started<i
+                            class="icon-arrow-right ms-2 fw-normal"></i></a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!-- Header End -->
+    {% if request.resolver_match.url_name == 'index' %}
+    {% include 'partials/slider.html' %}
+    {% endif%}
+</section>
+
+<!-- End Banner Section -->

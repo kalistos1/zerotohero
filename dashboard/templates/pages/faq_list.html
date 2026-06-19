@@ -1,0 +1,68 @@
+{% extends "dashbard_base.html" %}
+{% load static %}
+
+{% block title %}FAQ Management — Zero to Hero{% endblock %}
+{% block page_title %}FAQ Management{% endblock %}
+
+{% block extra_css %}
+{{ form.media }}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-xxl">
+  <div class="page-title-box d-flex align-items-center justify-content-between">
+    <h4 class="mb-0">Frequently Asked Questions</h4>
+    <button class="btn btn-primary btn-sm"
+            hx-get="{% url 'dashboard:faq-create' %}"
+            hx-target="#faq-form-area"
+            hx-swap="innerHTML">
+      <i class="bx bx-plus me-1"></i> Add FAQ
+    </button>
+  </div>
+
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+    {{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <div class="row">
+    <div class="col-xl-5">
+      <div class="card">
+        <div class="card-header"><h5 class="card-title mb-0">Add / Edit FAQ</h5></div>
+        <div class="card-body" id="faq-form-area">
+          {% include "pages/partials/_faq_form.html" %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-7">
+      <div class="card">
+        <div class="card-header"><h5 class="card-title mb-0">All FAQs</h5></div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover table-nowrap mb-0">
+              <thead class="bg-light">
+                <tr>
+                  <th>#</th>
+                  <th>Question</th>
+                  <th>Active</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="faq-list-body">
+                {% include "pages/partials/_faq_list_rows.html" %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}{% endblock %}

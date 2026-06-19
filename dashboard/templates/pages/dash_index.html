@@ -1,0 +1,199 @@
+{% extends 'dashbard_base.html' %}
+{% load static humanize %}
+
+{% block title %}Dashboard — Zero to Hero{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+  <div class="row mb-3">
+    <div class="col-12">
+      <h4 class="mb-1">Welcome back, {{ request.user.get_full_name|default:request.user.username }} 👋</h4>
+      <p class="text-muted mb-0">Here's what's happening on your platform today.</p>
+    </div>
+  </div>
+
+  {# ── Stat cards ────────────────────────────────────────────────────── #}
+  <div class="row g-3 mb-4">
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="avatar-md bg-primary bg-opacity-10 rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
+            <iconify-icon icon="solar:users-group-two-rounded-bold-duotone" class="fs-2 text-primary"></iconify-icon>
+          </div>
+          <div>
+            <p class="text-muted mb-1 small">Total Users</p>
+            <h3 class="mb-0 fw-bold">{{ total_users|intcomma }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="avatar-md bg-success bg-opacity-10 rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
+            <iconify-icon icon="solar:document-text-bold-duotone" class="fs-2 text-success"></iconify-icon>
+          </div>
+          <div>
+            <p class="text-muted mb-1 small">Published Posts</p>
+            <h3 class="mb-0 fw-bold">{{ total_posts|intcomma }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="avatar-md bg-warning bg-opacity-10 rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
+            <iconify-icon icon="solar:mailbox-bold-duotone" class="fs-2 text-warning"></iconify-icon>
+          </div>
+          <div>
+            <p class="text-muted mb-1 small">Contact Messages</p>
+            <h3 class="mb-0 fw-bold">{{ total_contacts|intcomma }}</h3>
+            {% if unread_contacts %}
+            <small class="text-danger">{{ unread_contacts }} unread</small>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="avatar-md bg-info bg-opacity-10 rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
+            <iconify-icon icon="solar:calendar-bold-duotone" class="fs-2 text-info"></iconify-icon>
+          </div>
+          <div>
+            <p class="text-muted mb-1 small">Active Events</p>
+            <h3 class="mb-0 fw-bold">{{ total_events|intcomma }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  {# ── Quick actions ─────────────────────────────────────────────────── #}
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title mb-3">Quick Actions</h5>
+          <div class="row g-2">
+            <div class="col-6 col-md-3">
+              <a class="btn btn-outline-primary w-100" href="{% url 'dashboard:profile' %}">
+                <iconify-icon icon="solar:user-circle-bold-duotone" class="me-1"></iconify-icon> Profile
+              </a>
+            </div>
+            {% if request.user.is_admin %}
+            <div class="col-6 col-md-3">
+              <a class="btn btn-outline-secondary w-100" href="{% url 'dashboard:faq-list' %}">
+                <iconify-icon icon="solar:question-circle-bold-duotone" class="me-1"></iconify-icon> Manage FAQs
+              </a>
+            </div>
+            <div class="col-6 col-md-3">
+              <a class="btn btn-outline-secondary w-100" href="{% url 'dashboard:event-list' %}">
+                <iconify-icon icon="solar:calendar-bold-duotone" class="me-1"></iconify-icon> Manage Events
+              </a>
+            </div>
+            <div class="col-6 col-md-3">
+              <a class="btn btn-outline-secondary w-100" href="{% url 'dashboard:contact-messages' %}">
+                <iconify-icon icon="solar:mailbox-bold-duotone" class="me-1"></iconify-icon> Messages
+                {% if unread_contacts %}<span class="badge bg-danger ms-1">{{ unread_contacts }}</span>{% endif %}
+              </a>
+            </div>
+            <div class="col-6 col-md-3">
+              <a class="btn btn-outline-secondary w-100" href="{% url 'dashboard:user-list' %}">
+                <iconify-icon icon="solar:users-group-two-rounded-bold-duotone" class="me-1"></iconify-icon> Users
+              </a>
+            </div>
+            <div class="col-6 col-md-3">
+              <a class="btn btn-outline-secondary w-100" href="{% url 'dashboard:about-page' %}">
+                <iconify-icon icon="solar:info-circle-bold-duotone" class="me-1"></iconify-icon> About Page
+              </a>
+            </div>
+            <div class="col-6 col-md-3">
+              <a class="btn btn-outline-secondary w-100" href="{% url 'dashboard:testimonial-list' %}">
+                <iconify-icon icon="solar:chat-square-like-bold-duotone" class="me-1"></iconify-icon> Testimonials
+              </a>
+            </div>
+            <div class="col-6 col-md-3">
+              <a class="btn btn-outline-secondary w-100" href="{% url 'dashboard:store-settings' %}">
+                <iconify-icon icon="solar:settings-bold-duotone" class="me-1"></iconify-icon> Settings
+              </a>
+            </div>
+            {% endif %}
+            {% if request.user.is_admin or request.user.is_mentor %}
+            <div class="col-6 col-md-3">
+              <a class="btn btn-outline-success w-100" href="{% url 'dashboard:blog-post-create' %}">
+                <iconify-icon icon="solar:pen-bold-duotone" class="me-1"></iconify-icon> New Post
+              </a>
+            </div>
+            {% endif %}
+            <div class="col-6 col-md-3">
+              <a class="btn btn-outline-info w-100" href="{% url 'dashboard:ticket-create' %}">
+                <iconify-icon icon="solar:ticket-bold-duotone" class="me-1"></iconify-icon> New Ticket
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# ── Recent messages ───────────────────────────────────────────────── #}
+  {% if request.user.is_admin and recent_contacts %}
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Recent Messages</h5>
+          <a href="{% url 'dashboard:contact-messages' %}" class="btn btn-sm btn-outline-secondary">View All</a>
+        </div>
+        <div class="card-body p-0">
+          <ul class="list-group list-group-flush">
+            {% for msg in recent_contacts %}
+            <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+              <div>
+                <strong>{{ msg.name }}</strong>
+                <p class="mb-0 text-muted small">{{ msg.subject|default:"(No subject)" }} — {{ msg.message|truncatechars:60 }}</p>
+              </div>
+              <small class="text-nowrap text-muted ms-3">{{ msg.created_at|timesince }} ago</small>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header"><h5 class="card-title mb-0">Content Summary</h5></div>
+        <div class="card-body">
+          <ul class="list-unstyled mb-0">
+            <li class="d-flex justify-content-between py-2 border-bottom">
+              <span>Active FAQs</span><strong>{{ total_faqs }}</strong>
+            </li>
+            <li class="d-flex justify-content-between py-2 border-bottom">
+              <span>Active Events</span><strong>{{ total_events }}</strong>
+            </li>
+            <li class="d-flex justify-content-between py-2 border-bottom">
+              <span>Testimonials</span><strong>{{ total_testimonials }}</strong>
+            </li>
+            <li class="d-flex justify-content-between py-2">
+              <span>Published Posts</span><strong>{{ total_posts }}</strong>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

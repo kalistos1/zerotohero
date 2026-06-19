@@ -1,0 +1,108 @@
+{% extends 'dashbard_base.html' %}
+{% load static %}
+
+{% block title %}{{ action }} Sponsorship Tier — Zero to Hero{% endblock %}
+{% block page_title %}{{ action }} Sponsorship Tier{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="mb-4">
+        <a href="{% url 'dashboard:sponsorship-tier-list' %}" class="text-decoration-none text-muted">
+            <i class="fas fa-arrow-left me-1"></i> Back to Tiers
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                    <h5 class="mb-0">{{ action }} Tier</h5>
+                    <p class="text-muted small mb-0">
+                        Fields populate directly on the public <strong>/sponsorship/</strong> page.
+                    </p>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Tier Name <span class="text-danger">*</span></label>
+                                {{ form.name }}
+                                {% if form.name.errors %}<div class="text-danger small mt-1">{{ form.name.errors }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Price Display</label>
+                                {{ form.price_display }}
+                                <div class="form-text">e.g. ₦150,000 (~$90)</div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Short Description <span class="text-danger">*</span></label>
+                                {{ form.description }}
+                                {% if form.description.errors %}<div class="text-danger small mt-1">{{ form.description.errors }}</div>{% endif %}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Features <span class="text-danger">*</span></label>
+                                {{ form.features }}
+                                <div class="form-text">Enter one feature per line. These will appear as bullet points on the public page.</div>
+                                {% if form.features.errors %}<div class="text-danger small mt-1">{{ form.features.errors }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Icon Class</label>
+                                {{ form.icon_class }}
+                                <div class="form-text">FontAwesome class, e.g. <code>fas fa-medal</code></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">CSS Background Class</label>
+                                {{ form.bg_class }}
+                                <div class="form-text">e.g. <code>bronze-bg</code>, <code>gold-bg</code></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Display Order</label>
+                                {{ form.order }}
+                                <div class="form-text">Lower numbers appear first.</div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    {{ form.is_recommended }}
+                                    <label class="form-check-label" for="{{ form.is_recommended.id_for_label }}">
+                                        Mark as <strong>Recommended</strong> (shows "RECOMMENDED" badge on public page)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                            <a href="{% url 'dashboard:sponsorship-tier-list' %}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">{{ action }} Tier</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Side Help Panel -->
+        <div class="col-lg-4">
+            <div class="card border-0 bg-light rounded-3">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3"><i class="fas fa-info-circle text-primary me-2"></i>Tips</h6>
+                    <ul class="small text-muted ps-3">
+                        <li class="mb-2">The <strong>Icon Class</strong> uses FontAwesome 6. Find icons at <a href="https://fontawesome.com/icons" target="_blank" rel="noopener">fontawesome.com</a>.</li>
+                        <li class="mb-2">The <strong>CSS BG Class</strong> must match a class defined in the frontend CSS (e.g. <code>bronze-bg</code>).</li>
+                        <li class="mb-2">Only one tier should be marked as <strong>Recommended</strong>.</li>
+                        <li class="mb-2">Changes here reflect <strong>immediately</strong> on the public sponsorship page.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

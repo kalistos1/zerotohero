@@ -1,0 +1,86 @@
+{% extends 'dashbard_base.html' %}
+{% load static %}
+
+{% block title %}Sponsorship Tiers — Zero to Hero{% endblock %}
+{% block page_title %}Sponsorship Tiers{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0">Sponsorship Tiers</h2>
+            <p class="text-muted mb-0 small">Manage the tiers displayed on the public sponsorship page.</p>
+        </div>
+        <a href="{% url 'dashboard:sponsorship-tier-create' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i> Add Tier
+        </a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width:50px;">#</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Features</th>
+                            <th class="text-center">Recommended</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tier in tiers %}
+                        <tr>
+                            <td class="text-muted">{{ tier.order }}</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="{{ tier.icon_class }}"></i>
+                                    <strong>{{ tier.name }}</strong>
+                                </div>
+                                <small class="text-muted">{{ tier.description|truncatechars:60 }}</small>
+                            </td>
+                            <td class="fw-bold">{{ tier.price_display|default:"—" }}</td>
+                            <td>
+                                <small class="text-muted">{{ tier.feature_list|length }} feature{{ tier.feature_list|length|pluralize }}</small>
+                            </td>
+                            <td class="text-center">
+                                {% if tier.is_recommended %}
+                                    <span class="badge bg-primary">Yes</span>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                <a href="{% url 'dashboard:sponsorship-tier-edit' tier.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <form method="post" action="{% url 'dashboard:sponsorship-tier-delete' tier.pk %}" class="d-inline"
+                                      onsubmit="return confirm('Delete the {{ tier.name }} tier? This will affect existing inquiries.');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-5">
+                                No tiers yet. <a href="{% url 'dashboard:sponsorship-tier-create' %}">Add one now.</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

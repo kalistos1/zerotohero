@@ -1,0 +1,99 @@
+{% extends 'dashbard_base.html' %}
+{% load static %}
+{% block title %}My Profile — Zero to Hero{% endblock %}
+{% block page_title %}My Profile{% endblock %}
+{% block content %}
+               <div class="container-xxl">
+                    {% if messages %}
+                    <div class="row">
+                         <div class="col-12">
+                              {% for message in messages %}
+                              <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+                              {% endfor %}
+                         </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="row">
+                         <div class="col-xl-6">
+                              <div class="card">
+                                   <div class="card-header">
+                                        <h4 class="card-title mb-0">Profile Information</h4>
+                                   </div>
+                                   <div class="card-body">
+                                        <form method="post">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="action" value="update_profile">
+                                             <div class="row g-3">
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">First name</label>
+                                                       {{ profile_form.first_name }}
+                                                       {% if profile_form.first_name.errors %}<div class="invalid-feedback d-block">{{ profile_form.first_name.errors|join:', ' }}</div>{% endif %}
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">Last name</label>
+                                                       {{ profile_form.last_name }}
+                                                       {% if profile_form.last_name.errors %}<div class="invalid-feedback d-block">{{ profile_form.last_name.errors|join:', ' }}</div>{% endif %}
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">Username</label>
+                                                       {{ profile_form.username }}
+                                                       {% if profile_form.username.errors %}<div class="invalid-feedback d-block">{{ profile_form.username.errors|join:', ' }}</div>{% endif %}
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">Email</label>
+                                                       {{ profile_form.email }}
+                                                       {% if profile_form.email.errors %}<div class="invalid-feedback d-block">{{ profile_form.email.errors|join:', ' }}</div>{% endif %}
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">Phone</label>
+                                                       {{ profile_form.phone }}
+                                                       {% if profile_form.phone.errors %}<div class="invalid-feedback d-block">{{ profile_form.phone.errors|join:', ' }}</div>{% endif %}
+                                                  </div>
+                                                  <div class="col-12 text-end">
+                                                       <button type="submit" class="btn btn-primary">Save Profile</button>
+                                                  </div>
+                                             </div>
+                                        </form>
+                                   </div>
+                              </div>
+                         </div>
+
+                         <div class="col-xl-6">
+                              <div class="card">
+                                   <div class="card-header">
+                                        <h4 class="card-title mb-0">Change Password</h4>
+                                   </div>
+                                   <div class="card-body">
+                                        <form method="post">
+                                             {% csrf_token %}
+                                             <input type="hidden" name="action" value="change_password">
+                                             <div class="row g-3">
+                                                  <div class="col-md-12">
+                                                       <label class="form-label">Current password</label>
+                                                       {{ password_form.old_password }}
+                                                       {% if password_form.old_password.errors %}<div class="invalid-feedback d-block">{{ password_form.old_password.errors|join:', ' }}</div>{% endif %}
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">New password</label>
+                                                       {{ password_form.new_password1 }}
+                                                       {% if password_form.new_password1.errors %}<div class="invalid-feedback d-block">{{ password_form.new_password1.errors|join:', ' }}</div>{% endif %}
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                       <label class="form-label">Confirm new password</label>
+                                                       {{ password_form.new_password2 }}
+                                                       {% if password_form.new_password2.errors %}<div class="invalid-feedback d-block">{{ password_form.new_password2.errors|join:', ' }}</div>{% endif %}
+                                                  </div>
+                                                  <div class="col-12 text-end">
+                                                       <button type="submit" class="btn btn-secondary">Change Password</button>
+                                                  </div>
+                                             </div>
+                                        </form>
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+
+               <!-- End Container Fluid -->
+
+             {% endblock %}

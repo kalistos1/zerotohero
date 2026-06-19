@@ -1,0 +1,712 @@
+{% extends 'core_base.html' %}
+{% load static %}
+{% block title %}Zero to Hero — Python Mentorship Cohort Programme | Learn Python Worldwide{% endblock %}
+
+{% block meta_description %}Join Zero to Hero's Python mentorship cohort. Live instructor-led sessions, real projects,
+and career support. Programmes in Software Engineering, Data Analysis, Backend Development, Data Engineering, and
+Cybersecurity. Open to learners worldwide.{% endblock %}
+
+{% block og_title %}Zero to Hero — Python Mentorship Cohort Programme{% endblock %}
+{% block og_description %}Cohort-based Python mentorship with live sessions 3× per week, real-world projects,
+personalised mentor groups of max 7, and career support. Open to learners everywhere.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["EducationalOrganization", "WebSite"],
+  "name": "Zero to Hero",
+  "url": "{{ safe_base_url }}",
+  "description": "A global Python mentorship platform offering cohort-based, instructor-led programmes in Software Engineering, Data Analysis, Backend Development, Data Engineering, and Cybersecurity.",
+  "areaServed": "Worldwide",
+  "knowsAbout": ["Python", "Software Engineering", "Data Analysis", "Data Engineering", "Backend Development", "Cybersecurity"],
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "{{ safe_base_url }}/blog/?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="step-section section">
+	<div class="container">
+
+		<!-- Section Header -->
+		<div class="section-header section-header-two section-head-one text-center">
+			<h2 class="section-title">How You <span class="text-gradient">Get Started</span></h2>
+			<p class="sub-title">A simple, clear process to find the right mentor and start growing your skills</p>
+		</div>
+		<!-- Section Header End -->
+
+		<div class="row g-4 justify-content-center">
+
+			<!-- Step Item -->
+			<div class="col-lg-3 col-md-6 d-flex">
+				<div class="step-item flex-fill wow fadeInUp" data-wow-duration="1s"
+					style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+					<div class="step-count">01</div>
+					<h3 class="custom-title">Join a Cohort</h3>
+					<p> join a cohort. Choose a program that fits your stage and goals.</p>
+					<div class="step-img">
+						<img src="{% static 'frontend/assets/img/about/step-01.jpg' %}" alt="mentor" class="img-fluid">
+					</div>
+					<div class="step-icon">
+						<img src="{% static 'frontend/assets/img/icon/search-icon.svg' %}" alt="search"
+							class="img-fluid">
+					</div>
+				</div>
+			</div>
+			<!-- End Step Item -->
+
+			<!-- Step Item -->
+			<div class="col-lg-3 col-md-6 d-flex">
+				<div class="step-item flex-fill wow fadeInUp" data-wow-duration="1s"
+					style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+					<div class="step-count">02</div>
+					<h3 class="custom-title">Live Instructor-Led Sessions</h3>
+					<p>Learn directly from experienced mentors in scheduled live sessions.</p>
+					<div class="step-img">
+						<img src="{% static 'frontend/assets/img/about/step-02.jpg' %}" alt="book" class="img-fluid">
+					</div>
+					<div class="step-icon">
+						<img src="{% static 'frontend/assets/img/icon/book.svg' %}" alt="book session"
+							class="img-fluid">
+					</div>
+				</div>
+			</div>
+			<!-- End Step Item -->
+
+			<!-- Step Item -->
+			<div class="col-lg-3 col-md-6 d-flex">
+				<div class="step-item flex-fill wow fadeInUp" data-wow-duration="1s"
+					style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+					<div class="step-count">03</div>
+					<h3 class="custom-title">Real Projects. Real Feedback.</h3>
+					<p>Tackle real-world project tasks. Work on live projects that mirror real industry challenges.</p>
+					<div class="step-img">
+						<img src="{% static 'frontend/assets/img/about/step-03.jpg' %}" alt="membreship"
+							class="img-fluid">
+					</div>
+					<div class="step-icon">
+						<img src="{% static 'frontend/assets/img/icon/learn.svg' %}" alt="icon" class="img-fluid">
+					</div>
+				</div>
+			</div>
+			<!-- End Step Item -->
+			<!-- Step Item -->
+			<div class="col-lg-3 col-md-6 d-flex">
+				<div class="step-item flex-fill wow fadeInUp" data-wow-duration="1s"
+					style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+					<div class="step-count">04</div>
+					<h3 class="custom-title">From Cohort to Career</h3>
+					<p>Your journey doesn't end when the program does, we
+						connect you with internship opportunities tailored to your goals</p>
+					<div class="step-img">
+						<img src="{% static 'frontend/assets/img/about/step-04.jpg' %}" alt="membreship"
+							class="img-fluid">
+					</div>
+					<div class="step-icon">
+						<img src="{% static 'frontend/assets/img/icon/learn.svg' %}" alt="icon" class="img-fluid">
+					</div>
+				</div>
+			</div>
+			<!-- End Step Item -->
+
+		</div>
+	</div>
+</section>
+<!-- Start Service Section -->
+<section class="about-section-two section">
+
+	<div class="container">
+
+		<div class="row">
+
+			<div class="col-lg-5">
+
+				<!-- Section Header -->
+				<div class="section-header section-header-two text-start">
+					<h2 class="section-title">A Platform Built for <span class="text-gradient">Your Success</span></h2>
+					<p class="sub-title">We connect learners with industry leading mentors who provide real-world
+						guidance, practical insights, and personalised support to help you grow faster.</p>
+				</div>
+				<!-- End Section Header -->
+
+				<div class="about-list">
+					<div class="about-item-two wow fadeInUp" data-wow-duration="1s"
+						style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+						<div class="about-icon">
+							<img src="{% static 'frontend/assets/img/icon/about-01.svg' %}" alt="icon"
+								class="img-fluid">
+						</div>
+						<div>
+							<h3 class="custom-title">Expertise</h3>
+							<p>Access top mentors with years of hands on experience and proven knowledge.</p>
+						</div>
+					</div>
+					<div class="about-item-two about-middle wow fadeInUp" data-wow-duration="1s"
+						style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+						<div class="about-icon">
+							<img src="{% static 'frontend/assets/img/icon/about-02.svg' %}" alt="icon"
+								class="img-fluid">
+						</div>
+						<div>
+							<h3 class="custom-title">Structured Learning, Built to Success</h3>
+							<p>Courses are broken into clear sessions and modules, each loaded with video lessons, PDF
+								guides, and slide resources. Practice exercises follow every session, and real-world
+								individual and team projects close out every module.</p>
+						</div>
+					</div>
+					<div class="about-item-two wow fadeInUp" data-wow-duration="1s"
+						style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+						<div class="about-icon">
+							<img src="{% static 'frontend/assets/img/icon/about-03.svg' %}" alt="icon"
+								class="img-fluid">
+						</div>
+						<div>
+							<h3 class="custom-title">Mentorship Without Borders</h3>
+							<p>A complete 5-month mentorship programme with three live, instructor-led classes every
+								week. Beyond the classroom, you become part of a thriving mentor-mentee community
+								spanning Discord, LinkedIn, and WhatsApp — plus local offline communities that connect
+								you with peers in your city.</p>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col-lg-7">
+				<div class="about-image-two wow fadeInUp" data-wow-duration="1s"
+					style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+					<img src="{% static 'frontend/assets/img/about/about-02.jpg' %}" alt="about"
+						class="img-fluid about-02">
+					<div class="about-img-01">
+						<img src="{% static 'frontend/assets/img/about/about-01.jpg' %}" alt="about"
+							class="img-fluid about-01">
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+	<img src="{% static 'frontend/assets/img/bg/about-bg.png' %}" alt="bg" class="img-fluid about-bg-01">
+
+</section>
+
+<!-- End Service Section -->
+
+
+
+<section class="benefit-section section">
+	<div class="container">
+
+		<!-- Section Header -->
+		<div class="section-header section-header-two title-white">
+			<h2 class="section-title">Why Learners Trust Us</h2>
+			<p class="sub-title">Discover the benefits that make our mentorship approach truly effective</p>
+		</div>
+		<!-- End Section Header -->
+
+		<div class="row g-4">
+
+			<!-- Benefit Item -->
+			<div class="col-lg-4 col-md-6 d-flex">
+				<div class="benefit-item flex-fill wow fadeInUp" data-wow-duration="1s"
+					style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+					<div class="benefit-inner-item bg-orange-transparent">
+						<div class="benefit-icon">
+							<img src="{% static 'frontend/assets/img/icon/benefit-01.svg' %}" alt="icon"
+								class="img-fluid">
+						</div>
+						<h3 class="custom-title">Expert Mentors</h3>
+						<p>Learn directly from professionals with years of real-world experience who provide practical,
+							actionable guidance tailored to your goals.</p>
+					</div>
+				</div>
+			</div>
+			<!-- End Benefit Item -->
+
+			<!-- Benefit Item -->
+			<div class="col-lg-4 col-md-6 d-flex">
+				<div class="benefit-item flex-fill wow fadeInUp" data-wow-duration="1s"
+					style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+					<div class="benefit-inner-item bg-success-transparent">
+						<div class="benefit-icon">
+							<img src="{% static 'frontend/assets/img/icon/benefit-02.svg' %}" alt="icon"
+								class="img-fluid">
+						</div>
+						<h3 class="custom-title">Goal Driven Mentorship</h3>
+						<p>Each session is aligned with your career or personal goals, helping you stay focused and
+							achieve meaningful outcomes.</p>
+					</div>
+				</div>
+			</div>
+			<!-- End Benefit Item -->
+
+			<!-- Benefit Item -->
+			<div class="col-lg-4 col-md-6 d-flex">
+				<div class="benefit-item flex-fill wow fadeInUp" data-wow-duration="1s"
+					style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+					<div class="benefit-inner-item bg-info-transparent">
+						<div class="benefit-icon">
+							<img src="{% static 'frontend/assets/img/icon/benefit-03.svg' %}" alt="icon"
+								class="img-fluid">
+						</div>
+						<h3 class="custom-title">Real Progress, Real Results</h3>
+						<p>Track your growth through consistent feedback, skill evaluations, and structured sessions
+							designed to help you level up continuously.</p>
+					</div>
+				</div>
+			</div>
+			<!-- End Benefit Item -->
+
+			<!-- Benefit Item -->
+			<div class="col-lg-4 col-md-6 d-flex">
+				<div class="benefit-item flex-fill wow fadeInUp" data-wow-duration="1s"
+					style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+					<div class="benefit-inner-item bg-warning-transparent">
+						<div class="benefit-icon">
+							<img src="{% static 'frontend/assets/img/icon/benefit-04.svg' %}" alt="icon"
+								class="img-fluid">
+						</div>
+						<h3 class="custom-title">Personalized Learning Paths</h3>
+						<p>Every mentorship journey is customized ensuring you receive the exact insights, strategies,
+							and direction needed to grow faster.</p>
+					</div>
+				</div>
+			</div>
+			<!-- End Benefit Item -->
+
+			<!-- Benefit Item -->
+			<div class="col-lg-4 col-md-6 d-flex">
+				<div class="benefit-item flex-fill wow fadeInUp" data-wow-duration="1s"
+					style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+					<div class="benefit-inner-item bg-purple-transparent">
+						<div class="benefit-icon">
+							<img src="{% static 'frontend/assets/img/icon/benefit-05.svg' %}" alt="icon"
+								class="img-fluid">
+						</div>
+						<h3 class="custom-title">Global Mentor Network</h3>
+						<p>Connect with experts across industries and countries, giving you access to diverse knowledge,
+							ideas, and opportunities.</p>
+					</div>
+				</div>
+			</div>
+			<!-- End Benefit Item -->
+
+			<!-- Benefit Item -->
+			<div class="col-lg-4 col-md-6  d-flex">
+				<div class="benefit-item flex-fill wow fadeInUp" data-wow-duration="1s"
+					style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+					<div class="benefit-inner-item bg-indigo-transparent">
+						<div class="benefit-icon">
+							<img src="{% static 'frontend/assets/img/icon/benefit-06.svg' %}" alt="icon"
+								class="img-fluid">
+						</div>
+						<h3 class="custom-title">Supportive &amp; Friendly Approach</h3>
+						<p>Our mentors focus on you. Expect patient guidance, clarity, and genuine support as you
+							overcome challenges and build confidence.</p>
+					</div>
+				</div>
+			</div>
+			<!-- End Benefit Item -->
+
+		</div>
+	</div>
+	<img src="{% static 'frontend/assets/img/bg/benefit-bg.png' %}" alt="bg" class="img-fluid benefit-bg-01">
+</section>
+
+
+<section class="categories-section section">
+	<div class="container">
+		<div class="section-header text-center  wow fadeInDown" data-wow-duration="1s"
+			style="visibility: visible; animation-duration: 1s; animation-name: fadeInDown;">
+			<div class="section-sub-title justify-content-center"> Mentorship Categories <span class="line"></span>
+			</div>
+			<h2 class="section-title">Explore Categories Designed for You</h2>
+		</div>
+
+		<!-- start row -->
+		<div class="row row-gap-4 justify-content-center">
+
+			<!-- Item 1 -->
+			<div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
+				<div class="categories-item  wow fadeInDown" data-wow-duration="2s"
+					style="visibility: visible; animation-duration: 2s; animation-name: fadeInDown;">
+					<img src="{% static 'frontend/assets/img/categories/categories-img-1.jpg' %}" alt="categories"
+						class="img-fluid img-1">
+					<div class="categories-content  mb-4">
+						<h3 class="custom-title"> <a href="#"> Core Python Software Engineering </a></h3>
+
+					</div>
+					<a href="#" class="link"> <i class="icon-arrow-right"></i></a>
+				</div>
+			</div>
+
+
+			<!-- Item 3 -->
+			<div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
+				<div class="categories-item  wow fadeInDown" data-wow-duration="2s"
+					style="visibility: visible; animation-duration: 2s; animation-name: fadeInDown;">
+					<img src="{% static 'frontend/assets/img/categories/categories-img-3.jpg' %}" alt="categories"
+						class="img-fluid img-1">
+					<div class="categories-content  mb-4">
+						<h3 class="custom-title"> <a href="#">Python for Scripting and Automation </a></h3>
+
+					</div>
+					<a href="#" class="link"> <i class="icon-arrow-right"></i></a>
+				</div>
+			</div>
+
+			<!-- Item 4 -->
+			<div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
+				<div class="categories-item  wow fadeInDown" data-wow-duration="2s"
+					style="visibility: visible; animation-duration: 2s; animation-name: fadeInDown;">
+					<img src="{% static 'frontend/assets/img/categories/categories-img-4.jpg' %}" alt="categories"
+						class="img-fluid img-1">
+					<div class="categories-content  mb-4">
+						<h3 class="custom-title"> <a href="#">Python for Data Analysis</a></h3>
+
+					</div>
+					<a href="#" class="link"> <i class="icon-arrow-right"></i></a>
+				</div>
+			</div>
+
+			<!-- Item 5 -->
+			<div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
+				<div class="categories-item  wow fadeInUp" data-wow-duration="2s"
+					style="visibility: visible; animation-duration: 2s; animation-name: fadeInUp;">
+					<img src="{% static 'frontend/assets/img/categories/categories-img-5.jpg' %}" alt="categories"
+						class="img-fluid img-1">
+					<div class="categories-content">
+						<h3 class="custom-title"> <a href="#"> Python for Backend Development</a></h3>
+
+					</div>
+					<a href="#" class="link"> <i class="icon-arrow-right"></i></a>
+				</div>
+			</div>
+
+			<!-- Item 6 -->
+			<div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
+				<div class="categories-item  wow fadeInDown" data-wow-duration="2s"
+					style="visibility: visible; animation-duration: 2s; animation-name: fadeInDown;">
+					<img src="{% static 'frontend/assets/img/categories/categories-img-6.jpg' %}" alt="categories"
+						class="img-fluid img-1">
+					<div class="categories-content mb-4">
+						<h3 class="custom-title"> <a href="#">Python For Data Engineering</a></h3>
+
+					</div>
+					<a href="#" class="link"> <i class="icon-arrow-right"></i></a>
+				</div>
+			</div>
+
+			<!-- Item 7 -->
+			<div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
+				<div class="categories-item  wow fadeInUp" data-wow-duration="2s"
+					style="visibility: visible; animation-duration: 2s; animation-name: fadeInUp;">
+					<img src="{% static 'frontend/assets/img/categories/categories-img-7.jpg' %}" alt="categories"
+						class="img-fluid img-1">
+					<div class="categories-content  mb-4">
+						<h3 class="custom-title"> <a href="#">Python For CyberSecurity </a></h3>
+
+					</div>
+					<a href="#" class="link"> <i class="icon-arrow-right"></i></a>
+				</div>
+			</div>
+
+
+
+		</div>
+		<!-- end row -->
+	</div>
+	<img src="{% static 'frontend/assets/img/icon/categories-circle-1.svg' %}" alt="circle" class="img-fluid element-1">
+	<img src="{% static 'frontend/assets/img/icon/categories-circle.svg' %}" alt="circle" class="img-fluid element-2">
+</section>
+
+
+
+
+
+<!-- Start Locations Section -->
+<section class="location-section how-section-three section">
+	<div class="container">
+
+		<img src="{% static 'frontend/assets/img/icon/city-element.svg' %}" alt="element"
+			class="img-fluid location-element">
+
+		<div class="section-header-three text-center">
+			<div class="section-sub-title"> <img src="{% static 'frontend/assets/img/icon/title-img.svg' %}" alt="img"
+					class="img-fluid img-1"> Mentee Locations <img
+					src="{% static 'frontend/assets/img/icon/title-img.svg' %}" alt="img" class="img-fluid img-1">
+			</div>
+			<h2 class="section-title">Our Global <span>Mentoring</span> Locations</h2>
+		</div>
+
+		<!-- start row -->
+		<div class="row row-gap-4">
+			<!-- Item 1 -->
+			<div class="col-lg-4 col-md-6 col-xs-6 col-6 d-flex">
+				<div class="location-item-three flex-fill">
+					<img src="{% static 'frontend/assets/img/city/location-img-6.jpg' %}" alt="location"
+						class="img-fluid img-1">
+					<div class="location-content">
+						<h3 class="custom-title mb-2"> Togo</h3>
+
+					</div>
+
+				</div>
+			</div>
+			<!-- Item 2 -->
+			<div class="col-lg-4 col-md-6 col-xs-6  col-6 d-flex">
+				<div class="location-item-three flex-fill">
+					<img src="{% static 'frontend/assets/img/city/location-img-7.jpg' %}" alt="location"
+						class="img-fluid img-1">
+					<div class="location-content">
+						<h3 class="custom-title mb-2"> Canada</h3>
+
+					</div>
+
+				</div>
+			</div>
+			<!-- Item 3 -->
+			<div class="col-lg-4 col-md-6 col-xs-6  col-6 d-flex">
+				<div class="location-item-three flex-fill">
+					<img src="{% static 'frontend/assets/img/city/location-img-8.jpg' %}" alt="location"
+						class="img-fluid img-1">
+					<div class="location-content">
+						<h3 class="custom-title mb-2">Kenya</h3>
+
+					</div>
+
+				</div>
+			</div>
+			<!-- Item 4 -->
+			<div class="col-lg-4 col-md-6 col-xs-6  col-6 d-flex">
+				<div class="location-item-three flex-fill">
+					<img src="{% static 'frontend/assets/img/city/location-img-9.jpg' %}" alt="location"
+						class="img-fluid img-1">
+					<div class="location-content">
+						<h3 class="custom-title"> Ghana</h3>
+
+					</div>
+
+				</div>
+			</div>
+			<!-- Item 5 -->
+			<div class="col-lg-4 col-md-6 col-xs-6  col-6 d-flex">
+				<div class="location-item-three flex-fill">
+					<img src="{% static 'frontend/assets/img/city/location-img-10.jpg' %}" alt="location"
+						class="img-fluid img-1">
+					<div class="location-content">
+						<h3 class="custom-title"> Nigeria</h3>
+
+					</div>
+
+				</div>
+			</div>
+			<!-- Item 6 -->
+
+		</div>
+		<!-- <div class="view-more text-center">
+			<a href="#" class="dark-btn d-inline-flex align-items-center"> View All Locations <i
+					class="icon-chevron-right ms-2 fw-normal"></i></a>
+		</div> -->
+	</div>
+</section>
+<!-- End platform Section -->
+
+<!-- Start Team Section -->
+<section class="team-section-three section">
+	<div class="container">
+
+		<div class="section-header-three text-center">
+			<div class="section-sub-title"> <img src="{% static 'frontend/assets/img/icon/title-img.svg' %}" alt="img"
+					class="img-fluid img-1"> Meet Our Mentors <img
+					src="{% static 'frontend/assets/img/icon/title-img.svg' %}" alt="img" class="img-fluid img-1">
+			</div>
+			<h2 class="section-title">Learn From Proven Experts</h2>
+		</div>
+
+		<!-- stat row -->
+		<div class="row row-gap-4 justify-content-center">
+			{% if team_members %}
+			{% for member in team_members %}
+			<!-- Dynamic Item -->
+			<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+				<div class="team-item-three">
+					<div class="team-overlay">
+						{% if member.image %}
+						<img src="{{ member.image.url }}" alt="{{ member.name }}" class="img-fluid oimg-1"
+							style="height: 300px; object-fit: cover;">
+						{% else %}
+						<img src="{% static 'frontend/assets/img/teams/teams-img-1.png' %}" alt="{{ member.name }}"
+							class="img-fluid oimg-1">
+						{% endif %}
+						<button class="favourite">
+							<i class="fa-solid fa-heart"></i>
+						</button>
+					</div>
+					<div class="team-content">
+						<div>
+							<h3 class="custom-title"><a href="javascript:void(0);">{{ member.name }}</a></h3>
+							<p class="expert">{{ member.role }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+			{% endif %}
+		</div>
+		<!-- end row -->
+		<div class="view-more text-center">
+			<a href="#" class="primary-btn d-inline-flex align-items-center"> Register to Get Started <i
+					class="icon-chevron-right ms-2 fw-normal"></i></a>
+		</div>
+
+	</div>
+	<img src="{% static 'frontend/assets/img/bg/platrom-bg.png' %}" alt="bg" class="bg-img">
+</section>
+<!-- End Team Section -->
+
+<!-- Start Testimonials Section -->
+<section class="testimonial-section-three section">
+	<div class="container">
+
+		<div class="section-header-three text-center">
+			<div class="section-sub-title"> <img src="{% static 'frontend/assets/img/icon/title-img.svg' %}" alt="img"
+					class="img-fluid img-1"> Testimonials <img
+					src="{% static 'frontend/assets/img/icon/title-img.svg' %}" alt="img" class="img-fluid img-1">
+			</div>
+			<h2 class="section-title">Trusted by <span>Mentees</span> Worldwide</h2>
+		</div>
+	</div>
+
+	{% if testimonials %}
+	<!-- Slide section  -->
+	<div class="horizontal-slide d-flex mb-4" data-direction="left" data-speed="slow">
+		<div class="slide-list d-flex gap-4">
+			{% for t in testimonials %}
+			<div class="testimonial-item-seven">
+				<div class="testimonial-author">
+					<div class="author-img">
+						{% if t.image %}
+						<a href="javascript:void(0);" class="author"><img src="{{ t.image.url }}"
+								alt="{{ t.name }}"></a>
+						{% else %}
+						<a href="javascript:void(0);" class="author"><img
+								src="{% static 'frontend/assets/img/user/profile-01.jpg' %}" alt="{{ t.name }}"></a>
+						{% endif %}
+					</div>
+					<div class="author-info">
+						<a href="javascript:void(0);" class="author-name">{{ t.name }}</a>
+						<p class="professional">{{ t.role }}</p>
+					</div>
+				</div>
+				<div class="review-star">
+					{% for _ in t.get_rating_range %}
+					<i class="fas fa-star"></i>
+					{% endfor %}
+				</div>
+				<div class="description">
+					{{ t.review_text|safe }}
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	<!-- Slide section -->
+
+	<!-- Slide section  -->
+	<div class="horizontal-slide d-flex" data-direction="right" data-speed="slow">
+		<div class="slide-list d-flex gap-4">
+			{% for t in testimonials reversed %}
+			<div class="testimonial-item-seven">
+				<div class="testimonial-author">
+					<div class="author-img">
+						{% if t.image %}
+						<a href="javascript:void(0);" class="author"><img src="{{ t.image.url }}"
+								alt="{{ t.name }}"></a>
+						{% else %}
+						<a href="javascript:void(0);" class="author"><img
+								src="{% static 'frontend/assets/img/user/profile-01.jpg' %}" alt="{{ t.name }}"></a>
+						{% endif %}
+					</div>
+					<div class="author-info">
+						<a href="javascript:void(0);" class="author-name">{{ t.name }}</a>
+						<p class="professional">{{ t.role }}</p>
+					</div>
+				</div>
+				<div class="review-star">
+					{% for _ in t.get_rating_range %}
+					<i class="fas fa-star"></i>
+					{% endfor %}
+				</div>
+				<div class="description">
+					{{ t.review_text|safe }}
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	<!-- Slide section -->
+	{% endif %}
+
+	<img src="{% static 'frontend/assets/img/icon/service-element-1.svg' %}" alt="element" class="img-fluid element-1">
+	<img src="{% static 'frontend/assets/img/bg/testimonial-bg.png' %}" alt="element" class="img-fluid element-2">
+</section>
+<!-- End Testimonials Section -->
+
+
+
+<!-- Start Blogs Section -->
+<section class="blog-section-two section">
+	<div class="container">
+
+		<!-- Section Header -->
+		<div class="section-header section-header-two">
+			<h2 class="section-title">Expert <span class="text-gradient">Tips &amp; Articles</span></h2>
+			<p class="sub-title text-black">Explore expert written articles to guide your learning journey.</p>
+		</div>
+		<!-- End Section Header -->
+
+		<div class="row g-4">
+			{% if latest_posts %}
+			{% for post in latest_posts %}
+			<!-- Blog Item -->
+			<div class="col-lg-6 d-flex">
+				<div class="blog-item-two flex-fill wow fadeInUp" data-wow-duration="1s"
+					style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+					<div class="blog-img">
+						<a href="{% url 'blog:blog-detail' post.slug %}">
+							<img src="{{ post.get_imagethumbnail }}" alt="{{ post.title }}" class="img-fluid">
+						</a>
+					</div>
+					<div class="blog-content">
+						<h3 class="custom-title"><a href="{% url 'blog:blog-detail' post.slug %}">{{ post.title }}</a>
+						</h3>
+						<p>{{ post.snippet }}</p>
+						<p class="date"><i class="icon-calendar-fold me-1"></i>{{ post.date_created|date:"d M Y" }}</p>
+					</div>
+				</div>
+			</div>
+			<!-- End Blog Item -->
+			{% endfor %}
+			{% endif %}
+	</div>
+
+	<div class="view-more text-center">
+		<a href="{% url 'blog:blog-list' %}" class="btn-medium primary-btn">View All<i
+				class="icon-chevron-right ms-2"></i></a>
+	</div>
+
+	</div>
+</section>
+<!-- End Blogs Section -->
+
+{% endblock %}

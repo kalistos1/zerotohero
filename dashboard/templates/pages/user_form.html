@@ -1,0 +1,33 @@
+{% extends "dashbard_base.html" %}
+{% block title %}{% if edit_user %}Edit User{% else %}Add User{% endif %} — Zero to Hero{% endblock %}
+{% block page_title %}{% if edit_user %}Edit: {{ edit_user.username }}{% else %}Add New User{% endif %}{% endblock %}
+{% block content %}
+<div class="container-xxl">
+  <div class="page-title-box d-flex align-items-center justify-content-between">
+    <h4 class="mb-0">{% if edit_user %}Edit: {{ edit_user.username }}{% else %}Add New User{% endif %}</h4>
+    <a href="{% url 'dashboard:user-list' %}" class="btn btn-outline-secondary btn-sm">Back to Users</a>
+  </div>
+  <div class="card" style="max-width:600px;">
+    <div class="card-body">
+      <form method="post"
+            action="{% if edit_user %}{% url 'dashboard:user-edit' edit_user.username %}{% else %}{% url 'dashboard:user-create' %}{% endif %}">
+        {% csrf_token %}
+        <div class="row g-3">
+          {% for field in form %}
+          <div class="col-md-6">
+            <label class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|join:', ' }}</div>{% endif %}
+          </div>
+          {% endfor %}
+          <div class="col-12 text-end">
+            <button type="submit" class="btn btn-primary">
+              {% if edit_user %}Update User{% else %}Create User{% endif %}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,206 @@
+{% extends 'core_base.html' %}
+{% load static %}
+{% block title %} zero to hero {% endblock %}
+
+{% block meta_tags %}
+{% endblock %}
+
+{% block navbar %}{% endblock navbar %}
+{% block footer %}{% endblock footer %}
+
+{% block content %}
+<!-- Start Content -->
+<div class="container-fuild z-1">
+	<div class="auth-wrapper">
+
+		<!-- start row -->
+		<div class="row">
+
+			<!-- start col -->
+			<div class="col-lg-7">
+				<div class="auth-wrapper-left">
+					<div class="content-box mx-auto">
+						<h1>“Growth starts when guidance meets passion.”</h1>
+						<div class="avatar-list-stacked avatar-group-lg">
+							<span class="avatar border-0">
+								<img src="{% static 'frontend/assets/img/auth/avatar/avatar-1.png' %}" alt="img">
+							</span>
+							<span class="avatar border-0">
+								<img src="{% static 'frontend/assets/img/auth/avatar/avatar-2.png' %}" alt="img">
+							</span>
+
+							<span class="avatar border-0">
+								<img src="{% static 'frontend/assets/img/auth/avatar/avatar-4.png' %}" alt="img">
+							</span>
+							<span class="avatar border-0">
+								<img src="{% static 'frontend/assets/img/auth/avatar/avatar-3.png' %}" alt="img">
+							</span>
+							<span class="avatar border-0">
+								<img src="{% static 'frontend/assets/img/auth/avatar/avatar-5.png' %}" alt="img">
+							</span>
+						</div>
+
+					</div>
+
+
+					<div class="auth-shape-1">
+						<img src="{% static 'frontend/assets/img/auth/shape-1.png' %}" alt="">
+					</div>
+					<div class="auth-shape-2">
+						<img src="{% static 'frontend/assets/img/auth/shape-2.png' %}" alt="">
+					</div>
+					<div class="auth-shape-3">
+						<img src="{% static 'frontend/assets/img/auth/Vector.png' %}" alt="">
+						<img src="{% static 'frontend/assets/img/auth/Vector-1.png' %}" alt="">
+						<img src="{% static 'frontend/assets/img/auth/Vector-2.png' %}" alt="">
+					</div>
+
+				</div>
+			</div>
+			<!-- end col -->
+
+			<!-- start col -->
+			<div class="col-lg-5">
+				<div class="auth-wrapper-right">
+					<div class="auth-logo">
+						<a href="{% url 'core:index' %}"><img
+								src="{% static 'frontend/assets/img/zerotohero_logo3.webp' %}" alt=""></a>
+					</div>
+					{% if messages or form.errors %}
+					<div class="mb-4">
+						{% for message in messages %}
+						<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+							{{ message }}
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+						{% endfor %}
+						{% if form.errors %}
+						<div class="alert alert-danger alert-dismissible fade show" role="alert">
+							<strong>Please correct the following errors:</strong>
+							<ul class="mb-0 text-start">
+								{% for field in form %}
+								{% for error in field.errors %}
+								<li>{{ field.label }}: {{ error }}</li>
+								{% endfor %}
+								{% endfor %}
+								{% for error in form.non_field_errors %}
+								<li>{{ error }}</li>
+								{% endfor %}
+							</ul>
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+						{% endif %}
+					</div>
+					{% endif %}
+					<form action="{% url 'accounts:signup' %}" method="POST" class="auth-form">
+						{% csrf_token %}
+						<div class="form-header text-center">
+							<h2>Sign Up</h2>
+							<p>Quick and secure access with simple sign up.</p>
+						</div>
+						<div class="auth-form-input text-start">
+							<div class="row">
+								<div class="col-md-6 mb-4 input-group-flat">
+									<label class="form-label">
+										First Name
+										<span class="text-danger ms-1">*</span>
+									</label>
+									<input type="text" name="first_name" class="form-control" placeholder="First Name"
+										required value="{{ form.first_name.value|default:'' }}">
+								</div>
+								<div class="col-md-6 mb-4 input-group-flat">
+									<label class="form-label">
+										Last Name
+										<span class="text-danger ms-1">*</span>
+									</label>
+									<input type="text" name="last_name" class="form-control" placeholder="Last Name"
+										required value="{{ form.last_name.value|default:'' }}">
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6 mb-4 input-group-flat">
+									<label class="form-label">
+										Username
+										<span class="text-danger ms-1">*</span>
+									</label>
+									<input type="text" name="username" class="form-control"
+										placeholder="Enter Your Username" required
+										value="{{ form.username.value|default:'' }}">
+								</div>
+
+								<div class="col-md-6 mb-4 input-group-flat">
+									<label class="form-label">
+										Email
+										<span class="text-danger ms-1">*</span>
+									</label>
+									<input type="email" name="email" class="form-control" placeholder="Enter Your Email"
+										required value="{{ form.email.value|default:'' }}">
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6 mb-4 input-group-flat">
+									<label class="form-label">Password
+										<span class="text-danger ms-1">*</span>
+									</label>
+									<div class="input-group input-group-flat pass-group">
+										<input type="password" name="password" class="form-control pass-input"
+											placeholder="**********" required>
+										<span class="input-group-text toggle-password">
+											<i class=" icon-eye-off"></i>
+										</span>
+									</div>
+								</div>
+								<div class="col-md-6 mb-4 input-group-flat">
+									<label class="form-label">Confirm Password
+										<span class="text-danger ms-1">*</span>
+									</label>
+									<div class="input-group input-group-flat pass-group">
+										<input type="password" name="password2" class="form-control pass-input"
+											placeholder="**********" required>
+										<span class="input-group-text toggle-password">
+											<i class=" icon-eye-off"></i>
+										</span>
+									</div>
+								</div>
+
+							</div>
+
+							{% if not debug %}
+							<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+							<div class="g-recaptcha mb-3" data-sitekey="{{ RECAPTCHA_SITE_KEY }}"></div>
+							{% endif %}
+
+							<div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
+								<div class="d-flex align-items-center">
+									<div class="form-check form-check-md mb-0">
+										<input class="form-check-input" name="accepted_terms" id="accepted_terms"
+											type="checkbox" required>
+										<label for="accepted_terms" class="form-check-label mt-0 text">I agree with <a
+												href="{% url 'core:terms' %}"
+												class="text-primary text-decoration-underline fw-semibold">Terms &
+												Service</a> </label>
+									</div>
+								</div>
+							</div>
+							<div class="mb-4">
+								<button type="submit" class="primary-btn w-100 justify-content-center">Sign
+									Up</button>
+							</div>
+							<div class="text-center">
+								<p class="mb-0">Already have an account? <a href="{% url 'accounts:login' %}"
+										class="link-primary">Sign In</a></p>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<!-- end col -->
+
+		</div>
+		<!-- End row -->
+	</div>
+</div>
+<!-- End Content -->
+{% endblock %}

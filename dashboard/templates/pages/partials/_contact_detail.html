@@ -1,0 +1,69 @@
+{% load static %}
+<div class="offcanvas-header">
+  <div class="d-flex gap-2 align-items-center w-50">
+    <a href="#" role="button" data-bs-dismiss="offcanvas" aria-label="Close">
+      <i class="bx bx-arrow-back fs-18 align-middle"></i>
+    </a>
+    <h5 class="offcanvas-title text-truncate w-50" id="email-readLabel">{{ m.subject|default:'(No subject)' }}</h5>
+  </div>
+  <div class="ms-auto">
+    <form method="post" action="{% url 'dashboard:contact-delete' m.id %}"
+          hx-post="{% url 'dashboard:contact-delete' m.id %}"
+          hx-confirm="Delete this message?"
+          hx-target="#contact-offcanvas"
+          hx-swap="innerHTML">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-light" aria-label="Delete">
+        <i class="bx bx-trash fs-18"></i>
+      </button>
+    </form>
+  </div>
+</div>
+<div class="offcanvas-body p-0 h-100" data-simplebar>
+  <div class="px-3">
+    <div class="mt-2">
+      <div class="d-flex mb-4 mt-1">
+        <div class="flex-grow-1">
+          <span class="float-end">{{ m.created_at|date:'M d, Y H:i' }}</span>
+          <h6 class="m-0">{{ m.name }}</h6>
+          <small class="text-muted">From: {{ m.email }}</small>
+        </div>
+      </div>
+      <div class="text-muted">
+        <p style="white-space: pre-line;">{{ m.message }}</p>
+      </div>
+    </div>
+
+    {% if replies %}
+    <hr>
+    <h6 class="text-muted small">Previous Replies</h6>
+    {% for reply in replies %}
+    <div class="border rounded p-2 mb-2 bg-light">
+      <small class="text-muted">{{ reply.replied_by }} &mdash; {{ reply.created_at|date:'M d, Y H:i' }}</small>
+      <p class="mb-0 mt-1 small">{{ reply.body }}</p>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
+<div class="p-3">
+  <div id="contact-reply-result"></div>
+  <form hx-post="{% url 'dashboard:contact-message-reply' m.id %}"
+        hx-target="#contact-reply-result"
+        hx-swap="innerHTML">
+    {% csrf_token %}
+    <div class="row g-2">
+      <div class="col-12">
+        <label class="form-label">Subject</label>
+        <input type="text" name="subject" class="form-control" value="Re: {{ m.subject|default:'' }}">
+      </div>
+      <div class="col-12">
+        <label class="form-label">Message</label>
+        <textarea name="body" rows="6" class="form-control"></textarea>
+      </div>
+    </div>
+    <div class="text-end mt-2">
+      <button type="submit" class="btn btn-primary width-sm">Send Reply</button>
+    </div>
+  </form>
+</div>

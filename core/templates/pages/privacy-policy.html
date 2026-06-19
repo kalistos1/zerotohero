@@ -1,0 +1,187 @@
+{% extends 'core_base.html' %}
+{% load static %}
+{% block title %}Zero to Hero — Privacy Policy{% endblock %}
+
+{% block meta_description %}
+Zero to Hero’s Privacy Policy - Learn about how we collect, use, and protect your data. Terms for students, mentors,
+and platform usage worldwide.{% endblock %}
+
+{% block og_title %}Zero to Hero — Privacy Policy{% endblock %}
+{% block og_description %}Zero to Hero’s Privacy Policy - Learn about how we collect, use, and protect your data.
+Terms for students, mentors, and platform usage worldwide.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["EducationalOrganization", "WebSite"],
+  "name": "Zero to Hero - Privacy Policy",
+  "url": "{{ safe_base_url }}",
+  "description": "Zero to Hero's Privacy Policy - Learn about how we collect, use, and protect your data. Terms for students, mentors, and platform usage worldwide.",
+  "areaServed": "Worldwide",
+  "knowsAbout": ["Python", "Software Engineering", "Data Analysis", "Data Engineering", "Backend Development", "Cybersecurity"],
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "{{ safe_base_url }}/blog/?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Page Wraper  -->
+<div class="page-wrapper">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar">
+        <div class="container">
+            <h1 class="breadcrumb-title">Privay Policy</h1>
+            <nav aria-label="breadcrumb" class="page-breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-items"><a href="{% url 'core:index' %}" class="icon"><i
+                                class="icon-house"></i></a></li>
+                    <li class="breadcrumb-items active" aria-current="page">Privay Policy</li>
+                </ol>
+            </nav>
+        </div>
+        <img src="{% static 'frontend/assets/img/bg/breadcrumb-wave.png' %}" alt="wave" class="img-fluid img-1">
+    </div>
+    <!-- /Breadcrumb -->
+
+    <div class="content">
+        <div class="container">
+
+            <!-- Start Content -->
+            <div class="terms-privacy">
+
+                <div class="container">
+
+                    <!-- Terms Content -->
+                    <div class="row">
+                        <div class="col-lg-10 mx-auto">
+                            <div class="mb-2 mb-lg-3">
+                                <p class="mb-0"> At Mentoring, we value your trust and are committed to protecting your
+                                    privacy. This policy explains how we collect, use, and safeguard your information
+                                    when
+                                    you use our platform.</p>
+                            </div>
+
+                            <div class="mb-2 mb-lg-3">
+                                <h2 class="mb-3 title">Information We Collect</h2>
+                                <ul class="list-styled mb-4 mb-lg-5">
+                                    <li class="mb-2 text-dark"> Personal Information: <span class="text-body"> Name,
+                                            email,
+                                            phone number, profile photo, and payment details when
+                                            you register, book a session or purchase a plan.</span></li>
+                                    <li class="mb-2 text-dark">Mentorship Information :<span class="text-body"> Session
+                                            history, preferred mentors, feedback, goals, and learning
+                                            preferences.</span></li>
+                                    <li class="mb-2 text-dark"> Technical Information : <span class="text-body"> IP
+                                            address,
+                                            browser type, device details, and cookies used to improve your experience
+                                            and
+                                            platform performance.
+                                        </span></li>
+                                    <li class="mb-0 text-dark"> Mentor Data : <span class="text-body"> Professional
+                                            details,
+                                            area of expertise, availability, ratings, pricing, and payout information if
+                                            you
+                                            register as a mentor.</span></li>
+                                </ul>
+                            </div>
+
+                            <div class="mb-2 mb-lg-3">
+                                <h2 class="mb-3 title">How We Use Your Information</h2>
+                                <p class="mb-3"> We use your data to :</p>
+                                <ul class="list-styled">
+                                    <li class="mb-2">Create and manage your user or mentor account</li>
+                                    <li class="mb-2"> Facilitate bookings, payments, and communication between mentors
+                                        and
+                                        mentees </li>
+                                    <li class="mb-2"> Send confirmations, updates, or relevant mentorship
+                                        recommendations
+                                    </li>
+                                    <li class="mb-2"> Provide personalized mentorship experiences and improve our
+                                        platform
+                                    </li>
+                                    <li class="mb-2"> Conduct analytics to enhance service quality and usability </li>
+                                    <li class="mb-2"> Ensure data security, prevent fraud, and comply with legal
+                                        requirements </li>
+                                </ul>
+                            </div>
+
+                            <div class="mb-2 mb-lg-3">
+                                <h2 class="mb-3 title">Sharing Your Information</h2>
+                                <p class="mb-3"> We do not sell your personal information. However, your data may be
+                                    shared
+                                    with :</p>
+                                <ul class="list-styled mb-4 mb-lg-5">
+                                    <li class="mb-2 text-dark"> Mentors/Mentees : <span class="text-body"> To connect
+                                            both
+                                            parties for scheduled sessions</span></li>
+                                    <li class="mb-2 text-dark">Mentorship Information :<span class="text-body"> Session
+                                            history, preferred mentors, feedback, goals, and learning
+                                            preferences.</span></li>
+                                    <li class="mb-2 text-dark"> Service Providers : <span class="text-body"> Payment
+                                            gateways, communication tools, analytics, and support services
+                                        </span></li>
+                                    <li class="mb-0 text-dark"> Legal Authorities : <span class="text-body"> When
+                                            required
+                                            to comply with laws or enforce platform policies</span></li>
+                                </ul>
+                            </div>
+
+                            <div class="mb-2 mb-lg-3">
+                                <h2 class="mb-3 title">Cookies & Tracking</h2>
+                                <p class="mb-3"> Our website uses cookies and similar technologies to :</p>
+                                <ul class="list-styled">
+                                    <li class="mb-2"> Remember your login preferences and settings</li>
+                                    <li class="mb-2"> Analyze engagement, user behavior, and traffic patterns
+                                    </li>
+                                    <li class="mb-2"> Improve platform functionality and overall experience
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="mb-2 mb-lg-3">
+                                <h2 class="mb-3 title">Data Security</h2>
+                                <p class="mb-3"> We implement appropriate technical and organizational measures to
+                                    protect
+                                    your information from unauthorized access, alteration, or disclosure. However, no
+                                    online
+                                    system is 100% secure.</p>
+                            </div>
+
+                            <div class="mb-2 mb-lg-3">
+                                <h2 class="mb-3 title">Changes to This Policy</h2>
+                                <p class="mb-3"> We may update this Privacy Policy from time to time. Any revisions will
+                                    be
+                                    posted on this page with an updated date. Continued use of our platform indicates
+                                    acceptance of the revised policy.</p>
+                            </div>
+
+                            <div class="mb-2 mb-lg-3">
+                                <h2 class="mb-3 title">Contact Us</h2>
+                                <ul class="list-styled">
+                                    <li class="mb-2"> If you have any questions, feedback, or concerns regarding this
+                                        Privacy Policy, please contact us at: mentoring@example.com</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Terms Content End -->
+                </div>
+
+            </div>
+            <!-- End Content -->
+
+        </div>
+    </div>
+
+</div>
+<!-- Page Wraper  -->
+{% endblock %}

@@ -1,0 +1,186 @@
+{% extends 'core_base.html' %}
+{% load static %}
+{% block title %}{{ post.seo_title|default:post.title }} — Zero to Hero Blog{% endblock %}
+
+{% block meta_description %}{{ post.meta_description|default:post.snippet }}{% endblock %}
+
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ post.seo_title|default:post.title }}{% endblock %}
+{% block og_description %}{{ post.meta_description|default:post.snippet }}{% endblock %}
+{% block og_image %}{% if post.image %}{{ safe_base_url }}{{ post.image.url }}{% else %}{{ safe_base_url }}/static/frontend/assets/img/og-default.jpg{% endif %}{% endblock %}
+{% block twitter_title %}{{ post.seo_title|default:post.title }}{% endblock %}
+{% block twitter_description %}{{ post.meta_description|default:post.snippet }}{% endblock %}
+{% block twitter_image %}{% if post.image %}{{ safe_base_url }}{{ post.image.url }}{% else %}{{ safe_base_url }}/static/frontend/assets/img/og-default.jpg{% endif %}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ post.title|escapejs }}",
+  "description": "{{ post.meta_description|default:post.snippet|escapejs }}",
+  "datePublished": "{{ post.date_created|date:'c' }}",
+  "dateModified": "{{ post.date_updated|date:'c' }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ post.author.get_full_name|default:post.author.username|escapejs }}"
+  },
+  "publisher": {
+    "@type": "EducationalOrganization",
+    "name": "Zero to Hero",
+    "url": "{{ safe_base_url }}"
+  },
+  "image": "{% if post.image %}{{ safe_base_url }}{{ post.image.url }}{% else %}{{ safe_base_url }}/static/frontend/assets/img/og-default.jpg{% endif %}",
+  "url": "{{ request.build_absolute_uri }}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ request.build_absolute_uri }}"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar">
+    <div class="container">
+        <h1 class="breadcrumb-title">{{ post.title }}</h1>
+        <nav aria-label="breadcrumb" class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-items"><a href="{% url 'core:index' %}" class="icon"><i class="icon-house"></i></a></li>
+                <li class="breadcrumb-items"><a href="{% url 'blog:blog-list' %}">Blog</a></li>
+                {% if post.category %}
+                <li class="breadcrumb-items">
+                    <a href="{% url 'blog:blog-list' %}?category={{ post.category.slug }}">{{ post.category.name }}</a>
+                </li>
+                {% endif %}
+                <li class="breadcrumb-items active" aria-current="page">{{ post.title|truncatechars:40 }}</li>
+            </ol>
+        </nav>
+    </div>
+    <img src="{% static 'frontend/assets/img/bg/breadcrumb-wave.png' %}" alt="wave" class="img-fluid img-1">
+</div>
+
+<div class="content">
+    <div class="container">
+        <div class="row g-4">
+
+            {# ── Main article ── #}
+            <div class="col-lg-8">
+
+                {# Featured image #}
+                {% if post.image %}
+                <img src="{{ post.image.url }}"
+                     class="img-fluid rounded mb-4 w-100"
+                     style="max-height:420px;object-fit:cover;"
+                     alt="{{ post.title }}"
+                     loading="eager">
+                {% endif %}
+
+                {# Post meta #}
+                <div class="d-flex flex-wrap gap-3 align-items-center mb-4 text-muted small">
+                    <span><i class="icon-calendar me-1"></i>{{ post.date_created|date:"d F Y" }}</span>
+                    <span><i class="icon-user me-1"></i>{{ post.author.get_full_name|default:post.author.username }}</span>
+                    {% if post.category %}
+                    <a href="{% url 'blog:blog-list' %}?category={{ post.category.slug }}"
+                       class="badge bg-primary text-decoration-none">
+                        {{ post.category.name }}
+                    </a>
+                    {% endif %}
+                    {% if post.date_updated != post.date_created %}
+                    <span class="text-muted fst-italic">Updated {{ post.date_updated|date:"d M Y" }}</span>
+                    {% endif %}
+                </div>
+
+                {# Body — sanitized by ProseEditor (nh3) at save time, safe to render #}
+                <div class="blog-content prose">
+                    {{ post.body|safe }}
+                </div>
+
+                {# Tags #}
+                {% with tags=post.tags.all %}
+                {% if tags %}
+                <div class="mt-4 pt-3 border-top">
+                    <strong class="me-2">Tags:</strong>
+                    {% for tag in tags %}
+                    <span class="badge bg-light text-dark border me-1">{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+
+                {# ── Comments section ── #}
+                <div class="mt-5 pt-3 border-top">
+                    <h5 class="fw-bold mb-4">
+                        Comments
+                        {% if comments %}<span class="badge bg-secondary ms-1">{{ comments|length }}</span>{% endif %}
+                    </h5>
+
+                    {% for comment in comments %}
+                    <div class="d-flex gap-3 mb-4">
+                        <div class="flex-shrink-0">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
+                                 style="width:40px;height:40px;">
+                                {{ comment.author.get_full_name|default:comment.author.username|slice:":1"|upper }}
+                            </div>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <strong>{{ comment.author.get_full_name|default:comment.author.username }}</strong>
+                                <small class="text-muted">{{ comment.date_created|timesince }} ago</small>
+                            </div>
+                            <p class="mb-0">{{ comment.text }}</p>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">No comments yet. Be the first to share your thoughts!</p>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            {# ── Sidebar ── #}
+            <div class="col-lg-4">
+
+                {# Related posts #}
+                {% if related %}
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <h6 class="fw-bold mb-3">Related Posts</h6>
+                        {% for r in related %}
+                        <div class="mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                            {% if r.thumbnail %}
+                            <img src="{{ r.thumbnail.url }}" class="img-fluid rounded mb-2"
+                                 style="height:80px;width:100%;object-fit:cover;" alt="{{ r.title }}" loading="lazy">
+                            {% elif r.image %}
+                            <img src="{{ r.image.url }}" class="img-fluid rounded mb-2"
+                                 style="height:80px;width:100%;object-fit:cover;" alt="{{ r.title }}" loading="lazy">
+                            {% endif %}
+                            <a href="{% url 'blog:blog-detail' r.slug %}"
+                               class="text-decoration-none text-dark fw-semibold small d-block">
+                                {{ r.title }}
+                            </a>
+                            <small class="text-muted">{{ r.date_created|date:"d M Y" }}</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="d-grid gap-2">
+                    <a href="{% url 'blog:blog-list' %}" class="btn btn-outline-primary">
+                        <i class="icon-chevron-left me-1"></i> Back to Blog
+                    </a>
+                    {% if post.category %}
+                    <a href="{% url 'blog:blog-list' %}?category={{ post.category.slug }}"
+                       class="btn btn-outline-secondary btn-sm">
+                        More in {{ post.category.name }}
+                    </a>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

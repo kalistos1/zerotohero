@@ -1,0 +1,167 @@
+{% extends 'core_base.html' %}
+{% load static %}
+{% block title %}{% if active_category %}{{ active_category.name }} Articles{% else %}Python Mentorship Blog{% endif %}
+— Zero to Hero{% endblock %}
+
+{% block meta_description %}{% if active_category %}Explore {{ active_category.name }} articles, tutorials and insights
+from the Zero to Hero Python Mentorship programme.{% else %}Articles, tutorials and insights on Python programming,
+mentorship, data engineering, backend development, and cybersecurity from the Zero to Hero programme.{% endif %}
+{% endblock %}
+
+{% block og_title %}{% if active_category %}{{ active_category.name }} — Zero to Hero Blog{% else %}Python Mentorship
+Blog — Zero to Hero {% endif %}{% endblock %}
+{% block og_description %}Practical Python tutorials, career guides, and mentorship insights from the Zero to Hero
+programme. Open to learners worldwide.{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar">
+    <div class="container">
+        <h1 class="breadcrumb-title">Blog</h1>
+        <nav aria-label="breadcrumb" class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-items"><a href="{% url 'core:index' %}" class="icon"><i
+                            class="icon-house"></i></a></li>
+                <li class="breadcrumb-items active" aria-current="page">Blog</li>
+            </ol>
+        </nav>
+    </div>
+    <img src="{% static 'frontend/assets/img/bg/breadcrumb-wave.png' %}" alt="wave" class="img-fluid img-1">
+</div>
+
+<div class="content">
+    <div class="container">
+        <div class="row g-4">
+
+            {# ── Posts grid ── #}
+            <div class="col-lg-9">
+
+                {% if active_category %}
+                <p class="text-muted mb-3">
+                    Showing posts in <strong>{{ active_category.name }}</strong>
+                    — <a href="{% url 'blog:blog-list' %}">clear filter</a>
+                </p>
+                {% endif %}
+
+                <div class="row g-4">
+                    {% for post in page_obj %}
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            {# Prefer thumbnail (small), fall back to full image, then placeholder #}
+                            {% if post.thumbnail %}
+                            <img src="{{ post.thumbnail.url }}" class="card-img-top"
+                                style="height:180px;object-fit:cover;" alt="{{ post.title }}" loading="lazy">
+                            {% elif post.image %}
+                            <img src="{{ post.image.url }}" class="card-img-top" style="height:180px;object-fit:cover;"
+                                alt="{{ post.title }}" loading="lazy">
+                            {% else %}
+                            <img src="{% static 'frontend/assets/img/blog/blog-4.jpg' %}" class="card-img-top"
+                                style="height:180px;object-fit:cover;" alt="{{ post.title }}" loading="lazy">
+                            {% endif %}
+
+                            <div class="card-body">
+                                {% if post.category %}
+                                <a href="?category={{ post.category.slug }}"
+                                    class="badge bg-primary text-decoration-none mb-2 d-inline-block">
+                                    {{ post.category.name }}
+                                </a>
+                                {% endif %}
+                                <h5 class="card-title">
+                                    <a href="{% url 'blog:blog-detail' post.slug %}"
+                                        class="text-dark text-decoration-none stretched-link">
+                                        {{ post.title }}
+                                    </a>
+                                </h5>
+                                <p class="card-text text-muted small">{{ post.snippet }}</p>
+                            </div>
+
+                            <div
+                                class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center gap-2 small text-muted">
+                                    <i class="icon-user"></i>
+                                    {{ post.author.get_full_name|default:post.author.username }}
+                                </div>
+                                <small class="text-muted">{{ post.date_created|date:"d M Y" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12">
+                        <div class="text-center py-5">
+                            <i class="bx bx-file-blank fs-1 text-muted"></i>
+                            <p class="text-muted mt-2">
+                                {% if category_slug %}No posts found in this category.{% else %}No published posts yet.
+                                Check back soon!{% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {# ── Pagination ── #}
+                {% if page_obj.has_other_pages %}
+                <nav class="mt-4" aria-label="Blog pagination">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                                href="?page={{ page_obj.previous_page_number }}{% if category_slug %}&category={{ category_slug }}{% endif %}">
+                                <i class="icon-chevron-left"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <li
+                            class="page-item"><a class="page-link"
+                                href="?page={{ num }}{% if category_slug %}&category={{ category_slug }}{% endif %}">{{
+                                num }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                    href="?page={{ page_obj.next_page_number }}{% if category_slug %}&category={{ category_slug }}{% endif %}">
+                                    <i class="icon-chevron-right"></i>
+                                </a>
+                            </li>
+                            {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+
+            {# ── Sidebar ── #}
+            <div class="col-lg-3">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <h6 class="fw-bold mb-3">Categories</h6>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <a href="{% url 'blog:blog-list' %}"
+                                    class="text-decoration-none {% if not category_slug %}fw-bold text-primary{% else %}text-dark{% endif %}">
+                                    All Posts
+                                </a>
+                            </li>
+                            {% for cat in categories %}
+                            <li class="mb-2">
+                                <a href="?category={{ cat.slug }}"
+                                    class="text-decoration-none {% if category_slug == cat.slug %}fw-bold text-primary{% else %}text-dark{% endif %}">
+                                    {{ cat.name }}
+                                </a>
+                            </li>
+                            {% empty %}
+                            <li class="text-muted small">No categories yet.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

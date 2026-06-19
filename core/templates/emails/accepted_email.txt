@@ -1,0 +1,13 @@
+Hi {{ full_name }},
+
+Congratulations! We are thrilled to inform you that you have been accepted into the Zero to Hero Mentorship program.
+
+We received many strong applications, but your background and enthusiasm stood out to our team. We're excited to have you on board for this journey.
+
+Next steps will be communicated shortly, so please keep an eye on your inbox.
+
+Best regards,
+The Zero to Hero Team
+
+--
+You received this email because you applied to the Zero to Hero Mentorship program.

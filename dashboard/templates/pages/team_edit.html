@@ -1,0 +1,66 @@
+{% extends "dashbard_base.html" %}
+{% block title %}Edit Team Member — {{ member.name }} {% endblock %}
+{% block page_title %}Edit Team Member{% endblock %}
+
+{% block content %}
+<div class="container-xxl">
+  <div class="page-title-box d-flex align-items-center justify-content-between">
+    <h4 class="mb-0">Edit Team Member</h4>
+    <a href="{% url 'dashboard:team-list' %}" class="btn btn-sm btn-outline-secondary">Back to List</a>
+  </div>
+
+  <div class="card max-w-2xl">
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          {{ form.name }}
+          {% if form.name.errors %}<div class="invalid-feedback d-block">{{ form.name.errors|join:', ' }}</div>{% endif %}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Role</label>
+          {{ form.role }}
+          {% if form.role.errors %}<div class="invalid-feedback d-block">{{ form.role.errors|join:', ' }}</div>{% endif %}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Image</label>
+          {% if member.image %}
+          <div class="mb-2">
+            <img src="{{ member.image.url }}" alt="Current Photo" width="80" class="rounded">
+          </div>
+          {% endif %}
+          {{ form.image }}
+          {% if form.image.errors %}<div class="invalid-feedback d-block">{{ form.image.errors|join:', ' }}</div>{% endif %}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Bio</label>
+          {{ form.bio }}
+          {% if form.bio.errors %}<div class="invalid-feedback d-block">{{ form.bio.errors|join:', ' }}</div>{% endif %}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">LinkedIn URL</label>
+          {{ form.linkedin_url }}
+          {% if form.linkedin_url.errors %}<div class="invalid-feedback d-block">{{ form.linkedin_url.errors|join:', ' }}</div>{% endif %}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Twitter URL</label>
+          {{ form.twitter_url }}
+          {% if form.twitter_url.errors %}<div class="invalid-feedback d-block">{{ form.twitter_url.errors|join:', ' }}</div>{% endif %}
+        </div>
+
+        <div class="mb-3 form-check">
+          {{ form.is_active }}
+          <label class="form-check-label">Active (visible on site)</label>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <a href="{% url 'dashboard:team-list' %}" class="btn btn-light">Cancel</a>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

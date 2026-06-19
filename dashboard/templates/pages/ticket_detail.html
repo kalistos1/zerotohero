@@ -1,0 +1,88 @@
+{% extends "dashbard_base.html" %}
+{% block title %}Ticket {{ ticket.ticket_id }} — Zero to Hero{% endblock %}
+{% block page_title %}Ticket: {{ ticket.ticket_id }}{% endblock %}
+{% block content %}
+<div class="container-xxl">
+  <div class="page-title-box d-flex align-items-center justify-content-between">
+    <h4 class="mb-0">Ticket: {{ ticket.subject }}</h4>
+    <a href="{% url 'dashboard:ticket-list' %}" class="btn btn-outline-secondary btn-sm">Back</a>
+  </div>
+
+  {% if messages %}{% for m in messages %}
+  <div class="alert alert-{{ m.tags }} alert-dismissible fade show">{{ m }}<button class="btn-close" data-bs-dismiss="alert"></button></div>
+  {% endfor %}{% endif %}
+
+  <div class="row g-3">
+    <div class="col-lg-8">
+      {# Messages thread #}
+      <div class="card">
+        <div class="card-header"><h5 class="card-title mb-0">Conversation</h5></div>
+        <div class="card-body" id="ticket-messages">
+          {% include "pages/partials/_ticket_messages.html" %}
+        </div>
+        <div class="card-footer">
+          <form method="post"
+                action="{% url 'dashboard:ticket-detail' ticket.pk %}"
+                hx-post="{% url 'dashboard:ticket-detail' ticket.pk %}"
+                hx-target="#ticket-messages"
+                hx-swap="innerHTML">
+            {% csrf_token %}
+            <div class="d-flex gap-2">
+              {{ msg_form.content }}
+              <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+            {% if msg_form.content.errors %}
+            <div class="invalid-feedback d-block">{{ msg_form.content.errors|join:', ' }}</div>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-header"><h5 class="card-title mb-0">Details</h5></div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-5">Ticket ID</dt><dd class="col-7"><code>{{ ticket.ticket_id }}</code></dd>
+            <dt class="col-5">Status</dt><dd class="col-7">{{ ticket.get_status_display }}</dd>
+            <dt class="col-5">Created by</dt><dd class="col-7">{{ ticket.user.username }}</dd>
+            <dt class="col-5">Opened</dt><dd class="col-7">{{ ticket.created_at|date:"d M Y" }}</dd>
+            <dt class="col-5">Assigned to</dt><dd class="col-7">{{ ticket.assigned_to.username|default:"Unassigned" }}</dd>
+          </dl>
+        </div>
+      </div>
+
+      {% if request.user.is_admin %}
+      <div class="card mt-3">
+        <div class="card-header"><h5 class="card-title mb-0">Admin Actions</h5></div>
+        <div class="card-body">
+          {# Change status #}
+          <form method="post" action="{% url 'dashboard:ticket-status-update' ticket.pk %}" class="mb-3">
+            {% csrf_token %}
+            <label class="form-label">Change Status</label>
+            <div class="input-group">
+              <select name="status" class="form-select">
+                {% for value, label in ticket.STATUS_CHOICES %}
+                <option value="{{ value }}" {% if ticket.status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+              <button type="submit" class="btn btn-outline-secondary">Update</button>
+            </div>
+          </form>
+          {# Assign ticket #}
+          <form method="post" action="{% url 'dashboard:ticket-assign' ticket.pk %}">
+            {% csrf_token %}
+            <label class="form-label">Assign To</label>
+            <div class="input-group">
+              {{ assign_form.assigned_to }}
+              <button type="submit" class="btn btn-outline-secondary">Assign</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

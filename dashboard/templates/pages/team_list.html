@@ -1,0 +1,114 @@
+{% extends "dashbard_base.html" %}
+{% block title %}Team Members — Zero to Hero{% endblock %}
+{% block page_title %}Team Members{% endblock %}
+
+{% block extra_css %}{% endblock %}
+
+{% block content %}
+<div class="container-xxl">
+  <div class="page-title-box d-flex align-items-center justify-content-between">
+    <h4 class="mb-0">Team Members</h4>
+  </div>
+
+  {% if messages %}{% for m in messages %}
+  <div class="alert alert-{{ m.tags }} alert-dismissible fade show">{{ m }}<button class="btn-close" data-bs-dismiss="alert"></button></div>
+  {% endfor %}{% endif %}
+
+  <div class="row g-4">
+    {# ── Add form ── #}
+    <div class="col-lg-5">
+      <div class="card">
+        <div class="card-header"><h5 class="card-title mb-0">Add Team Member</h5></div>
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:team-create' %}">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              {{ form.name }}
+              {% if form.name.errors %}<div class="invalid-feedback d-block">{{ form.name.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Role</label>
+              {{ form.role }}
+              {% if form.role.errors %}<div class="invalid-feedback d-block">{{ form.role.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Image</label>
+              {{ form.image }}
+              {% if form.image.errors %}<div class="invalid-feedback d-block">{{ form.image.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Bio</label>
+              {{ form.bio }}
+              {% if form.bio.errors %}<div class="invalid-feedback d-block">{{ form.bio.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">LinkedIn URL</label>
+              {{ form.linkedin_url }}
+              {% if form.linkedin_url.errors %}<div class="invalid-feedback d-block">{{ form.linkedin_url.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Twitter URL</label>
+              {{ form.twitter_url }}
+              {% if form.twitter_url.errors %}<div class="invalid-feedback d-block">{{ form.twitter_url.errors|join:', ' }}</div>{% endif %}
+            </div>
+
+            <div class="mb-3 form-check">
+              {{ form.is_active }}
+              <label class="form-check-label">Active (visible on site)</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Team Member</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    {# ── List ── #}
+    <div class="col-lg-7">
+      <div class="card">
+        <div class="card-body p-0">
+          <table class="table table-hover mb-0">
+            <thead class="bg-light">
+              <tr><th>Person</th><th>Active</th><th></th></tr>
+            </thead>
+            <tbody>
+              {% for t in team_members %}
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    {% if t.image %}
+                    <img src="{{ t.image.url }}" class="rounded-circle" width="36" height="36" style="object-fit:cover;" alt="{{ t.name }}">
+                    {% endif %}
+                    <div>
+                      <div class="fw-semibold">{{ t.name }}</div>
+                      <small class="text-muted">{{ t.role }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  {% if t.is_active %}<span class="badge bg-success">Yes</span>{% else %}<span class="badge bg-secondary">No</span>{% endif %}
+                </td>
+                <td class="text-nowrap text-end">
+                  <a href="{% url 'dashboard:team-edit' t.pk %}" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                  <form method="post" action="{% url 'dashboard:team-delete' t.pk %}"
+                        onsubmit="return confirm('Delete this team member?');" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Del</button>
+                  </form>
+                </td>
+              </tr>
+              {% empty %}
+              <tr><td colspan="3" class="text-center text-muted py-4">No team members yet.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}{% endblock %}

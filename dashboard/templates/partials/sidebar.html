@@ -1,0 +1,228 @@
+{% load static %}
+<!-- ========== App Menu Start ========== -->
+<div class="main-nav">
+     <!-- Sidebar Logo -->
+     <div class="logo-box">
+          <a href="{% url 'dashboard:dash_index' %}" class="logo-dark">
+               <img src="{% static 'dashboard/assets/images/logo-sm.png' %}" class="logo-sm" alt="logo sm">
+               <img src="{% static 'dashboard/assets/images/logo-dark.png' %}" class="logo-lg" alt="Zero to Hero">
+          </a>
+          <a href="{% url 'dashboard:dash_index' %}" class="logo-light">
+               <img src="{% static 'dashboard/assets/images/logo-sm.png' %}" class="logo-sm" alt="logo sm">
+               <img src="{% static 'dashboard/assets/images/logo-light.png' %}" class="logo-lg" alt="Zero to Hero">
+          </a>
+     </div>
+
+     <button type="button" class="button-sm-hover" aria-label="Show Full Sidebar">
+          <iconify-icon icon="solar:double-alt-arrow-right-bold-duotone" class="button-sm-hover-icon"></iconify-icon>
+     </button>
+
+     <div class="scrollbar" data-simplebar>
+          <ul class="navbar-nav" id="navbar-nav">
+
+               <li class="menu-title">General</li>
+
+               <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'dash_index' %}active{% endif %}"
+                       href="{% url 'dashboard:dash_index' %}">
+                         <span class="nav-icon"><iconify-icon icon="solar:widget-5-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">Dashboard</span>
+                    </a>
+               </li>
+
+               <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}"
+                       href="{% url 'dashboard:profile' %}">
+                         <span class="nav-icon"><iconify-icon icon="solar:user-circle-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">Profile</span>
+                    </a>
+               </li>
+
+               {% if request.user.is_admin %}
+               <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'store-settings' %}active{% endif %}"
+                       href="{% url 'dashboard:store-settings' %}">
+                         <span class="nav-icon"><iconify-icon icon="solar:settings-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">Settings</span>
+                    </a>
+               </li>
+               {% endif %}
+
+               {% if request.user.is_admin %}
+               <li class="menu-title mt-2">Content</li>
+
+               <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'faq-list' %}active{% endif %}"
+                       href="{% url 'dashboard:faq-list' %}">
+                         <span class="nav-icon"><iconify-icon icon="solar:question-circle-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">FAQs</span>
+                    </a>
+               </li>
+
+               <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'testimonial-list' %}active{% endif %}"
+                       href="{% url 'dashboard:testimonial-list' %}">
+                         <span class="nav-icon"><iconify-icon icon="solar:chat-square-like-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">Testimonials</span>
+                    </a>
+               </li>
+
+               <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'about-page' %}active{% endif %}"
+                       href="{% url 'dashboard:about-page' %}">
+                         <span class="nav-icon"><iconify-icon icon="solar:info-circle-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">About Page</span>
+                    </a>
+               </li>
+
+               <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'event-list' %}active{% endif %}"
+                       href="{% url 'dashboard:event-list' %}">
+                         <span class="nav-icon"><iconify-icon icon="solar:calendar-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">Events</span>
+                    </a>
+               </li>
+
+               <li class="nav-item">
+                    <a class="nav-link menu-arrow {% if 'gallery' in request.resolver_match.url_name %}active{% endif %}"
+                       href="#sidebarGallery" data-bs-toggle="collapse" role="button"
+                       aria-expanded="{% if 'gallery' in request.resolver_match.url_name %}true{% else %}false{% endif %}"
+                       aria-controls="sidebarGallery">
+                         <span class="nav-icon"><iconify-icon icon="solar:gallery-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">Gallery</span>
+                    </a>
+                    <div class="collapse {% if 'gallery' in request.resolver_match.url_name %}show{% endif %}" id="sidebarGallery">
+                         <ul class="nav sub-navbar-nav">
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link {% if request.resolver_match.url_name == 'gallery-list' %}active{% endif %}"
+                                      href="{% url 'dashboard:gallery-list' %}">Items</a>
+                              </li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link {% if request.resolver_match.url_name == 'gallery-category-list' %}active{% endif %}"
+                                      href="{% url 'dashboard:gallery-category-list' %}">Categories</a>
+                              </li>
+                         </ul>
+                    </div>
+               </li>
+               {% endif %}
+
+               {% if request.user.is_admin or request.user.is_mentor %}
+               <li class="nav-item">
+                    <a class="nav-link menu-arrow {% if 'blog' in request.resolver_match.url_name %}active{% endif %}"
+                       href="#sidebarBlog" data-bs-toggle="collapse" role="button"
+                       aria-expanded="{% if 'blog' in request.resolver_match.url_name %}true{% else %}false{% endif %}"
+                       aria-controls="sidebarBlog">
+                         <span class="nav-icon"><iconify-icon icon="solar:document-text-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">Blog</span>
+                    </a>
+                    <div class="collapse {% if 'blog' in request.resolver_match.url_name %}show{% endif %}" id="sidebarBlog">
+                         <ul class="nav sub-navbar-nav">
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link {% if request.resolver_match.url_name == 'blog-post-list' %}active{% endif %}"
+                                      href="{% url 'dashboard:blog-post-list' %}">Posts</a>
+                              </li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link {% if request.resolver_match.url_name == 'blog-post-create' %}active{% endif %}"
+                                      href="{% url 'dashboard:blog-post-create' %}">New Post</a>
+                              </li>
+                              {% if request.user.is_admin %}
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link {% if request.resolver_match.url_name == 'blog-category-list' %}active{% endif %}"
+                                      href="{% url 'dashboard:blog-category-list' %}">Categories</a>
+                              </li>
+                              {% endif %}
+                         </ul>
+                    </div>
+               </li>
+               {% endif %}
+
+               <li class="menu-title mt-2">Communication</li>
+
+               {% if request.user.is_admin %}
+               <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'contact-messages' %}active{% endif %}"
+                       href="{% url 'dashboard:contact-messages' %}">
+                         <span class="nav-icon"><iconify-icon icon="solar:mailbox-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">
+                              Contact Messages
+                              {% if unread_contacts %}
+                              <span class="badge bg-danger ms-1">{{ unread_contacts }}</span>
+                              {% endif %}
+                         </span>
+                    </a>
+               </li>
+               {% endif %}
+
+               <li class="nav-item">
+                    <a class="nav-link {% if 'ticket' in request.resolver_match.url_name %}active{% endif %}"
+                       href="{% url 'dashboard:ticket-list' %}">
+                         <span class="nav-icon"><iconify-icon icon="solar:ticket-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">Tickets</span>
+                    </a>
+               </li>
+
+               {% if request.user.is_admin %}
+               <li class="menu-title mt-2">Users</li>
+
+               <li class="nav-item">
+                    <a class="nav-link {% if 'user' in request.resolver_match.url_name %}active{% endif %}"
+                       href="{% url 'dashboard:user-list' %}">
+                         <span class="nav-icon"><iconify-icon icon="solar:users-group-two-rounded-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">All Users</span>
+                    </a>
+               </li>
+
+               <li class="nav-item">
+                    <a class="nav-link {% if 'mentorship' in request.resolver_match.url_name %}active{% endif %}"
+                       href="{% url 'dashboard:mentorship-list' %}">
+                         <span class="nav-icon"><iconify-icon icon="solar:star-fall-minimalistic-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">Mentorship Apps</span>
+                    </a>
+               </li>
+
+               <li class="nav-item">
+                    <a class="nav-link menu-arrow {% if 'sponsorship' in request.resolver_match.url_name %}active{% endif %}"
+                       href="#sidebarSponsorship" data-bs-toggle="collapse" role="button"
+                       aria-expanded="{% if 'sponsorship' in request.resolver_match.url_name %}true{% else %}false{% endif %}"
+                       aria-controls="sidebarSponsorship">
+                         <span class="nav-icon"><iconify-icon icon="solar:hand-stars-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">Sponsorships</span>
+                    </a>
+                    <div class="collapse {% if 'sponsorship' in request.resolver_match.url_name %}show{% endif %}" id="sidebarSponsorship">
+                         <ul class="nav sub-navbar-nav">
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link {% if request.resolver_match.url_name == 'sponsorship-list' %}active{% endif %}"
+                                      href="{% url 'dashboard:sponsorship-list' %}">Inquiries</a>
+                              </li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link {% if 'sponsorship-tier' in request.resolver_match.url_name %}active{% endif %}"
+                                      href="{% url 'dashboard:sponsorship-tier-list' %}">Manage Tiers</a>
+                              </li>
+                         </ul>
+                    </div>
+               </li>
+               {% endif %}
+
+               <li class="menu-title mt-2">Account</li>
+
+               <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:index' %}" target="_blank">
+                         <span class="nav-icon"><iconify-icon icon="solar:globe-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">View Website</span>
+                    </a>
+               </li>
+
+               <li class="nav-item">
+                    <form method="post" action="{% url 'accounts:logout' %}">
+                         {% csrf_token %}
+                         <button type="submit" class="nav-link btn btn-link text-start w-100 p-0">
+                              <span class="nav-icon"><iconify-icon icon="solar:logout-3-bold-duotone"></iconify-icon></span>
+                              <span class="nav-text">Logout</span>
+                         </button>
+                    </form>
+               </li>
+
+          </ul>
+     </div>
+</div>
+<!-- ========== App Menu End ========== -->

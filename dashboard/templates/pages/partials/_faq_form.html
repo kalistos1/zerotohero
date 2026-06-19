@@ -1,0 +1,33 @@
+{% if form %}
+<form method="post"
+      action="{% if faq %}{% url 'dashboard:faq-edit' faq.pk %}{% else %}{% url 'dashboard:faq-create' %}{% endif %}"
+      hx-post="{% if faq %}{% url 'dashboard:faq-edit' faq.pk %}{% else %}{% url 'dashboard:faq-create' %}{% endif %}"
+      hx-target="#faq-list-body"
+      hx-swap="innerHTML">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label class="form-label" for="{{ form.question.id_for_label }}">Question</label>
+    {{ form.question }}
+    {% if form.question.errors %}<div class="invalid-feedback d-block">{{ form.question.errors|join:', ' }}</div>{% endif %}
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="{{ form.answer.id_for_label }}">Answer</label>
+    {{ form.answer }}
+    {% if form.answer.errors %}<div class="invalid-feedback d-block">{{ form.answer.errors|join:', ' }}</div>{% endif %}
+  </div>
+  <div class="mb-3 form-check">
+    {{ form.is_active }}
+    <label class="form-check-label" for="{{ form.is_active.id_for_label }}">Active (visible on site)</label>
+  </div>
+  <div class="d-flex gap-2">
+    <button type="submit" class="btn btn-primary">
+      {% if faq %}Update{% else %}Create{% endif %} FAQ
+    </button>
+    {% if faq %}
+    <a href="{% url 'dashboard:faq-list' %}" class="btn btn-outline-secondary">Cancel</a>
+    {% endif %}
+  </div>
+</form>
+{% else %}
+<p class="text-muted">Click <strong>Add FAQ</strong> to get started.</p>
+{% endif %}

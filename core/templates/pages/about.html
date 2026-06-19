@@ -1,0 +1,270 @@
+{% extends 'core_base.html' %}
+{% load static %}
+{% block title %}About Zero to Hero — Global Python Mentorship Platform{% endblock %}
+
+{% block meta_description %}Learn about Zero to Hero, a global Python mentorship platform. We run cohort-based,
+instructor-led programmes with personalised mentor groups, live sessions, real-world projects, and career support for
+learners worldwide.{% endblock %}
+
+{% block og_title %}About Zero to Hero — Our Mission, Team & Impact{% endblock %}
+{% block og_description %}Zero to Hero empowers learners worldwide to go from complete beginner to confident, job-ready
+Python developer through structured cohort mentorship.{% endblock %}
+
+{% block content %}
+
+
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar">
+    <div class="container">
+        <h1 class="breadcrumb-title">About Us</h1>
+        <nav aria-label="breadcrumb" class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-items"><a href="{% url 'core:index' %}" class="icon"><i
+                            class="icon-house"></i></a></li>
+                <li class="breadcrumb-items active" aria-current="page">About Us</li>
+            </ol>
+        </nav>
+    </div>
+    <img src="{% static 'frontend/assets/img/bg/breadcrumb-wave.png' %}" alt="wave" class="img-fluid img-1">
+</div>
+<!-- /Breadcrumb -->
+
+<!-- Start About us -->
+<section class="about-section about-section-five section pb-0">
+    <div class="container">
+
+        <!-- start row  -->
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="about-image-five">
+                    <img src="{% static 'frontend/assets/img/about/about-img-5.png' %}" alt="about-img"
+                        class="img-fluid img-1">
+                    <img src="{% static 'frontend/assets/img/icon/about-icon-6.svg' %}" alt="about-img"
+                        class="img-fluid img-2">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-content-five">
+                    <div class="section-header wow fadeInDown" data-wow-duration="1s">
+                        <div class="sub-title shape-bg"> About Us <span class="line"></span> </div>
+                        {% if about and about.description %}
+                            {{ about.description|safe }}
+                        {% else %}
+                            <h2 class="section-title">Growing Stronger Together</h2>
+                            <p>We believe mentorship is more than just teaching code. It’s about complete transformation from beginner to expert and bridging the gap between learning and the job.</p>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- End row  -->
+
+
+        <div class="partners">
+
+            <h6 class="title text-center">Trusted By 56+ Partners Around the Globe</h6>
+
+            <div class="partners-slider">
+                <div class="slide-item">
+                    <div class="partner-img"><img src="{% static 'frontend/assets/img/partner/python_abia.webp' %}"
+                            alt="python abia" class="img-fluid img-1" width="150px"></div>
+                </div>
+                <div class="slide-item">
+                    <div class="partner-img"><img src="{% static 'frontend/assets/img/partner/luster_visio.webp' %}"
+                            alt="luster visio" class="img-fluid img-1" width="150px"></div>
+                </div>
+
+                <div class="slide-item">
+                    <div class="partner-img"><img src="{% static 'frontend/assets/img/partner/bpd.png' %}"
+                            alt="black python devs" class="img-fluid img-1" width="100px"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- End About us -->
+
+<!-- Start Mission -->
+<section class="mission-section section">
+    <div class="container">
+        <div class="section-header text-center  wow fadeInDown" data-wow-duration="1s">
+            <h2 class="section-title">Mission & Impact</h2>
+            <p>To empower aspiring developers across Africa to go From Zero to Hero in Python — transforming complete
+                beginners into confident, skilled, and job-ready tech professionals through practical, high-quality
+                mentorship.We are not just teaching code. We are building futures.</p>
+        </div>
+
+        <!-- start row -->
+        <div class="row row-gap-3 justify-content-center">
+
+            <!-- Item 1 -->
+            <div class="col-lg-4 col-sm-6 d-flex">
+                <div class="mission-item flex-fill">
+                    <div class="mission-count">
+                        <div class="count">01</div>
+                        <span class="dot"></span>
+                    </div>
+                    <div class="mission-content">
+                        <h3 class="custom-title">Inspire</h3>
+                        <p>We ignite ambition in every mentee by showing them what’s possible. Through success stories,
+                            hands-on projects, and consistent support, we help them see that a successful tech career is
+                            possible no matter their starting point.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="col-lg-4 col-sm-6 d-flex">
+                <div class="mission-item flex-fill">
+                    <div class="mission-count">
+                        <div class="count">02</div>
+                        <span class="dot"></span>
+                    </div>
+                    <div class="mission-content">
+                        <h3 class="custom-title">Connect</h3>
+                        <p>We create strong, supportive relationships by placing every mentee in a small group with a
+                            dedicated mentor. This ensures personalized guidance, daily support, code reviews, and
+                            genuine human connection throughout the 6-month journey
+
+
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="col-lg-4 col-sm-6 d-flex">
+                <div class="mission-item flex-fill">
+                    <div class="mission-count">
+                        <div class="count">03</div>
+                        <span class="dot"></span>
+                    </div>
+                    <div class="mission-content">
+                        <h3 class="custom-title">Transform</h3>
+                        <p>From writing their first line of code to building professional portfolios, publishing
+                            articles, and preparing for career opportunities, we equip our mentees with technical
+                            skills, confidence, and a strong network to thrive in the tech industry.
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+    </div>
+    <img src="{% static 'frontend/assets/img/bg/mission-img-1.png' %}" alt="img" class="img-fluid img-1">
+    <img src="{% static 'frontend/assets/img/bg/mission-img-2.png' %}" alt="img" class="img-fluid img-2">
+    <img src="{% static 'frontend/assets/img/bg/mission-img-3.png' %}" alt="img" class="img-fluid img-3">
+</section>
+<!-- End Mission -->
+
+<!-- Start team -->
+<section class="team-section-five section pb-0">
+    <div class="container">
+        <div class="section-header text-center  wow fadeInDown" data-wow-duration="1s">
+            <div class="sub-title shape-bg"> Our Team </div>
+            <h2 class="section-title">Meet the Minds Behind the Mission</h2>
+            <p>A passionate team of mentors, designers, and innovators committed to creating real human impact.</p>
+        </div>
+
+        <!-- start row -->
+        <div class="row row-gap-4 justify-content-center">
+            {% if team_members %}
+            {% for member in team_members %}
+            <!-- Dynamic Item -->
+            <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                <div class="team-item-five">
+                    <div class="team-overlay">
+                        <div class="team-img">
+                            {% if member.image %}
+                            <img src="{{ member.image.url }}" alt="{{ member.name }}" class="img-fluid img-1"
+                                style="height: 300px; object-fit: cover;">
+                            {% else %}
+                            <img src="{% static 'frontend/assets/img/teams/team-img-1.jpg' %}" alt="{{ member.name }}"
+                                class="img-fluid img-1">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="team-content">
+                        <div class="team-info">
+                            <h3 class="custom-title"> <a href="javascript:void(0);">{{ member.name }}</a> </h3>
+                            <p>{{ member.role }}</p>
+                        </div>
+                        <div class="team-share">
+                            <a href="javascript:void(0);" class="share-icon"> <i class="icon-share-2"></i> </a>
+                            <div class="social-icon">
+                                {% if member.linkedin_url %}
+                                <a href="{{ member.linkedin_url }}" target="_blank" class="icon"><i
+                                        class="fa-brands fa-linkedin-in"></i></a>
+                                {% endif %}
+                                {% if member.twitter_url %}
+                                <a href="{{ member.twitter_url }}" target="_blank" class="icon"><i
+                                        class="fa-brands fa-x-twitter"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <!-- end row -->
+
+    </div>
+</section>
+<!-- End team -->
+
+
+<!-- Start Faq Section -->
+<section class="testimonial-section testimonial-section-five section">
+    <div class="container">
+
+        <div class="section-header text-center wow fadeInDown" data-wow-duration="1s">
+            <h2 class="section-title">Testimonials</h2>
+            <p>A passionate team of mentors, designers, and innovators committed to creating real human impact.</p>
+        </div>
+
+        {% if testimonials %}
+        <div class="testimonial-five-slider">
+            {% for t in testimonials %}
+            <div class="testimonial-item-five">
+                <div class="testimonial-content">
+                    <div class="description">
+                        {{ t.review_text|safe }}
+                    </div>
+                    <img src="{% static 'frontend/assets/img/icon/qutation-icon-1.svg' %}" alt="quatation"
+                        class="img-fluid img-1">
+                </div>
+                <div class="testimonial-author">
+                    <a href="javascript:void(0);" class="author-name">{{ t.name }}</a>
+                    <p>{{ t.role }}</p>
+                    <div class="review-star">
+                        {% for _ in t.get_rating_range %}
+                        <i class="fas fa-star"></i>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if t.image %}
+                <img src="{{ t.image.url }}" alt="testimonial"
+                    class="img-fluid img-2" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
+                {% else %}
+                <img src="{% static 'frontend/assets/img/teams/testimonial-img-1.png' %}" alt="testimonial"
+                    class="img-fluid img-2">
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+<!-- Start Faq Section -->
+
+
+{% endblock %}

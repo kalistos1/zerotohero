@@ -1,0 +1,118 @@
+{% extends "dashbard_base.html" %}
+{% block title %}Edit Testimonial — Zero to Hero{% endblock %}
+{% block page_title %}Edit Testimonial{% endblock %}
+
+{% block extra_css %}{% endblock %}
+
+{% block content %}
+<div class="container-xxl">
+  <div class="page-title-box d-flex align-items-center justify-content-between">
+    <h4 class="mb-0">Edit Testimonial — {{ obj.name }}</h4>
+    <a href="{% url 'dashboard:testimonial-list' %}" class="btn btn-outline-secondary btn-sm">Back</a>
+  </div>
+
+  <div class="card" style="max-width:650px;">
+    <div class="card-body">
+      {# Show current profile photo #}
+      {% if obj.image %}
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Current Profile Photo</label><br>
+        <img src="{{ obj.image.url }}" class="rounded-circle" width="72" height="72" style="object-fit:cover;" alt="{{ obj.name }}">
+      </div>
+      {% endif %}
+
+      {# Show current evidence media #}
+      {% if obj.media_type == 'screenshot' and obj.chat_screenshot %}
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Current Screenshot</label><br>
+        <img src="{{ obj.chat_screenshot.url }}" class="img-thumbnail" style="max-height:200px;" alt="screenshot">
+      </div>
+      {% elif obj.media_type == 'video' and obj.video_file %}
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Current Video</label><br>
+        <video controls style="max-height:200px;max-width:100%;">
+          <source src="{{ obj.video_file.url }}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      {% endif %}
+
+      <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:testimonial-edit' obj.pk %}">
+        {% csrf_token %}
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Full Name</label>
+            {{ form.name }}
+            {% if form.name.errors %}<div class="invalid-feedback d-block">{{ form.name.errors|join:', ' }}</div>{% endif %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Role / Title</label>
+            {{ form.role }}
+            {% if form.role.errors %}<div class="invalid-feedback d-block">{{ form.role.errors|join:', ' }}</div>{% endif %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Profile Photo</label>
+            {{ form.image }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Rating (1–5)</label>
+            {{ form.rating }}
+            {% if form.rating.errors %}<div class="invalid-feedback d-block">{{ form.rating.errors|join:', ' }}</div>{% endif %}
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Testimonial Type</label>
+            {{ form.media_type }}
+            <div class="form-text">{{ form.media_type.help_text }}</div>
+          </div>
+
+          <div id="field-review_text" class="col-12">
+            <label class="form-label">Text Review</label>
+            {{ form.review_text }}
+            <div class="form-text">{{ form.review_text.help_text }}</div>
+            {% if form.review_text.errors %}<div class="invalid-feedback d-block">{{ form.review_text.errors|join:', ' }}</div>{% endif %}
+          </div>
+          <div id="field-chat_screenshot" class="col-12 d-none">
+            <label class="form-label">Chat / DM Screenshot</label>
+            {{ form.chat_screenshot }}
+            <div class="form-text">{{ form.chat_screenshot.help_text }}</div>
+            {% if form.chat_screenshot.errors %}<div class="invalid-feedback d-block">{{ form.chat_screenshot.errors|join:', ' }}</div>{% endif %}
+          </div>
+          <div id="field-video_file" class="col-12 d-none">
+            <label class="form-label">Video File</label>
+            {{ form.video_file }}
+            <div class="form-text">{{ form.video_file.help_text }}</div>
+            {% if form.video_file.errors %}<div class="invalid-feedback d-block">{{ form.video_file.errors|join:', ' }}</div>{% endif %}
+          </div>
+
+          <div class="col-12 form-check ms-1">
+            {{ form.is_active }}
+            <label class="form-check-label">Active (visible on site)</label>
+          </div>
+
+          <div class="col-12 d-flex gap-2 justify-content-end">
+            <a href="{% url 'dashboard:testimonial-list' %}" class="btn btn-outline-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Update Testimonial</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}<script>
+(function () {
+  const sel = document.getElementById('id_media_type');
+  if (!sel) return;
+  function toggle(val) {
+    document.getElementById('field-review_text').classList.toggle('d-none', val === 'screenshot' || val === 'video');
+    document.getElementById('field-chat_screenshot').classList.toggle('d-none', val !== 'screenshot');
+    document.getElementById('field-video_file').classList.toggle('d-none', val !== 'video');
+  }
+  sel.addEventListener('change', () => toggle(sel.value));
+  toggle(sel.value);
+}());
+</script>
+{% endblock %}

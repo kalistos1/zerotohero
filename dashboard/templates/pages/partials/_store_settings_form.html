@@ -1,0 +1,93 @@
+{% load static %}
+<form method="post"
+      action="{% url 'dashboard:store-settings' %}"
+      hx-post="{% url 'dashboard:store-settings' %}"
+      hx-target="#store-settings-formwrap"
+      hx-swap="innerHTML">
+  {% csrf_token %}
+
+  {% if saved %}
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    Settings saved successfully.
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  {% endif %}
+
+  {% if form.errors %}
+  <div class="alert alert-danger" role="alert">Please correct the errors below.</div>
+  {% endif %}
+
+  <div class="row g-3">
+    <div class="col-md-6">
+      <label class="form-label" for="{{ form.site_name.id_for_label }}">Site Name</label>
+      {{ form.site_name }}
+      {% if form.site_name.errors %}<div class="invalid-feedback d-block">{{ form.site_name.errors|join:', ' }}</div>{% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="{{ form.support_email.id_for_label }}">Support Email</label>
+      {{ form.support_email }}
+      {% if form.support_email.errors %}<div class="invalid-feedback d-block">{{ form.support_email.errors|join:', ' }}</div>{% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="{{ form.support_phone.id_for_label }}">Support Phone</label>
+      {{ form.support_phone }}
+      {% if form.support_phone.errors %}<div class="invalid-feedback d-block">{{ form.support_phone.errors|join:', ' }}</div>{% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="{{ form.whatsapp_number.id_for_label }}">WhatsApp Number</label>
+      {{ form.whatsapp_number }}
+      {% if form.whatsapp_number.errors %}<div class="invalid-feedback d-block">{{ form.whatsapp_number.errors|join:', ' }}</div>{% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="{{ form.address.id_for_label }}">Address</label>
+      {{ form.address }}
+      {% if form.address.errors %}<div class="invalid-feedback d-block">{{ form.address.errors|join:', ' }}</div>{% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="{{ form.working_hours.id_for_label }}">Working Hours</label>
+      {{ form.working_hours }}
+      {% if form.working_hours.errors %}<div class="invalid-feedback d-block">{{ form.working_hours.errors|join:', ' }}</div>{% endif %}
+    </div>
+
+    <div class="col-12"><hr><p class="text-muted mb-1 small">Social Links</p></div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="{{ form.facebook_url.id_for_label }}">Facebook URL</label>
+      {{ form.facebook_url }}
+      {% if form.facebook_url.errors %}<div class="invalid-feedback d-block">{{ form.facebook_url.errors|join:', ' }}</div>{% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="{{ form.twitter_url.id_for_label }}">Twitter / X URL</label>
+      {{ form.twitter_url }}
+      {% if form.twitter_url.errors %}<div class="invalid-feedback d-block">{{ form.twitter_url.errors|join:', ' }}</div>{% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="{{ form.instagram_url.id_for_label }}">Instagram URL</label>
+      {{ form.instagram_url }}
+      {% if form.instagram_url.errors %}<div class="invalid-feedback d-block">{{ form.instagram_url.errors|join:', ' }}</div>{% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="{{ form.linkedin_url.id_for_label }}">LinkedIn URL</label>
+      {{ form.linkedin_url }}
+      {% if form.linkedin_url.errors %}<div class="invalid-feedback d-block">{{ form.linkedin_url.errors|join:', ' }}</div>{% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label" for="{{ form.youtube_url.id_for_label }}">YouTube URL</label>
+      {{ form.youtube_url }}
+      {% if form.youtube_url.errors %}<div class="invalid-feedback d-block">{{ form.youtube_url.errors|join:', ' }}</div>{% endif %}
+    </div>
+
+    <div class="col-12 text-end">
+      <button type="submit" class="btn btn-primary">Save Settings</button>
+    </div>
+  </div>
+</form>

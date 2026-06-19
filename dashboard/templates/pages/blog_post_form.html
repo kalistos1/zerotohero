@@ -1,0 +1,69 @@
+{% extends "dashbard_base.html" %}
+{% load static %}
+{% block title %}{% if post %}Edit Post{% else %}New Post{% endif %} — Zero to Hero{% endblock %}
+{% block page_title %}{% if post %}Edit: {{ post.title|truncatechars:40 }}{% else %}New Blog Post{% endif %}{% endblock %}
+
+{% block extra_css %}
+{{ form.media }}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-xxl">
+  <div class="page-title-box d-flex align-items-center justify-content-between">
+    <h4 class="mb-0">{% if post %}Edit Post{% else %}New Post{% endif %}</h4>
+    <a href="{% url 'dashboard:blog-post-list' %}" class="btn btn-outline-secondary btn-sm">Back to Posts</a>
+  </div>
+
+  <form method="post" enctype="multipart/form-data"
+        action="{% if post %}{% url 'dashboard:blog-post-edit' post.pk %}{% else %}{% url 'dashboard:blog-post-create' %}{% endif %}">
+    {% csrf_token %}
+    <div class="row g-3">
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-body">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Title</label>
+              {{ form.title }}
+              {% if form.title.errors %}<div class="invalid-feedback d-block">{{ form.title.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Body</label>
+              {{ form.body }}
+              {% if form.body.errors %}<div class="invalid-feedback d-block">{{ form.body.errors|join:', ' }}</div>{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-header"><h6 class="mb-0">Publish Settings</h6></div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              {{ form.status }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Category</label>
+              {{ form.category }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Featured Image</label>
+              {% if post and post.image %}
+              <img src="{{ post.image.url }}" class="img-thumbnail d-block mb-2" style="max-height:120px;">
+              {% endif %}
+              {{ form.image }}
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+              {% if post %}Update Post{% else %}Publish Post{% endif %}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}{% endblock %}

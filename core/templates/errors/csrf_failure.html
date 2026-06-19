@@ -1,0 +1,33 @@
+{% extends "core_base.html" %}
+{% load static %}
+
+{% block title %}Session Expired - Zero to Hero{% endblock %}
+
+{% block content %}
+<div class="content" style="min-height: 60vh; display: flex; align-items: center;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10 col-sm-12 text-center py-5">
+        <h1 class="display-1 text-primary fw-bold" style="font-size: 6rem;">403</h1>
+        <h2 class="mb-4">Session Expired or Invalid</h2>
+        
+        <p class="lead mb-4 text-muted">
+          {% if reason %}
+            {{ reason }}
+          {% else %}
+            We couldn't verify your request. Your session may have expired, or you may have left the page open too long.
+          {% endif %}
+        </p>
+
+        {% if is_login_failure %}
+        <p class="text-muted mb-5">Please refresh the login page and try again.</p>
+        <a href="javascript:location.reload();" class="btn btn-primary btn-lg">Refresh Page</a>
+        {% else %}
+        <p class="text-muted mb-5">Please go back, refresh the page, and try submitting your form again.</p>
+        <a href="javascript:history.back();" class="btn btn-primary btn-lg">Go Back</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

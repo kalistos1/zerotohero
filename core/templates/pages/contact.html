@@ -1,0 +1,139 @@
+{% extends 'core_base.html' %}
+{% load static %}
+{% block title %} zero to hero {% endblock %}
+
+{% block meta_tags %}
+{% endblock %}
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar">
+    <div class="container">
+        <h1 class="breadcrumb-title">Contact Us</h1>
+        <nav aria-label="breadcrumb" class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-items"><a href="index.html.htm" class="icon"><i class="icon-house"></i></a>
+                </li>
+                <li class="breadcrumb-items active" aria-current="page">Contact Us</li>
+            </ol>
+        </nav>
+    </div>
+    <img src="{% static 'frontend/assets/img/bg/breadcrumb-wave.png' %}" alt="wave" class="img-fluid img-1">
+</div>
+<!-- /Breadcrumb -->
+
+<div class="content">
+    <!-- Contact Us Section -->
+    <section class="contact-section">
+        <div class="container">
+
+            <!-- start row -->
+            <div class="row g-4 align-items-stretch">
+
+                <div class="col-lg-7 col-md-12 d-flex">
+                    <div class="contact-wrapper-left">
+                        <div class="contact-info">
+                            <img src="{% static 'frontend/assets/img/contact/contact-1.png' %}" alt="">
+                            <div class="contact-details">
+                                <h4 class="mb-4">Need Support? Let’s Get Started...</h4>
+                                <div class="contact-details-item">
+                                    <div class="contact-icon">
+                                        <i class="icon-map-pin"></i>
+                                    </div>
+                                    <h5 class="contact-title">{% if site_settings.address %}{{ site_settings.address }}{% else %}Global{% endif %}</h5>
+                                </div>
+                                <div class="contact-details-item">
+                                    <div class="contact-icon">
+                                        <i class="icon-mail"></i>
+                                    </div>
+                                    <h5 class="contact-title">{% if site_settings.support_email %}{{ site_settings.support_email }}{% else %}hello@zerotohero.com{% endif %}</h5>
+                                </div>
+                                <div class="contact-details-item">
+                                    <div class="contact-icon">
+                                        <i class="icon-phone-outgoing"></i>
+                                    </div>
+                                    <h5 class="contact-title">{% if site_settings.support_phone %}{{ site_settings.support_phone }}{% else %}+1234567890{% endif %}</h5>
+                                </div>
+                                <div class="contact-shape">
+                                    <img src="{% static 'frontend/assets/img/contact/shape.png' %}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end col -->
+
+                <div class="col-lg-5 col-md-12 d-flex">
+                    <div class="contact-wrapper-right">
+                        <div class="contact-form custom-form card bg-light">
+                            <div class="card-header bg-light mb-0">
+                                <h5 class="mb-2 fs-24 fw-bold">Contact Us</h5>
+                                <p class="mb-0">Fill in this form or send us an email with your inquiry.</p>
+                            </div>
+                            <div class="card-body">
+                                <form action="{% url 'core:contact' %}" id="contact-form" method="POST">
+                                    {% csrf_token %}
+
+                                    {% if messages %}
+                                        {% for message in messages %}
+                                            <div class="alert alert-{{ message.tags }}">
+                                                {{ message }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    <div class="row g-4 mb-4">
+                                        {% for field in contact_form %}
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label" for="{{ field.id_for_label }}">
+                                                    {{ field.label }}
+                                                </label>
+                                                {{ field }}
+                                                {% if field.errors %}
+                                                    <div class="text-danger mt-1">
+                                                        <small>{{ field.errors|striptags }}</small>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+
+                                        <div class="d-flex align-items-center">
+                                            <div class="form-check form-check-md mb-0">
+                                                <input class="form-check-input" id="remember_me" type="checkbox" required>
+                                                <label for="remember_me" class="form-check-label mt-0 text">
+                                                    You agree to our friendly
+                                                    <a href="{% url 'core:privacy' %}"> Privacy Policy</a></label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                                    <div class="g-recaptcha mb-3" data-sitekey="{{ RECAPTCHA_SITE_KEY }}"></div>
+
+                                    <div class="d-flex align-items-center justify-content-end">
+                                        <button type="submit" class="primary-btn btn-medium w-100">
+                                            Send Message
+                                        </button>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- end col -->
+
+            </div>
+            <!-- end row -->
+
+        </div>
+    </section>
+    <!-- End Contact Us Section -->
+</div>
+{% endblock %}

@@ -1,0 +1,224 @@
+{% extends "dashbard_base.html" %}
+{% load static %}
+{% block title %}Contact Messages — Zero to Hero{% endblock %}
+{% block page_title %}Contact Messages{% endblock %}
+
+{% block content %}
+<div class="container-xxl">
+
+  <div class="page-title-box d-flex align-items-center justify-content-between mb-3">
+    <h4 class="mb-0">Contact Messages</h4>
+    <span class="badge bg-danger">
+      {{ page.paginator.count }} message{{ page.paginator.count|pluralize }}
+    </span>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body p-0">
+
+          {# ── Message list ─────────────────────────────────────────────── #}
+          <div class="inbox-app">
+            <div class="inbox-leftbar d-none d-lg-block">
+              <div class="p-3">
+                <a href="{% url 'core:contact' %}" target="_blank" class="btn btn-primary btn-sm w-100 mb-2">
+                  <iconify-icon icon="solar:globe-bold-duotone" class="me-1"></iconify-icon> View Contact Page
+                </a>
+              </div>
+              <div class="px-3">
+                <h6 class="text-muted text-uppercase fw-semibold mb-2" style="font-size:0.7rem;">Filters</h6>
+                <ul class="list-unstyled">
+                  <li class="mb-1"><a href="?filter=all" class="text-body d-flex align-items-center gap-2"><iconify-icon icon="solar:inbox-bold-duotone"></iconify-icon> All Messages</a></li>
+                  <li class="mb-1"><a href="?filter=unread" class="text-body d-flex align-items-center gap-2"><iconify-icon icon="solar:letter-bold-duotone"></iconify-icon> Unread</a></li>
+                  <li class="mb-1"><a href="?filter=read" class="text-body d-flex align-items-center gap-2"><iconify-icon icon="solar:letter-opened-bold-duotone"></iconify-icon> Read</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="inbox-rightbar flex-grow-1">
+              {# ── If viewing a specific message (non-HTMX fallback) ──────── #}
+              {% if m %}
+              <div class="p-3 border-bottom">
+                <a href="{% url 'dashboard:contact-messages' %}" class="btn btn-outline-secondary btn-sm mb-3">
+                  <iconify-icon icon="solar:arrow-left-bold-duotone" class="me-1"></iconify-icon> Back to All Messages
+                </a>
+                <div class="card border-0 shadow-sm">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                      <div>
+                        <h5 class="mb-1">{{ m.subject|default:"(No subject)" }}</h5>
+                        <p class="text-muted mb-0 small">
+                          From: <strong>{{ m.name }}</strong> &lt;{{ m.email }}&gt;
+                          &nbsp;|&nbsp; {{ m.created_at|date:"M d, Y H:i" }}
+                          {% if m.phone %}&nbsp;|&nbsp; {{ m.phone }}{% endif %}
+                        </p>
+                      </div>
+                      <form method="post" action="{% url 'dashboard:contact-delete' m.id %}"
+                            onsubmit="return confirm('Delete this message permanently?')">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                          <iconify-icon icon="solar:trash-bin-trash-bold-duotone"></iconify-icon> Delete
+                        </button>
+                      </form>
+                    </div>
+                    <hr>
+                    <div class="text-body" style="white-space:pre-line;">{{ m.message }}</div>
+
+                    {% if replies %}
+                    <hr>
+                    <h6 class="text-muted small fw-semibold text-uppercase">Previous Replies</h6>
+                    {% for reply in replies %}
+                    <div class="border rounded p-3 mb-2 bg-light">
+                      <div class="d-flex justify-content-between mb-1">
+                        <strong class="small">{{ reply.replied_by.get_full_name|default:reply.replied_by.username }}</strong>
+                        <small class="text-muted">{{ reply.created_at|date:"M d, Y H:i" }}</small>
+                      </div>
+                      <p class="mb-0 small">{{ reply.body }}</p>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    <hr>
+                    <h6 class="fw-semibold mb-3">Send Reply</h6>
+                    <div id="contact-reply-result"></div>
+                    <form method="post" action="{% url 'dashboard:contact-message-reply' m.id %}">
+                      {% csrf_token %}
+                      <div class="mb-2">
+                        <label class="form-label">Subject</label>
+                        <input type="text" name="subject" class="form-control"
+                               value="Re: {{ m.subject|default:'' }}">
+                      </div>
+                      <div class="mb-2">
+                        <label class="form-label">Message</label>
+                        <textarea name="body" rows="6" class="form-control" required></textarea>
+                      </div>
+                      <button type="submit" class="btn btn-primary">
+                        <iconify-icon icon="solar:plain-3-bold-duotone" class="me-1"></iconify-icon> Send Reply
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              {% else %}
+              {# ── Message list view ──────────────────────────────────────── #}
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th>From</th>
+                      <th>Subject / Message</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                      <th class="text-end">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for msg in page %}
+                    <tr class="{% if not msg.read_status %}fw-semibold{% endif %}">
+                      <td>
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white flex-shrink-0"
+                                style="width:36px;height:36px;font-size:0.85rem;">
+                            {{ msg.name|slice:":1"|upper }}
+                          </span>
+                          <div>
+                            <div class="small">{{ msg.name }}</div>
+                            <div class="text-muted" style="font-size:0.75rem;">{{ msg.email }}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <a href="{% url 'dashboard:contact-message-read' msg.pk %}" class="text-body text-decoration-none">
+                          <span class="{% if not msg.read_status %}text-dark{% else %}text-muted{% endif %}">
+                            {{ msg.subject|default:"(No subject)" }}
+                          </span>
+                          <span class="text-muted small d-block">{{ msg.message|truncatechars:80 }}</span>
+                        </a>
+                      </td>
+                      <td class="text-muted small text-nowrap">{{ msg.created_at|date:"M d, Y" }}</td>
+                      <td>
+                        {% if msg.read_status %}
+                        <span class="badge bg-success-subtle text-success">Read</span>
+                        {% else %}
+                        <span class="badge bg-danger-subtle text-danger">Unread</span>
+                        {% endif %}
+                      </td>
+                      <td class="text-end">
+                        <a href="{% url 'dashboard:contact-message-read' msg.pk %}"
+                           class="btn btn-sm btn-outline-primary me-1" title="Read & Reply">
+                          <iconify-icon icon="solar:plain-3-bold-duotone"></iconify-icon>
+                        </a>
+                        <form method="post" action="{% url 'dashboard:contact-delete' msg.pk %}"
+                              class="d-inline"
+                              onsubmit="return confirm('Delete this message?')">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                            <iconify-icon icon="solar:trash-bin-trash-bold-duotone"></iconify-icon>
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="5" class="text-center py-5 text-muted">
+                        <iconify-icon icon="solar:mailbox-bold-duotone" class="fs-1 d-block mb-2"></iconify-icon>
+                        No contact messages yet.
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+
+              {# ── Pagination ─────────────────────────────────────────────── #}
+              {% if page.has_other_pages %}
+              <div class="d-flex justify-content-between align-items-center px-3 py-2 border-top">
+                <small class="text-muted">
+                  Showing {{ page.start_index }}–{{ page.end_index }} of {{ page.paginator.count }}
+                </small>
+                <nav>
+                  <ul class="pagination pagination-sm mb-0">
+                    {% if page.has_previous %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ page.previous_page_number }}">&laquo;</a>
+                    </li>
+                    {% endif %}
+                    {% for num in page.paginator.page_range %}
+                    <li class="page-item {% if num == page.number %}active{% endif %}">
+                      <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+                    {% if page.has_next %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ page.next_page_number }}">&raquo;</a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+              </div>
+              {% endif %}
+              {% endif %}{# end {% if m %} #}
+
+            </div>{# end .inbox-rightbar #}
+          </div>{# end .inbox-app #}
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# ── HTMX offcanvas for reading messages ──────────────────────────────── #}
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="email-read"
+       aria-labelledby="email-readLabel" style="width:min(600px, 95vw)">
+    <div id="contact-offcanvas">
+      {# HTMX loads _contact_detail.html content here #}
+      <div class="d-flex align-items-center justify-content-center h-100 text-muted p-5">
+        <p>Select a message to read it.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

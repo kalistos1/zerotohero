@@ -1,0 +1,233 @@
+{% extends 'core_base.html' %}
+{% load static %}
+
+{% block title %}Sponsorship Packages | Zero to Hero{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Header -->
+<div class="breadcrumb-bar">
+    <div class="container">
+        <h1 class="breadcrumb-title">Sponsorship Packages</h1>
+        <nav aria-label="breadcrumb" class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-items"><a href="{% url 'core:index' %}" class="icon"><i class="icon-house"></i></a></li>
+                <li class="breadcrumb-items active" aria-current="page">Sponsorships</li>
+            </ol>
+        </nav>
+    </div>
+    <img src="{% static 'frontend/assets/img/bg/breadcrumb-wave.png' %}" alt="wave" class="img-fluid img-1">
+</div>
+
+<!-- Main Pricing Section -->
+<section class="sponsorship-section position-relative overflow-hidden py-5">
+
+    <!-- Ambient Background Blobs -->
+    <div class="ambient-blob blob-1"></div>
+    <div class="ambient-blob blob-2"></div>
+    <div class="ambient-blob blob-3"></div>
+
+    <div class="container position-relative z-1 py-4">
+
+        <!-- Section Header -->
+        <div class="text-center mb-5">
+            <h2 class="display-4 fw-bold gradient-text pb-2">Support the Next Generation</h2>
+            <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                We build software careers, one cohort at a time. Partner with us and get direct
+                access to curated, verified Python talent.
+            </p>
+        </div>
+
+        {% if tiers %}
+            <!-- Build rows of 3 cards -->
+            {% with tiers|length as total %}
+            <div class="row g-4 justify-content-center mb-4">
+                {% for tier in tiers %}
+
+                    {# Open a new row every 3 cards #}
+                    {% if forloop.counter0 > 0 and forloop.counter0|divisibleby:3 %}
+                    </div>
+                    <div class="row g-4 justify-content-center mt-2">
+                    {% endif %}
+
+                    <div class="col-lg-4 col-md-6 d-flex">
+                        <div class="card glass-card hover-lift w-100 h-100 border-0 rounded-4 d-flex flex-column
+                                    {% if tier.is_recommended %}scale-up shadow-lg{% endif %}
+                                    position-relative">
+
+                            {% if tier.is_recommended %}
+                                <div class="recommended-badge bg-primary text-white shadow-sm">RECOMMENDED</div>
+                            {% endif %}
+
+                            <div class="card-body p-5 d-flex flex-column {% if tier.is_recommended %}mt-2{% endif %}">
+
+                                <!-- Tier Header -->
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon-box {{ tier.bg_class }} me-3">
+                                        <i class="{{ tier.icon_class }}"></i>
+                                    </div>
+                                    <h3 class="fw-bold mb-0">{{ tier.name }}</h3>
+                                </div>
+
+                                <!-- Price -->
+                                {% if tier.price_display %}
+                                    <h4 class="mb-4 text-dark fs-2 fw-bold">{{ tier.price_display }}</h4>
+                                {% else %}
+                                    <h4 class="mb-4 text-muted fs-5 fw-bold">Actively Welcomed</h4>
+                                {% endif %}
+
+                                <!-- Description -->
+                                <p class="text-muted mb-4 flex-grow-1">{{ tier.description }}</p>
+
+                                <!-- Feature List -->
+                                <ul class="feature-list list-unstyled mb-5">
+                                    {% for feature in tier.feature_list %}
+                                        <li><i class="fas fa-check-circle text-success"></i> {{ feature }}</li>
+                                    {% endfor %}
+                                </ul>
+
+                                <!-- CTA Button -->
+                                <a href="{% url 'core:sponsorship_apply' %}?plan={{ tier.pk }}"
+                                   class="btn {% if tier.is_recommended %}btn-primary{% else %}btn-outline-dark{% endif %} w-100 mt-auto rounded-pill py-3 fw-bold btn-hover-grow">
+                                    Apply as {{ tier.name }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+            {% endwith %}
+
+        {% else %}
+            <!-- No tiers published yet -->
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-gem fa-3x mb-3 opacity-25"></i>
+                <p class="lead">Sponsorship tiers are coming soon. Check back shortly!</p>
+            </div>
+        {% endif %}
+
+    </div>
+</section>
+
+
+<style>
+    /* ─── Gradient Heading ─────────────────────────────────────────── */
+    .gradient-text {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* ─── Ambient Background ────────────────────────────────────────── */
+    .sponsorship-section {
+        background-color: var(--light);
+        min-height: 100vh;
+    }
+
+    .ambient-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.45;
+        z-index: 0;
+        animation: blobFloat 12s infinite ease-in-out alternate;
+    }
+
+    .blob-1 {
+        width: 400px; height: 400px;
+        background: rgba(3, 83, 73, 0.3);   /* --primary */
+        top: -100px; left: -100px;
+    }
+    .blob-2 {
+        width: 500px; height: 500px;
+        background: rgba(232, 232, 40, 0.2); /* --secondary */
+        bottom: -150px; right: -100px;
+        animation-delay: -6s;
+    }
+    .blob-3 {
+        width: 300px; height: 300px;
+        background: rgba(3, 83, 73, 0.15);
+        top: 45%; left: 45%;
+        animation-duration: 18s;
+    }
+
+    @keyframes blobFloat {
+        0%   { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(30px, 50px) scale(1.1); }
+    }
+
+    /* ─── Glassmorphism Cards ───────────────────────────────────────── */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.82) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.6) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .scale-up {
+        transform: scale(1.05);
+        z-index: 10;
+    }
+
+    .scale-up:hover {
+        transform: scale(1.08) translateY(-5px);
+    }
+
+    @media (max-width: 991px) {
+        .scale-up { transform: scale(1); }
+    }
+
+    /* ─── Recommended Badge ─────────────────────────────────────────── */
+    .recommended-badge {
+        position: absolute;
+        top: 0; left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 5px 18px;
+        border-radius: 20px;
+        font-size: 0.72rem;
+        letter-spacing: 1.2px;
+        z-index: 20;
+    }
+
+    /* ─── Icon Boxes ────────────────────────────────────────────────── */
+    .icon-box {
+        width: 48px; height: 48px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 12px;
+        font-size: 1.25rem;
+    }
+    .bronze-bg  { background: rgba(205, 127,  50, 0.15); color: #cd7f32; }
+    .silver-bg  { background: rgba(108, 117, 125, 0.15); color: #6c757d; }
+    .gold-bg    { background: rgba(212, 175,  55, 0.15); color: #d4af37; }
+    .platinum-bg { background: linear-gradient(135deg, #e2e8f0, #cbd5e1); color: #0f172a; }
+    .inkind-bg  { background: rgba(3,  83,  73, 0.15); color: var(--primary); }
+
+    /* ─── Feature List ──────────────────────────────────────────────── */
+    .feature-list li {
+        margin-bottom: 12px;
+        display: flex;
+        align-items: flex-start;
+    }
+    .feature-list i {
+        margin-top: 4px;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
+    /* ─── CTA Buttons ───────────────────────────────────────────────── */
+    .btn-hover-grow {
+        transition: transform 0.2s ease;
+    }
+    .btn-hover-grow:hover {
+        transform: scale(1.03);
+    }
+</style>
+{% endblock %}

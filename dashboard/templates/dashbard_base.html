@@ -1,0 +1,360 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <!-- Title Meta -->
+     <meta charset="utf-8" />
+     <title>{% block title %}Zero to Hero — Admin Dashboard{% endblock %}</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta name="description"
+          content="Zero to Hero Admin Dashboard — Manage users, blog posts, events, FAQs, testimonials, gallery, and support tickets." />
+     <meta name="robots" content="noindex, nofollow" />
+     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+     <!-- Favicon -->
+     <link rel="shortcut icon" href="{% static 'dashboard/assets/images/favicon.ico' %}">
+     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'dashboard/assets/images/apple-touch-icon.png' %}">
+     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'dashboard/assets/images/favicon-32x32.png' %}">
+     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'dashboard/assets/images/favicon-16x16.png' %}">
+     <link rel="manifest" href="{% static 'dashboard/assets/images/site.webmanifest' %}">
+     <meta name="theme-color" content="#ffffff">
+
+     <!-- Vendor css (Require in all Page) -->
+     <link href="{% static 'dashboard/assets/css/vendor.min.css' %}" rel="stylesheet" type="text/css" />
+
+     <!-- Icons css (Require in all Page) -->
+     <link href="{% static 'dashboard/assets/css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+
+     <!-- App css (Require in all Page) -->
+     <link href="{% static 'dashboard/assets/css/app.min.css' %}" rel="stylesheet" type="text/css" />
+
+     <!-- Theme Config js (Require in all Page) -->
+     <script src="{% static 'dashboard/assets/js/config.js' %}"></script>
+
+     <!-- Form Media (CSS) - Automatically load rich text editor styles if form exists -->
+     {% if form %}{{ form.media.css }}{% endif %}
+
+     <!-- Prose Content Typography Fix for Dashboard -->
+     <style>
+          .prose-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+          .prose-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
+          .prose-content p { margin-bottom: 1rem; }
+          .prose-content h1, .prose-content h2, .prose-content h3, .prose-content h4 { margin-top: 1.5rem; margin-bottom: 1rem; font-weight: 600; }
+          .prose-content a { text-decoration: underline; color: #0d6efd; }
+          .prose-content blockquote { border-left: 4px solid #dee2e6; padding-left: 1rem; color: #6c757d; font-style: italic; }
+     </style>
+
+     <!-- Page-specific CSS (injected by child templates) -->
+     {% block extra_css %}{% endblock %}
+
+</head>
+
+<body>
+     <!-- START Wrapper -->
+     <div class="wrapper">
+          <!-- ========== Topbar Start ========== -->
+          <header class="topbar">
+               <div class="container-fluid">
+                    <div class="navbar-header">
+                         <div class="d-flex align-items-center">
+                              <div class="topbar-item">
+                                   <button type="button" class="button-toggle-menu me-2">
+                                        <iconify-icon icon="solar:hamburger-menu-broken"
+                                             class="fs-24 align-middle"></iconify-icon>
+                                   </button>
+                              </div>
+                              <div class="topbar-item">
+                                   <h4 class="fw-bold topbar-button pe-none text-uppercase mb-0">
+                                        {% block page_title %}Dashboard{% endblock %}
+                                   </h4>
+                              </div>
+                         </div>
+
+                         <div class="d-flex align-items-center gap-1">
+                              <!-- Light / Dark Mode -->
+                              <div class="topbar-item">
+                                   <button type="button" class="topbar-button" id="light-dark-mode">
+                                        <iconify-icon icon="solar:moon-bold-duotone"
+                                             class="fs-24 align-middle"></iconify-icon>
+                                   </button>
+                              </div>
+                              <!-- New Ticket quick-action -->
+                              <div class="topbar-item">
+                                   <a href="{% url 'dashboard:ticket-create' %}" class="topbar-button"
+                                        title="New Support Ticket">
+                                        <iconify-icon icon="solar:ticket-bold-duotone"
+                                             class="fs-24 align-middle"></iconify-icon>
+                                   </a>
+                              </div>
+                              <!-- Contact Messages badge (admin only) -->
+                              {% if request.user.is_admin and unread_contacts %}
+                              <div class="topbar-item">
+                                   <a href="{% url 'dashboard:contact-messages' %}"
+                                        class="topbar-button position-relative" title="Unread Messages">
+                                        <iconify-icon icon="solar:mailbox-bold-duotone"
+                                             class="fs-24 align-middle"></iconify-icon>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                             style="font-size:0.6rem;">
+                                             {{ unread_contacts }}
+                                        </span>
+                                   </a>
+                              </div>
+                              {% endif %}
+                              <!-- User Dropdown -->
+                              <div class="dropdown topbar-item">
+                                   <a type="button" class="topbar-button" id="page-header-user-dropdown"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="d-flex align-items-center">
+                                             {% if request.user.profile.photo %}
+                                             <img class="rounded-circle" width="32" height="32"
+                                                  src="{{ request.user.profile.photo.url }}"
+                                                  alt="{{ request.user.get_full_name|default:request.user.username }}">
+                                             {% else %}
+                                             <span class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white fw-bold"
+                                                  style="width:32px;height:32px;font-size:0.85rem;">
+                                                  {{ request.user.get_full_name|default:request.user.username|slice:":1"|upper }}
+                                             </span>
+                                             {% endif %}
+                                        </span>
+                                   </a>
+                                   <div class="dropdown-menu dropdown-menu-end">
+                                        <h6 class="dropdown-header">
+                                             {{ request.user.get_full_name|default:request.user.username }}
+                                             {% if request.user.is_admin %}
+                                             <span class="badge bg-danger ms-1" style="font-size:0.65rem;">Admin</span>
+                                             {% elif request.user.is_mentor %}
+                                             <span class="badge bg-primary ms-1"
+                                                  style="font-size:0.65rem;">Mentor</span>
+                                             {% else %}
+                                             <span class="badge bg-secondary ms-1"
+                                                  style="font-size:0.65rem;">Mentee</span>
+                                             {% endif %}
+                                        </h6>
+                                        <a class="dropdown-item" href="{% url 'dashboard:profile' %}">
+                                             <iconify-icon icon="solar:user-circle-bold-duotone"
+                                                  class="fs-18 align-middle me-1 text-muted"></iconify-icon>
+                                             <span class="align-middle">My Profile</span>
+                                        </a>
+                                        {% if request.user.is_admin %}
+                                        <a class="dropdown-item" href="{% url 'dashboard:store-settings' %}">
+                                             <iconify-icon icon="solar:settings-bold-duotone"
+                                                  class="fs-18 align-middle me-1 text-muted"></iconify-icon>
+                                             <span class="align-middle">Settings</span>
+                                        </a>
+                                        {% endif %}
+                                        <a class="dropdown-item" href="{% url 'dashboard:ticket-list' %}">
+                                             <iconify-icon icon="solar:ticket-bold-duotone"
+                                                  class="fs-18 align-middle me-1 text-muted"></iconify-icon>
+                                             <span class="align-middle">My Tickets</span>
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'core:index' %}" target="_blank">
+                                             <iconify-icon icon="solar:globe-bold-duotone"
+                                                  class="fs-18 align-middle me-1 text-muted"></iconify-icon>
+                                             <span class="align-middle">View Website</span>
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <form method="post" action="{% url 'accounts:logout' %}">
+                                             {% csrf_token %}
+                                             <button type="submit" class="dropdown-item text-danger">
+                                                  <iconify-icon icon="solar:logout-3-bold-duotone"
+                                                       class="fs-18 align-middle me-1"></iconify-icon>
+                                                  <span class="align-middle">Logout</span>
+                                             </button>
+                                        </form>
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </header>
+          <!-- ========== Topbar End ========== -->
+          {% include 'partials/sidebar.html' %}
+
+
+          <!-- ==================================================== -->
+          <!-- Start right Content here -->
+          <!-- ==================================================== -->
+          <div class="page-content">
+
+               {% block content %}
+
+               {% endblock %}
+
+               <!-- ========== Footer Start ========== -->
+               <footer class="footer">
+                    <div class="container-fluid">
+                         <div class="row">
+                              <div class="col-12 text-center">
+                                   <script>document.write(new Date().getFullYear())</script> &copy; <strong>Zero to
+                                        Hero</strong> &mdash; Python Mentorship Platform
+                              </div>
+                         </div>
+                    </div>
+               </footer>
+               <!-- ========== Footer End ========== -->
+
+          </div>
+          <!-- ==================================================== -->
+          <!-- End Page Content -->
+          <!-- ==================================================== -->
+
+     </div>
+     <!-- END Wrapper -->
+
+     <!-- Vendor Javascript (Require in all Page) -->
+     <script src="{% static 'dashboard/assets/js/vendor.js' %}"></script>
+     <!-- HTMX for dynamic interactions -->
+     <script src="{% static 'htmx.js' %}"></script>
+     <!-- Global HTMX CSRF header hook for Django.
+          Uses the server-rendered token rather than reading document.cookie,
+          so this works correctly even when CSRF_COOKIE_HTTPONLY=True. -->
+     <meta name="csrf-token" content="{{ csrf_token }}">
+     <script>
+          document.body.addEventListener('htmx:configRequest', function (event) {
+               var meta = document.querySelector('meta[name="csrf-token"]');
+               if (meta) {
+                    event.detail.headers['X-CSRFToken'] = meta.getAttribute('content');
+               }
+          });
+     </script>
+
+     <!-- App Javascript (Require in all Page) -->
+     <script src="{% static 'dashboard/assets/js/app.js' %}"></script>
+
+     <!-- Vector Map Js -->
+     <script src="{% static 'dashboard/assets/vendor/jsvectormap/js/jsvectormap.min.js' %}"></script>
+     <script src="{% static 'dashboard/assets/vendor/jsvectormap/maps/world-merc.js' %}"></script>
+     <script src="{% static 'dashboard/assets/vendor/jsvectormap/maps/world.js' %}"></script>
+     <!-- Dashboard Js -->
+     <script src="{% static 'dashboard/assets/js/pages/dashboard.js' %}"></script>
+
+     <!-- Auto-Logout for Inactive Users -->
+     <script>
+          (function () {
+               // Configuration (in milliseconds)
+               const WARNING_TIME = 15 * 60 * 1000;  // 15 minutes - show warning
+               const LOGOUT_TIME = 20 * 60 * 1000;   // 20 minutes - auto logout
+
+               let inactivityTimer;
+               let warningTimer;
+               let warningShown = false;
+
+               // Reset inactivity timer
+               function resetTimer() {
+                    // Clear existing timers
+                    clearTimeout(inactivityTimer);
+                    clearTimeout(warningTimer);
+                    warningShown = false;
+
+                    // Set warning timer (15 minutes)
+                    warningTimer = setTimeout(showWarning, WARNING_TIME);
+
+                    // Set logout timer (20 minutes)
+                    inactivityTimer = setTimeout(autoLogout, LOGOUT_TIME);
+               }
+
+               // Show inactivity warning
+               function showWarning() {
+                    if (!warningShown) {
+                         warningShown = true;
+                         const remainingTime = Math.round((LOGOUT_TIME - WARNING_TIME) / 60000); // minutes
+
+                         if (confirm(
+                              '⚠️  Session Timeout Warning\n\n' +
+                              'You have been inactive for 15 minutes.\n\n' +
+                              'Your session will automatically expire in ' + remainingTime + ' minutes ' +
+                              'for security reasons.\n\n' +
+                              'Click OK to continue working, or Cancel to logout now.'
+                         )) {
+                              // User wants to continue - reset timer
+                              resetTimer();
+                         } else {
+                              // User chose to logout
+                              autoLogout();
+                         }
+                    }
+               }
+
+               // Auto logout
+               function autoLogout() {
+                    // Save current page for redirect after re-login
+                    sessionStorage.setItem('returnUrl', window.location.pathname);
+
+                    // Show logout message
+                    alert(
+                         'Session Expired\n\n' +
+                         'You have been logged out due to inactivity.\n\n' +
+                         'Please log in again to continue.'
+                    );
+
+                    // Redirect to logout URL using POST to satisfy CSRF
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/accounts/logout/';
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = 'csrfmiddlewaretoken';
+                    csrfInput.value = csrfToken;
+                    form.appendChild(csrfInput);
+                    document.body.appendChild(form);
+                    form.submit();
+               }
+
+               // Events that indicate user activity
+               const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+
+               // Reset timer on user activity
+               events.forEach(event => {
+                    document.addEventListener(event, resetTimer, true);
+               });
+
+               // Start timer when page loads
+               resetTimer();
+
+               // Log for debugging
+               console.log(' Auto-logout enabled: Warning after 15 min, Logout after 20 min of inactivity');
+          })();
+     </script>
+
+     <!-- Page-specific JS (injected by child templates) -->
+     {% if form %}{{ form.media.js }}{% endif %}
+     {% block extra_js %}{% endblock %}
+
+     <!-- Initialize Prose Editor for frontend forms -->
+     <script type="module">
+          import { 
+               Document, Dropcursor, Gapcursor, Paragraph, HardBreak, Text, 
+               Bold, Italic, Subscript, Superscript, Link, Menu,
+               createTextareaEditor, initializeEditors 
+          } from "django-prose-editor/editor";
+
+          // The default marker used by ProseEditorField
+          const marker = "data-django-prose-editor-default";
+
+          function createEditor(textarea) {
+               if (textarea.closest(".prose-editor")) return;
+               
+               // The editor uses the extensions configured in python
+               // We provide the base extensions required for it to run
+               const extensions = [
+                    Document, Dropcursor, Gapcursor, Paragraph, HardBreak, Text, 
+                    Bold, Italic, Subscript, Superscript, Link, Menu
+               ];
+               
+               return createTextareaEditor(textarea, extensions);
+          }
+
+          // Initialize on full page load
+          initializeEditors(createEditor, `[${marker}]`);
+          
+          // Re-initialize after HTMX swaps
+          document.body.addEventListener('htmx:load', function() {
+               initializeEditors(createEditor, `[${marker}]`);
+          });
+     </script>
+
+</body>
+
+</html>

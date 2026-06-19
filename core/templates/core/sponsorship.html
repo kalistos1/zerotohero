@@ -1,0 +1,44 @@
+{% extends 'core_base.html' %}
+{% load static %}
+
+{% block title %}Become a Sponsor | Zero to Hero{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="mb-4">Become a Sponsor</h1>
+            <p class="lead">Partner with us to train the next generation of Python developers. Choose a tier from our sponsorship package or offer an in-kind contribution.</p>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="card shadow-sm mt-4">
+                <div class="card-body p-4">
+                    <form method="post" action="{% url 'core:sponsorship_apply' %}">
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+                        {{ form.as_p }}
+                        
+                        {% if RECAPTCHA_ENABLED %}
+                            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                            <div class="g-recaptcha mb-3" data-sitekey="{{ RECAPTCHA_SITE_KEY }}"></div>
+                        {% endif %}
+                        
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Submit Inquiry</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

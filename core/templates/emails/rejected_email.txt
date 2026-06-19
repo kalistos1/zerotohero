@@ -1,0 +1,15 @@
+Hi {{ full_name }},
+
+Thank you for taking the time to apply to the Zero to Hero Mentorship program. We appreciate your interest and the effort you put into your application.
+
+We received an overwhelming number of highly qualified applicants this cohort. After careful review, we regret to inform you that we cannot offer you a spot in the program at this time.
+
+Please note that this decision does not reflect on your potential as a developer. We strongly encourage you to continue learning, building projects, and applying for our future cohorts.
+
+We wish you the very best in your coding journey.
+
+Best regards,
+The Zero to Hero Team
+
+--
+You received this email because you applied to the Zero to Hero Mentorship program.

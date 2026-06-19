@@ -1,0 +1,72 @@
+{% extends "dashbard_base.html" %}
+{% block title %}Gallery — Zero to Hero{% endblock %}
+{% block page_title %}Gallery{% endblock %}
+{% block content %}
+<div class="container-xxl">
+  <div class="page-title-box d-flex align-items-center justify-content-between">
+    <h4 class="mb-0">Gallery</h4>
+    <div class="d-flex gap-2">
+      <a href="{% url 'dashboard:gallery-category-list' %}" class="btn btn-outline-secondary btn-sm">Categories</a>
+      <a href="{% url 'dashboard:gallery-create' %}" class="btn btn-primary btn-sm">
+        <i class="bx bx-plus me-1"></i> Add Item
+      </a>
+    </div>
+  </div>
+
+  {% if messages %}{% for m in messages %}
+  <div class="alert alert-{{ m.tags }} alert-dismissible fade show">{{ m }}<button class="btn-close" data-bs-dismiss="alert"></button></div>
+  {% endfor %}{% endif %}
+
+  <div class="row g-3 mb-4">
+    {% for item in items %}
+    <div class="col-xl-2 col-lg-3 col-md-4 col-6">
+      <div class="card h-100">
+        {% if item.image %}
+        <img src="{{ item.image.url }}" class="card-img-top" style="height:120px;object-fit:cover;" alt="{{ item.alt_text|default:item.title }}">
+        {% else %}
+        <div class="bg-light d-flex align-items-center justify-content-center" style="height:120px;">
+          <iconify-icon icon="solar:gallery-bold-duotone" class="fs-2 text-muted"></iconify-icon>
+        </div>
+        {% endif %}
+        <div class="card-body p-2">
+          <p class="mb-1 small fw-semibold text-truncate">{{ item.title }}</p>
+          <small class="text-muted">{{ item.category.name|default:"Uncategorised" }}</small>
+        </div>
+        <div class="card-footer p-2 d-flex gap-1">
+          <a href="{% url 'dashboard:gallery-edit' item.pk %}" class="btn btn-sm btn-outline-primary flex-fill">Edit</a>
+          <form method="post" action="{% url 'dashboard:gallery-delete' item.pk %}"
+                onsubmit="return confirm('Delete this item?');" class="flex-fill">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-danger w-100">Del</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12"><p class="text-muted">No gallery items yet.</p></div>
+    {% endfor %}
+  </div>
+
+  {# Inline create form #}
+  <div class="card">
+    <div class="card-header"><h5 class="card-title mb-0">Add Gallery Item</h5></div>
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:gallery-create' %}">
+        {% csrf_token %}
+        <div class="row g-3">
+          {% for field in form %}
+          <div class="col-md-4">
+            <label class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|join:', ' }}</div>{% endif %}
+          </div>
+          {% endfor %}
+          <div class="col-12 text-end">
+            <button type="submit" class="btn btn-primary">Add Item</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

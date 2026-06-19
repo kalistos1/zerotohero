@@ -1,0 +1,110 @@
+{% extends "dashbard_base.html" %}
+{% block title %}About Page — Zero to Hero{% endblock %}
+{% block page_title %}About Page{% endblock %}
+
+{% block extra_css %}
+{{ form.media }}
+{% endblock %}
+
+{% block content %}
+<div class="container-xxl">
+  <div class="page-title-box">
+    <h4 class="mb-0">About Page Content</h4>
+    <p class="text-muted small mb-0">Changes here update the public About page in real time.</p>
+  </div>
+
+  {% if messages %}{% for m in messages %}
+  <div class="alert alert-{{ m.tags }} alert-dismissible fade show">{{ m }}<button class="btn-close" data-bs-dismiss="alert"></button></div>
+  {% endfor %}{% endif %}
+
+  <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:about-page' %}">
+    {% csrf_token %}
+    <div class="row g-3">
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-header"><h5 class="card-title mb-0">Hero Section</h5></div>
+          <div class="card-body row g-3">
+            <div class="col-12">
+              <label class="form-label">Title</label>
+              {{ form.title }}
+              {% if form.title.errors %}<div class="invalid-feedback d-block">{{ form.title.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="col-12">
+              <label class="form-label">Subtitle</label>
+              {{ form.subtitle }}
+              {% if form.subtitle.errors %}<div class="invalid-feedback d-block">{{ form.subtitle.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              {{ form.description }}
+              {% if form.description.errors %}<div class="invalid-feedback d-block">{{ form.description.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Image 1</label>
+              {{ form.image_1 }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Image 2</label>
+              {{ form.image_2 }}
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header"><h5 class="card-title mb-0">Highlights</h5></div>
+          <div class="card-body row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Highlight 1 Title</label>
+              {{ form.highlight_1_title }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Highlight 1 Description</label>
+              {{ form.highlight_1_description }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Highlight 2 Title</label>
+              {{ form.highlight_2_title }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Highlight 2 Description</label>
+              {{ form.highlight_2_description }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-header"><h5 class="card-title mb-0">CEO / Leadership</h5></div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label class="form-label">CEO Name</label>
+              {{ form.ceo_name }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">CEO Title</label>
+              {{ form.ceo_title }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">CEO Photo</label>
+              {{ form.ceo_image }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Signature Image</label>
+              {{ form.signature_image }}
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-body text-end">
+            <button type="submit" class="btn btn-primary">Save About Page</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}{% endblock %}
