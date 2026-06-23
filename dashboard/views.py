@@ -11,6 +11,9 @@ from django.views.decorators.http import require_POST
 from django.contrib.sessions.models import Session
 from django.utils import timezone
 
+import csv
+from django.http import HttpResponse
+
 from accounts.forms import (
     CreateUserForm,
     EditUserForm,
@@ -1035,5 +1038,181 @@ def sponsorship_tier_delete(request, pk):
     _admin_required(request)
     tier = get_object_or_404(SponsorshipTier, pk=pk)
     tier.delete()
-    messages.success(request, 'Sponsorship tier deleted.')
-    return redirect('dashboard:sponsorship-tier-list')
+    return redirect('dashboard:sponsorship-tier-list')
+
+
+# ── Volunteer Applications ───────────────────────────────────────────────────
+
+@login_required
+def volunteer_list(request):
+    _admin_required(request)
+    from core.models import VolunteerApplication
+    from django.db.models import Count
+    
+    qs = VolunteerApplication.objects.all().order_by("-created_at")
+    
+    # Advanced Filtering
+    status_filter = request.GET.get('status')
+    role_filter = request.GET.get('role_interest')
+    availability_filter = request.GET.get('availability')
+
+    if status_filter:
+        qs = qs.filter(status=status_filter)
+    if role_filter:
+        qs = qs.filter(role_interest=role_filter)
+    if availability_filter:
+        qs = qs.filter(hours_per_week=availability_filter)
+    
+    # Analytics data
+    total_apps = qs.count()
+    status_counts = list(qs.values("status").annotate(count=Count("status")))
+    status_dict = {item["status"]: item["count"] for item in status_counts}
+    
+    paginator = Paginator(qs, 50)
+    page = paginator.get_page(request.GET.get("page"))
+    
+    context = {
+        "page_obj": page,
+        "total_apps": total_apps,
+        "status_counts": status_dict,
+        "current_status": status_filter,
+        "current_role": role_filter,
+        "current_availability": availability_filter,
+        "status_choices": VolunteerApplication.STATUS_CHOICES,
+        "role_choices": VolunteerApplication.ROLE_CHOICES,
+        "hours_choices": VolunteerApplication.HOURS_CHOICES,
+    }
+    return render(request, "pages/volunteer_list.html", context)
+
+@login_required
+@require_POST
+def volunteer_bulk_action(request):
+    _admin_required(request)
+    from core.models import VolunteerApplication
+    
+    action = request.POST.get('bulk_action')
+    selected_ids = request.POST.getlist('selected_applications')
+    
+    if not action or not selected_ids:
+        messages.error(request, "Please select an action and at least one application.")
+        return redirect("dashboard:volunteer-list")
+        
+    if action == 'delete':
+        VolunteerApplication.objects.filter(id__in=selected_ids).delete()
+        messages.success(request, f"Deleted {len(selected_ids)} applications.")
+    else:
+        # Action should be a valid status
+        valid_statuses = dict(VolunteerApplication.STATUS_CHOICES).keys()
+        if action in valid_statuses:
+            apps = VolunteerApplication.objects.filter(id__in=selected_ids)
+            for app in apps:
+                app.status = action
+                app.save(update_fields=['status'])
+            messages.success(request, f"Updated {len(selected_ids)} applications to {action}.")
+        else:
+            messages.error(request, "Invalid bulk action.")
+            
+    return redirect("dashboard:volunteer-list")
+
+
+@login_required
+def volunteer_detail(request, pk):
+    _admin_required(request)
+    from core.models import VolunteerApplication
+    from .forms import VolunteerAdminReviewForm
+    
+    app = get_object_or_404(VolunteerApplication, pk=pk)
+    
+    if request.method == "POST":
+        form = VolunteerAdminReviewForm(request.POST, instance=app)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Application updated successfully.")
+            return redirect("dashboard:volunteer-detail", pk=pk)
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.replace('_', ' ').title()}: {error}")
+            return redirect("dashboard:volunteer-detail", pk=pk)
+        
+    return render(request, "pages/volunteer_detail.html", {"app": app})
+
+
+@login_required
+@require_POST
+def volunteer_send_email(request, pk, decision):
+    _admin_required(request)
+    from core.models import VolunteerApplication
+    from core.tasks import send_volunteer_decision_email_task
+    
+    if decision not in ['accepted', 'rejected', 'interview']:
+        messages.error(request, "Invalid email decision type.")
+        return redirect("dashboard:volunteer-detail", pk=pk)
+        
+    app = get_object_or_404(VolunteerApplication, pk=pk)
+    
+    # Dispatch the background task via Huey
+    send_volunteer_decision_email_task(app.id, decision)
+    
+    messages.success(request, f"{decision.capitalize()} email has been queued to send to {app.email}.")
+    return redirect("dashboard:volunteer-detail", pk=pk)
+
+
+@login_required
+def volunteer_export_csv(request):
+    _admin_required(request)
+    from core.models import VolunteerApplication
+    
+    qs = VolunteerApplication.objects.all().order_by("-created_at")
+    
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="volunteer_applications.csv"'
+    
+    writer = csv.writer(response)
+    writer.writerow([
+        'Full Name', 'Email', 'Phone Number', 'Country', 
+        'Role Interest', 'Status', 'Created At'
+    ])
+    
+    for app in qs:
+        writer.writerow([
+            app.full_name,
+            app.email,
+            app.phone_number,
+            app.country,
+            app.get_role_interest_display(),
+            app.get_status_display(),
+            app.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        ])
+        
+    return response
+
+
+@login_required
+@require_POST
+def volunteer_convert_to_team(request, pk):
+    _admin_required(request)
+    from core.models import VolunteerApplication, TeamMember
+    
+    app = get_object_or_404(VolunteerApplication, pk=pk)
+    
+    if app.status != 'accepted':
+        messages.error(request, "Only accepted volunteers can be converted to Team Members.")
+        return redirect("dashboard:volunteer-detail", pk=pk)
+        
+    # Check if a TeamMember with this email or name already exists
+    if TeamMember.objects.filter(name=app.full_name).exists():
+        messages.error(request, f"A team member named {app.full_name} already exists.")
+        return redirect("dashboard:volunteer-detail", pk=pk)
+        
+    TeamMember.objects.create(
+        name=app.full_name,
+        role=app.get_role_interest_display(),
+        bio=app.professional_bio,
+        linkedin_url=app.linkedin_profile,
+        twitter_url=app.github_profile, # Best effort mapping for optional field
+        is_active=True
+    )
+    
+    messages.success(request, f"{app.full_name} has been successfully added to the Team page!")
+    return redirect("dashboard:team-list")

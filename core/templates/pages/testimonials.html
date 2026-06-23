@@ -23,8 +23,10 @@
     <img src="{% static 'frontend/assets/img/bg/breadcrumb-wave.png' %}" alt="wave" class="img-fluid img-1">
 </div>
 
+
+
 <!-- Start Content -->
-<div class="content">
+<section class="content">
     <div class="container">
         <section class="testimonial-section-two section">
             <div class="container">
@@ -95,7 +97,15 @@
                                 </div>
                                 <div class="author-info">
                                     <p class="author-name">{{ t.name }}</p>
-                                    <p class="professional">{{ t.role }}</p>
+                                    <p class="professional mb-1">{{ t.role }}</p>
+                                    <div class="social-icon">
+                                        {% if t.linkedin_url %}
+                                        <a href="{{ t.linkedin_url }}" target="_blank" class="text-primary me-2"><i class="fa-brands fa-linkedin"></i></a>
+                                        {% endif %}
+                                        {% if t.twitter_url %}
+                                        <a href="{{ t.twitter_url }}" target="_blank" class="text-dark"><i class="fa-brands fa-x-twitter"></i></a>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
 
@@ -105,129 +115,31 @@
 
                     {% else %}
 
-                    <div class="col-lg-4">
-                        <div class="testimonial-item-two mb-4 wow fadeInUp" data-wow-duration="1s">
-                            <div class="review-star">
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            </div>
-                            <h3 class="title">Real World Advice</h3>
-                            <p class="description">What I loved most was how actionable everything was. My mentor shared
-                                industry insights and experiences that I couldn't get anywhere else.</p>
+                    <div class="testimonial-item-three wow fadeInUp" data-wow-duration="2s">
+                        <div class="testimonial-video">
+                            <video playsinline muted loop class="video">
+                                <source src="{% static 'frontend/assets/img/video/testimonial-03.mp4' %}"
+                                    type="video/mp4">
+                            </video>
                             <div class="testimonial-author">
                                 <div class="author-img">
-                                    <img src="{% static 'frontend/assets/img/user/user8.jpg' %}" alt="profile">
+                                    <img src="{% static 'frontend/assets/img/user/user10.jpg' %}" alt="profile">
                                 </div>
                                 <div class="author-info">
-                                    <p class="author-name">Peter Jones</p>
-                                    <p class="professional">Product Manager</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="testimonial-item-three wow fadeInUp" data-wow-duration="2s">
-                            <div class="testimonial-video">
-                                <video playsinline autoplay muted loop class="video">
-                                    <source src="{% static 'frontend/assets/img/video/testimonial-01.mp4' %}"
-                                        type="video/mp4">
-                                </video>
-                                <div class="testimonial-author">
-                                    <div class="author-img">
-                                        <img src="{% static 'frontend/assets/img/user/user2.jpg' %}" alt="profile">
-                                    </div>
-                                    <div class="author-info">
-                                        <p class="author-name">Peter Jones</p>
-                                        <p class="professional">Product Manager</p>
-                                    </div>
+                                    <p class="author-name">Roscoe Conway</p>
+                                    <p class="professional">Digital Marketer</p>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-lg-4">
-                        <div class="testimonial-item-three mb-4 wow fadeInUp" data-wow-duration="1s">
-                            <div class="testimonial-video">
-                                <video playsinline muted loop class="video">
-                                    <source src="{% static 'frontend/assets/img/video/testimonial-02.mp4' %}"
-                                        type="video/mp4">
-                                </video>
-                                <div class="testimonial-author">
-                                    <div class="author-img">
-                                        <img src="{% static 'frontend/assets/img/user/user4.jpg' %}" alt="profile">
-                                    </div>
-                                    <div class="author-info">
-                                        <p class="author-name">Diane Mackenzie</p>
-                                        <p class="professional">Software Developer</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="testimonial-item-two wow fadeInUp" data-wow-duration="2s">
-                            <div class="review-star">
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            </div>
-                            <h3 class="title">Guidance You Can Trust</h3>
-                            <p class="description">I gained clarity in my career path within just a few sessions. The
-                                practical advice and support were exactly what I needed.</p>
-                            <div class="testimonial-author">
-                                <div class="author-img">
-                                    <img src="{% static 'frontend/assets/img/user/user5.jpg' %}" alt="profile">
-                                </div>
-                                <div class="author-info">
-                                    <p class="author-name">Erin Hedge</p>
-                                    <p class="professional">Accountant</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4">
-                        <div class="testimonial-item-two mb-4 wow fadeInUp" data-wow-duration="1s">
-                            <div class="review-star">
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            </div>
-                            <h3 class="title">Confidence Boost</h3>
-                            <p class="description">This platform connected me with a mentor who truly understood my
-                                goals. Their guidance helped me grow faster than I imagined.</p>
-                            <div class="testimonial-author">
-                                <div class="author-img">
-                                    <img src="{% static 'frontend/assets/img/user/user3.jpg' %}" alt="profile">
-                                </div>
-                                <div class="author-info">
-                                    <p class="author-name">Terry Samuels</p>
-                                    <p class="professional">Marketing Manager</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="testimonial-item-three wow fadeInUp" data-wow-duration="2s">
-                            <div class="testimonial-video">
-                                <video playsinline muted loop class="video">
-                                    <source src="{% static 'frontend/assets/img/video/testimonial-03.mp4' %}"
-                                        type="video/mp4">
-                                </video>
-                                <div class="testimonial-author">
-                                    <div class="author-img">
-                                        <img src="{% static 'frontend/assets/img/user/user10.jpg' %}" alt="profile">
-                                    </div>
-                                    <div class="author-info">
-                                        <p class="author-name">Roscoe Conway</p>
-                                        <p class="professional">Digital Marketer</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {% endif %}
-                </div>{# /row #}
-
+                {% endif %}
             </div>
-        </section>
+
     </div>
+    </section>
+</div>
 </div>
 
 {% endblock %}

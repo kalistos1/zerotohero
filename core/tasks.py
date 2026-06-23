@@ -52,3 +52,57 @@ def send_decision_email_task(application_id: int, decision: str) -> bool:
     except Exception as e:
         logger.error(f"Failed to prepare {decision} email for {app.email}. Error: {str(e)}")
         return False
+
+@task()
+def send_volunteer_decision_email_task(application_id: int, decision: str) -> bool:
+    """
+    Sends a customized acceptance, rejection, or interview email to a volunteer applicant.
+    """
+    from core.models import VolunteerApplication, SiteSettings
+
+    if decision not in ['accepted', 'rejected', 'interview']:
+        logger.error(f"Invalid decision type '{decision}' for volunteer application {application_id}.")
+        return False
+
+    try:
+        app = VolunteerApplication.objects.get(id=application_id)
+    except VolunteerApplication.DoesNotExist:
+        logger.error(f"VolunteerApplication with id {application_id} not found.")
+        return False
+
+    if decision == "accepted":
+        subject = "Congratulations! You've been accepted to the Zero to Hero Volunteer Team"
+    elif decision == "interview":
+        subject = "Interview Invitation: Zero to Hero Volunteer Team"
+    else:
+        subject = "Update on your Volunteer Application - Zero to Hero"
+
+    from_email = settings.DEFAULT_FROM_EMAIL
+    to_email = [app.email]
+    settings_obj = SiteSettings.load()
+    context = {
+        'full_name': app.full_name, 
+        'role_interest': app.get_role_interest_display(),
+        'booking_link': settings_obj.interview_booking_link or "#"
+    }
+
+    try:
+        text_content = render_to_string(f"emails/volunteer_{decision}_email.txt", context)
+        html_content = render_to_string(f"emails/volunteer_{decision}_email.html", context)
+
+        msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+        msg.attach_alternative(html_content, "text/html")
+
+        # 2024 Spam Compliance: Native Unsubscribe Header
+        msg.extra_headers['List-Unsubscribe'] = f"<mailto:{from_email}?subject=unsubscribe>"
+        
+        # Dispatch to background thread instead of a heavy worker queue
+        msg.send()
+        
+        logger.info(f"Volunteer {decision.capitalize()} email queued in local thread for {app.email}.")
+        return True
+
+    except Exception as e:
+        logger.error(f"Failed to prepare volunteer {decision} email for {app.email}. Error: {str(e)}")
+        return False
+

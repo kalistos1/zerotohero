@@ -94,4 +94,12 @@ urlpatterns = [
     path("sponsorship-tiers/create/", views.sponsorship_tier_create, name="sponsorship-tier-create"),
     path("sponsorship-tiers/<int:pk>/edit/", views.sponsorship_tier_edit, name="sponsorship-tier-edit"),
     path("sponsorship-tiers/<int:pk>/delete/", views.sponsorship_tier_delete, name="sponsorship-tier-delete"),
+
+    # ── Volunteer Applications (admin only) ───────────────────────────────────
+    path("volunteers/", views.volunteer_list, name="volunteer-list"),
+    path("volunteers/bulk/", views.volunteer_bulk_action, name="volunteer-bulk-action"),
+    path("volunteers/export/csv/", views.volunteer_export_csv, name="volunteer-export-csv"),
+    path("volunteers/<int:pk>/", views.volunteer_detail, name="volunteer-detail"),
+    path("volunteers/<int:pk>/email/<str:decision>/", views.volunteer_send_email, name="volunteer-send-email"),
+    path("volunteers/<int:pk>/convert/", views.volunteer_convert_to_team, name="volunteer-convert-to-team"),
 ]

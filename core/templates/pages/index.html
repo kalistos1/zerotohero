@@ -121,7 +121,7 @@ personalised mentor groups of max 7, and career support. Open to learners everyw
 	</div>
 </section>
 <!-- Start Service Section -->
-<section class="about-section-two section">
+<section class="about-section-two section  d-none d-sm-block">
 
 	<div class="container">
 
@@ -522,40 +522,109 @@ personalised mentor groups of max 7, and career support. Open to learners everyw
 <!-- End platform Section -->
 
 <!-- Start Team Section -->
-<section class="team-section-three section">
+<section class="team-section-five section pb-0">
 	<div class="container">
-
-		<div class="section-header-three text-center">
-			<div class="section-sub-title"> <img src="{% static 'frontend/assets/img/icon/title-img.svg' %}" alt="img"
-					class="img-fluid img-1"> Meet Our Mentors <img
-					src="{% static 'frontend/assets/img/icon/title-img.svg' %}" alt="img" class="img-fluid img-1">
-			</div>
-			<h2 class="section-title">Learn From Proven Experts</h2>
+		<div class="section-header text-center  wow fadeInDown" data-wow-duration="1s">
+			<div class="sub-title shape-bg"> Our Team </div>
+			<h2 class="section-title">Meet the Minds Behind the Mission</h2>
+			<p>A passionate team of mentors, designers, and innovators committed to creating real human impact.</p>
 		</div>
 
-		<!-- stat row -->
+		<!-- start row -->
+		<style>
+			/* Make the circular image container responsive so it doesn't overflow col-6 */
+			.team-item-five .team-img {
+				width: 100% !important;
+				max-width: 200px !important;
+				height: auto !important;
+				aspect-ratio: 1 / 1 !important;
+			}
+
+			/* Make the image fill its container perfectly */
+			.team-member-img {
+				width: 100% !important;
+				height: 100% !important;
+				object-fit: cover !important;
+			}
+		</style>
 		<div class="row row-gap-4 justify-content-center">
 			{% if team_members %}
 			{% for member in team_members %}
 			<!-- Dynamic Item -->
-			<div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
-				<div class="team-item-three">
+			<div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
+				<div class="team-item-five" style="cursor: pointer;" data-bs-toggle="modal"
+					data-bs-target="#teamModal{{ member.pk }}">
 					<div class="team-overlay">
-						{% if member.image %}
-						<img src="{{ member.image.url }}" alt="{{ member.name }}" class="img-fluid oimg-1"
-							style="height: 300px; object-fit: cover;">
-						{% else %}
-						<img src="{% static 'frontend/assets/img/teams/teams-img-1.png' %}" alt="{{ member.name }}"
-							class="img-fluid oimg-1">
-						{% endif %}
-						<button class="favourite">
-							<i class="fa-solid fa-heart"></i>
-						</button>
+						<div class="team-img">
+							{% if member.image %}
+							<img src="{{ member.image.url }}" alt="{{ member.name }}"
+								class="img-fluid img-1 team-member-img">
+							{% else %}
+							<img src="{% static 'frontend/assets/img/teams/team-img-1.jpg' %}" alt="{{ member.name }}"
+								class="img-fluid img-1 team-member-img">
+							{% endif %}
+						</div>
 					</div>
 					<div class="team-content">
-						<div>
-							<h3 class="custom-title"><a href="javascript:void(0);">{{ member.name }}</a></h3>
-							<p class="expert">{{ member.role }}</p>
+						<div class="team-info">
+							<h3 class="custom-title"> <a href="javascript:void(0);">{{ member.name }}</a> </h3>
+							<p>{{ member.role }}</p>
+						</div>
+						<div class="team-share">
+							<a href="javascript:void(0);" class="share-icon"> <i class="icon-share-2"></i> </a>
+							<div class="social-icon">
+								{% if member.linkedin_url %}
+								<a href="{{ member.linkedin_url }}" target="_blank" class="icon"><i
+										class="fa-brands fa-linkedin-in"></i></a>
+								{% endif %}
+								{% if member.twitter_url %}
+								<a href="{{ member.twitter_url }}" target="_blank" class="icon"><i
+										class="fa-brands fa-x-twitter"></i></a>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Team Member Modal -->
+			<div class="modal fade" id="teamModal{{ member.pk }}" tabindex="-1"
+				aria-labelledby="teamModalLabel{{ member.pk }}" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered modal-lg">
+					<div class="modal-content">
+						<div class="modal-header border-0 pb-0">
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body text-center pt-0 pb-5 px-4">
+							{% if member.image %}
+							<img src="{{ member.image.url }}" alt="{{ member.name }}" class="rounded-circle mb-3 shadow"
+								style="width: 150px; height: 150px; object-fit: cover;">
+							{% else %}
+							<img src="{% static 'frontend/assets/img/teams/team-img-1.jpg' %}" alt="{{ member.name }}"
+								class="rounded-circle mb-3 shadow"
+								style="width: 150px; height: 150px; object-fit: cover;">
+							{% endif %}
+							<h3 class="mb-1">{{ member.name }}</h3>
+							<p class="text-primary fw-bold mb-3">{{ member.role }}</p>
+
+							{% if member.bio %}
+							<div class="text-start text-muted mb-4 px-md-4">
+								{{ member.bio|linebreaks }}
+							</div>
+							{% endif %}
+
+							<div class="social-icon d-flex justify-content-center gap-3">
+								{% if member.linkedin_url %}
+								<a href="{{ member.linkedin_url }}" target="_blank"
+									class="btn btn-outline-primary rounded-circle d-flex align-items-center justify-content-center"
+									style="width: 40px; height: 40px;"><i class="fa-brands fa-linkedin-in"></i></a>
+								{% endif %}
+								{% if member.twitter_url %}
+								<a href="{{ member.twitter_url }}" target="_blank"
+									class="btn btn-outline-dark rounded-circle d-flex align-items-center justify-content-center"
+									style="width: 40px; height: 40px;"><i class="fa-brands fa-x-twitter"></i></a>
+								{% endif %}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -564,13 +633,8 @@ personalised mentor groups of max 7, and career support. Open to learners everyw
 			{% endif %}
 		</div>
 		<!-- end row -->
-		<div class="view-more text-center">
-			<a href="#" class="primary-btn d-inline-flex align-items-center"> Register to Get Started <i
-					class="icon-chevron-right ms-2 fw-normal"></i></a>
-		</div>
 
 	</div>
-	<img src="{% static 'frontend/assets/img/bg/platrom-bg.png' %}" alt="bg" class="bg-img">
 </section>
 <!-- End Team Section -->
 
@@ -587,126 +651,176 @@ personalised mentor groups of max 7, and career support. Open to learners everyw
 		</div>
 	</div>
 
-	{% if testimonials %}
-	<!-- Slide section  -->
-	<div class="horizontal-slide d-flex mb-4" data-direction="left" data-speed="slow">
-		<div class="slide-list d-flex gap-4">
-			{% for t in testimonials %}
-			<div class="testimonial-item-seven">
-				<div class="testimonial-author">
-					<div class="author-img">
-						{% if t.image %}
-						<a href="javascript:void(0);" class="author"><img src="{{ t.image.url }}"
-								alt="{{ t.name }}"></a>
-						{% else %}
-						<a href="javascript:void(0);" class="author"><img
-								src="{% static 'frontend/assets/img/user/profile-01.jpg' %}" alt="{{ t.name }}"></a>
+	<section class="testimonial-section-two">
+		<div class="container">
+			<div class="row g-4">
+
+				{% if testimonials %}
+
+				{% for t in testimonials|slice:":3" %}
+				<div class="col-lg-4 col-md-6 col-6">
+					<div class="testimonial-item-two wow fadeInUp"
+						data-wow-duration="0.{% widthratio forloop.counter 1 3 %}s">
+
+						{# ── Star rating ── #}
+						<div class="review-star mb-2">
+							{% for i in "12345" %}
+							{% if forloop.counter <= t.rating %} <i class="fas fa-star text-warning"></i>
+								{% else %}
+								<i class="far fa-star text-muted"></i>
+								{% endif %}
+								{% endfor %}
+						</div>
+
+						{# ── Evidence media (determined by media_type) ── #}
+						{% if t.media_type == 'screenshot' and t.chat_screenshot %}
+						{# Chat screenshot — show full image #}
+						<div class="testimonial-screenshot mb-3">
+							<img src="{{ t.chat_screenshot.url }}" alt="Chat from {{ t.name }}"
+								class="img-fluid rounded shadow-sm" loading="lazy"
+								style="max-height:300px;width:100%;object-fit:contain;background:#f8f9fa;">
+						</div>
+						{# Optional caption #}
+						{% if t.review_text %}
+						<p class="description text-muted small fst-italic">"{{ t.review_text|safe }}"</p>
 						{% endif %}
-					</div>
-					<div class="author-info">
-						<a href="javascript:void(0);" class="author-name">{{ t.name }}</a>
-						<p class="professional">{{ t.role }}</p>
-					</div>
-				</div>
-				<div class="review-star">
-					{% for _ in t.get_rating_range %}
-					<i class="fas fa-star"></i>
-					{% endfor %}
-				</div>
-				<div class="description">
-					{{ t.review_text|safe }}
-				</div>
-			</div>
-			{% endfor %}
-		</div>
-	</div>
-	<!-- Slide section -->
 
-	<!-- Slide section  -->
-	<div class="horizontal-slide d-flex" data-direction="right" data-speed="slow">
-		<div class="slide-list d-flex gap-4">
-			{% for t in testimonials reversed %}
-			<div class="testimonial-item-seven">
-				<div class="testimonial-author">
-					<div class="author-img">
-						{% if t.image %}
-						<a href="javascript:void(0);" class="author"><img src="{{ t.image.url }}"
-								alt="{{ t.name }}"></a>
-						{% else %}
-						<a href="javascript:void(0);" class="author"><img
-								src="{% static 'frontend/assets/img/user/profile-01.jpg' %}" alt="{{ t.name }}"></a>
+						{% elif t.media_type == 'video' and t.video_file %}
+						{# Short video testimonial #}
+						<div class="testimonial-video mb-3 position-relative rounded shadow-sm overflow-hidden"
+							style="background:#000;">
+							<video playsinline preload="metadata" class="w-100 d-block" {% if t.video_thumbnail %}poster="{{ t.video_thumbnail.url }}" {% endif %}
+								style="max-height:280px; object-fit: contain; cursor: pointer;"
+								onclick="if(this.paused){this.play();}else{this.pause();}"
+								onplay="this.controls=true; this.nextElementSibling.style.display='none';"
+								onpause="this.controls=false; this.nextElementSibling.style.display='block';">
+								<source src="{{ t.video_file.url }}#t=0.001" type="video/mp4">
+								Your browser does not support the video element.
+							</video>
+							<div class="play-btn-overlay position-absolute top-50 start-50 translate-middle text-white text-center"
+								style="pointer-events: none;">
+								<i class="fas fa-play-circle"
+									style="font-size: 4rem; opacity: 0.85; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));"></i>
+							</div>
+						</div>
+						{% if t.review_text %}
+						<p class="description text-muted small fst-italic">"{{ t.review_text|safe }}"</p>
 						{% endif %}
-					</div>
-					<div class="author-info">
-						<a href="javascript:void(0);" class="author-name">{{ t.name }}</a>
-						<p class="professional">{{ t.role }}</p>
+
+						{% else %}
+						{# Plain text review (default) #}
+						<p class="description">"{{ t.review_text|safe }}"</p>
+						{% endif %}
+
+						{# ── Person details ── #}
+						<div class="testimonial-author mt-3">
+							<div class="author-img">
+								{% if t.image %}
+								<img src="{{ t.image.url }}" alt="{{ t.name }}" loading="lazy">
+								{% else %}
+								<img src="{% static 'frontend/assets/img/user/user8.jpg' %}" alt="{{ t.name }}">
+								{% endif %}
+							</div>
+							<div class="author-info">
+								<p class="author-name">{{ t.name }}</p>
+								<p class="professional mb-1">{{ t.role }}</p>
+								<div class="social-icon">
+									{% if t.linkedin_url %}
+									<a href="{{ t.linkedin_url }}" target="_blank" class="text-primary me-2"><i
+											class="fa-brands fa-linkedin"></i></a>
+									{% endif %}
+									{% if t.twitter_url %}
+									<a href="{{ t.twitter_url }}" target="_blank" class="text-dark"><i
+											class="fa-brands fa-x-twitter"></i></a>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+
 					</div>
 				</div>
-				<div class="review-star">
-					{% for _ in t.get_rating_range %}
-					<i class="fas fa-star"></i>
-					{% endfor %}
-				</div>
-				<div class="description">
-					{{ t.review_text|safe }}
-				</div>
-			</div>
-			{% endfor %}
-		</div>
-	</div>
-	<!-- Slide section -->
-	{% endif %}
+				{% endfor %}
 
-	<img src="{% static 'frontend/assets/img/icon/service-element-1.svg' %}" alt="element" class="img-fluid element-1">
-	<img src="{% static 'frontend/assets/img/bg/testimonial-bg.png' %}" alt="element" class="img-fluid element-2">
-</section>
-<!-- End Testimonials Section -->
+				{% else %}
 
-
-
-<!-- Start Blogs Section -->
-<section class="blog-section-two section">
-	<div class="container">
-
-		<!-- Section Header -->
-		<div class="section-header section-header-two">
-			<h2 class="section-title">Expert <span class="text-gradient">Tips &amp; Articles</span></h2>
-			<p class="sub-title text-black">Explore expert written articles to guide your learning journey.</p>
-		</div>
-		<!-- End Section Header -->
-
-		<div class="row g-4">
-			{% if latest_posts %}
-			{% for post in latest_posts %}
-			<!-- Blog Item -->
-			<div class="col-lg-6 d-flex">
-				<div class="blog-item-two flex-fill wow fadeInUp" data-wow-duration="1s"
-					style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
-					<div class="blog-img">
-						<a href="{% url 'blog:blog-detail' post.slug %}">
-							<img src="{{ post.get_imagethumbnail }}" alt="{{ post.title }}" class="img-fluid">
-						</a>
-					</div>
-					<div class="blog-content">
-						<h3 class="custom-title"><a href="{% url 'blog:blog-detail' post.slug %}">{{ post.title }}</a>
-						</h3>
-						<p>{{ post.snippet }}</p>
-						<p class="date"><i class="icon-calendar-fold me-1"></i>{{ post.date_created|date:"d M Y" }}</p>
+				<div class="testimonial-item-three wow fadeInUp" data-wow-duration="2s">
+					<div class="testimonial-video">
+						<video playsinline muted loop class="video">
+							<source src="{% static 'frontend/assets/img/video/testimonial-03.mp4' %}" type="video/mp4">
+						</video>
+						<div class="testimonial-author">
+							<div class="author-img">
+								<img src="{% static 'frontend/assets/img/user/user10.jpg' %}" alt="profile">
+							</div>
+							<div class="author-info">
+								<p class="author-name">Roscoe Conway</p>
+								<p class="professional">Digital Marketer</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-			<!-- End Blog Item -->
-			{% endfor %}
+
 			{% endif %}
-	</div>
+		</div>
 
-	<div class="view-more text-center">
-		<a href="{% url 'blog:blog-list' %}" class="btn-medium primary-btn">View All<i
-				class="icon-chevron-right ms-2"></i></a>
-	</div>
+		<div class="view-more text-center mt-5">
+			<a href="{% url 'core:testimonials' %}" class="btn-medium primary-btn">View All Testimonials<i
+					class="icon-chevron-right ms-2"></i></a>
+		</div>
 
-	</div>
-</section>
-<!-- End Blogs Section -->
 
-{% endblock %}
+		<img src="{% static 'frontend/assets/img/bg/testimonial-bg.png' %}" alt="element" class="img-fluid element-2">
+	</section>
+	<!-- End Testimonials Section -->
+
+
+
+	<!-- Start Blogs Section -->
+	<section class="blog-section-two section">
+		<div class="container">
+
+			<!-- Section Header -->
+			<div class="section-header section-header-two">
+				<h2 class="section-title">Expert <span class="text-gradient">Tips &amp; Articles</span></h2>
+				<p class="sub-title text-black">Explore expert written articles to guide your learning journey.</p>
+			</div>
+			<!-- End Section Header -->
+
+			<div class="row g-4">
+				{% if latest_posts %}
+				{% for post in latest_posts %}
+				<!-- Blog Item -->
+				<div class="col-lg-6 d-flex">
+					<div class="blog-item-two flex-fill wow fadeInUp" data-wow-duration="1s"
+						style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+						<div class="blog-img">
+							<a href="{% url 'blog:blog-detail' post.slug %}">
+								<img src="{{ post.get_imagethumbnail }}" alt="{{ post.title }}" class="img-fluid">
+							</a>
+						</div>
+						<div class="blog-content">
+							<h3 class="custom-title"><a href="{% url 'blog:blog-detail' post.slug %}">{{ post.title
+									}}</a>
+							</h3>
+							<p>{{ post.snippet }}</p>
+							<p class="date"><i class="icon-calendar-fold me-1"></i>{{ post.date_created|date:"d M Y" }}
+							</p>
+						</div>
+					</div>
+				</div>
+				<!-- End Blog Item -->
+				{% endfor %}
+				{% endif %}
+			</div>
+
+			<div class="view-more text-center">
+				<a href="{% url 'blog:blog-list' %}" class="btn-medium primary-btn">View All<i
+						class="icon-chevron-right ms-2"></i></a>
+			</div>
+
+		</div>
+	</section>
+	<!-- End Blogs Section -->
+
+	{% endblock %}

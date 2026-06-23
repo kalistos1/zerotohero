@@ -10,6 +10,7 @@ from core.models import (
     Testimonial,
     TeamMember,
     MentorshipApplication,
+    VolunteerApplication,
 )
 
 
@@ -30,31 +31,37 @@ class TestimonialForm(forms.ModelForm):
         model = Testimonial
         fields = [
             "name", "role", "image",
+            "linkedin_url", "twitter_url",
             "rating", "media_type",
-            "review_text", "chat_screenshot", "video_file",
+            "review_text", "chat_screenshot", "video_file", "video_thumbnail",
             "is_active",
         ]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "role": forms.TextInput(attrs={"class": "form-control"}),
             "image": forms.ClearableFileInput(attrs={"class": "form-control"}),
+            "linkedin_url": forms.URLInput(attrs={"class": "form-control", "placeholder": "https://linkedin.com/in/..."}),
+            "twitter_url": forms.URLInput(attrs={"class": "form-control", "placeholder": "https://twitter.com/..."}),
             "rating": forms.NumberInput(attrs={"class": "form-control", "min": 1, "max": 5}),
             "media_type": forms.Select(attrs={"class": "form-select", "id": "id_media_type"}),
             "chat_screenshot": forms.ClearableFileInput(attrs={"class": "form-control"}),
             "video_file": forms.ClearableFileInput(attrs={"class": "form-control"}),
+            "video_thumbnail": forms.ClearableFileInput(attrs={"class": "form-control"}),
             "is_active": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
         labels = {
             "image": "Profile Photo",
             "chat_screenshot": "Chat / DM Screenshot",
-            "video_file": "Video File (MP4 recommended)",
+            "video_file": "Video File (Max 2 mins, MP4 recommended)",
+            "video_thumbnail": "Video Thumbnail (Optional)",
             "review_text": "Text Review",
         }
         help_texts = {
             "media_type": "Select how this testimonial will be displayed on the site.",
             "review_text": "Required for 'Text Review'. Optional caption for Screenshot/Video types.",
             "chat_screenshot": "Required for 'Chat Screenshot' type. Upload the screenshot image.",
-            "video_file": "Required for 'Video Testimonial' type. Keep under 50 MB.",
+            "video_file": "Required for 'Video Testimonial' type. Max 2 mins. Keep under 150 MB.",
+            "video_thumbnail": "Optional. If blank, browser automatically extracts first frame.",
         }
 
 
@@ -67,28 +74,12 @@ class AboutPageForm(forms.ModelForm):
             "description",
             "image_1",
             "image_2",
-            "ceo_name",
-            "ceo_title",
-            "ceo_image",
-            "signature_image",
-            "highlight_1_title",
-            "highlight_1_description",
-            "highlight_2_title",
-            "highlight_2_description",
         ]
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control"}),
             "subtitle": forms.TextInput(attrs={"class": "form-control"}),
             "image_1": forms.ClearableFileInput(attrs={"class": "form-control"}),
             "image_2": forms.ClearableFileInput(attrs={"class": "form-control"}),
-            "ceo_name": forms.TextInput(attrs={"class": "form-control"}),
-            "ceo_title": forms.TextInput(attrs={"class": "form-control"}),
-            "ceo_image": forms.ClearableFileInput(attrs={"class": "form-control"}),
-            "signature_image": forms.ClearableFileInput(attrs={"class": "form-control"}),
-            "highlight_1_title": forms.TextInput(attrs={"class": "form-control"}),
-            "highlight_1_description": forms.TextInput(attrs={"class": "form-control"}),
-            "highlight_2_title": forms.TextInput(attrs={"class": "form-control"}),
-            "highlight_2_description": forms.TextInput(attrs={"class": "form-control"}),
         }
 
 
@@ -216,4 +207,21 @@ class MentorshipAdminReviewForm(forms.ModelForm):
         notes = self.cleaned_data.get("admin_notes", "")
         if len(notes) > 5000:
             raise forms.ValidationError("Admin notes cannot exceed 5000 characters.")
+
+class VolunteerAdminReviewForm(forms.ModelForm):
+    class Meta:
+        model = VolunteerApplication
+        fields = ["status", "internal_score", "admin_notes"]
+        
+    def clean_internal_score(self):
+        score = self.cleaned_data.get("internal_score", 0)
+        if score is not None and not (0 <= score <= 5):
+            raise forms.ValidationError("Score must be between 0 and 5.")
+        return score
+        
+    def clean_admin_notes(self):
+        notes = self.cleaned_data.get("admin_notes", "")
+        if len(notes) > 5000:
+            raise forms.ValidationError("Admin notes cannot exceed 5000 characters.")
         return notes
+

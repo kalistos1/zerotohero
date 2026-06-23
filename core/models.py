@@ -8,7 +8,7 @@ from django.utils.text import slugify
 from django_prose_editor.fields import ProseEditorField
 from taggit.managers import TaggableManager
 
-from core.validators import validate_video_upload
+from core.validators import validate_pdf_upload, validate_video_upload
 
 
 # Shared rich-text extensions used across all ProseEditorField instances
@@ -138,6 +138,8 @@ class Testimonial(models.Model):
     role = models.CharField(max_length=255)
     # Profile photo of the person giving the testimonial
     image = models.ImageField(upload_to="testimonials/profiles/", blank=True, null=True)
+    linkedin_url = models.URLField(blank=True, null=True, help_text="LinkedIn profile URL (optional)")
+    twitter_url = models.URLField(blank=True, null=True, help_text="Twitter/X profile URL (optional)")
     rating = models.PositiveIntegerField(
         default=5,
         validators=[MinValueValidator(1), MaxValueValidator(5)],
@@ -168,6 +170,12 @@ class Testimonial(models.Model):
         null=True,
         validators=[validate_video_upload],
         help_text="Short testimonial video (MP4/WebM/OGG/MOV, ≤50 MB)",
+    )
+    video_thumbnail = models.ImageField(
+        upload_to="testimonials/thumbnails/",
+        blank=True,
+        null=True,
+        help_text="Optional thumbnail for the video. If left blank, the first frame of the video will be used.",
     )
 
     # ── Metadata ───────────────────────────────────────────────────────
@@ -413,18 +421,6 @@ class AboutPage(models.Model):
     image_2 = models.ImageField(
         upload_to="about/", blank=True, null=True, help_text="Secondary about image"
     )
-    ceo_name = models.CharField(max_length=100, blank=True)
-    ceo_title = models.CharField(max_length=100, blank=True)
-    ceo_image = models.ImageField(upload_to="about/", blank=True, null=True)
-    signature_image = models.ImageField(upload_to="about/", blank=True, null=True)
-    highlight_1_title = models.CharField(
-        max_length=100, blank=True, default="Super Quality Food"
-    )
-    highlight_1_description = models.CharField(max_length=255, blank=True)
-    highlight_2_title = models.CharField(
-        max_length=100, blank=True, default="Qualified Chef"
-    )
-    highlight_2_description = models.CharField(max_length=255, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -577,6 +573,7 @@ class SiteSettings(models.Model):
     instagram_url = models.URLField(blank=True, null=True)
     linkedin_url = models.URLField(blank=True, null=True)
     youtube_url = models.URLField(blank=True, null=True)
+    interview_booking_link = models.URLField(blank=True, null=True, help_text="Calendly or scheduling link for interviews")
 
     class Meta:
         verbose_name = "Site Settings"
@@ -604,7 +601,7 @@ class SiteSettings(models.Model):
 class TeamMember(models.Model):
     name = models.CharField(max_length=100)
     role = models.CharField(max_length=100)
-    image = models.ImageField(upload_to="team/")
+    image = models.ImageField(upload_to="team/", blank=True, null=True)
     bio = models.TextField(blank=True)
     linkedin_url = models.URLField(blank=True)
     twitter_url = models.URLField(blank=True)
@@ -669,4 +666,103 @@ class SponsorshipInquiry(models.Model):
 
     def __str__(self):
         tier_name = self.tier.name if self.tier else "No Tier Selected"
-        return f"{self.company_name} ({tier_name})"
+        return f"{self.company_name} ({tier_name})"
+
+
+class VolunteerApplication(models.Model):
+    ROLE_CHOICES = [
+        ('mentor', 'Mentor (Python Expert)'),
+        ('teaching_assistant', 'Teaching Assistant'),
+        ('career_coach', 'Career Coach / Industry Mentor'),
+        ('community_liaison', 'Community Liaison / Manager'),
+        ('graphics_social', 'Graphics Designer & Social Media Manager'),
+        ('content_writer', 'Content Writer / Technical Writer'),
+        ('other', 'Other'),
+    ]
+
+    EXPERTISE_CHOICES = [
+        ('python_fundamentals', 'Python Fundamentals'),
+        ('data_analysis', 'Data Analysis / Data Science'),
+        ('backend_development', 'Backend Development (Django, Flask, FastAPI)'),
+        ('machine_learning', 'Machine Learning / AI'),
+        ('cybersecurity', 'Cybersecurity'),
+        ('devops_cloud', 'DevOps & Cloud'),
+        ('career_coaching', 'Career Coaching & Interview Preparation'),
+        ('technical_writing', 'Technical Writing / Content Creation'),
+        ('graphic_design', 'Graphic Design / Social Media Management'),
+    ]
+
+    HOURS_CHOICES = [
+        ('2_4', '2–4 hours'),
+        ('5_8', '5–8 hours'),
+        ('8_plus', '8+ hours'),
+    ]
+
+    EVENING_CHOICES = [
+        ('yes', 'Yes'),
+        ('partially', 'Partially'),
+        ('no', 'No'),
+    ]
+
+    COMMITMENT_CHOICES = [
+        ('6_months', 'Full 6 months (Preferred)'),
+        ('3_months', '3 months'),
+        ('flexible', 'Flexible'),
+    ]
+
+    full_name = models.CharField(max_length=200)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=25)
+    country = models.CharField(max_length=100)
+    linkedin_profile = models.URLField()
+    github_profile = models.URLField(blank=True)
+    
+    role_interest = models.CharField(max_length=50, choices=ROLE_CHOICES)
+    role_other = models.CharField(max_length=200, blank=True)
+    
+    job_title_company = models.CharField(max_length=200)
+    years_of_experience = models.CharField(max_length=50)
+    areas_of_expertise = models.JSONField(default=list)
+    professional_bio = models.TextField()
+    
+    motivation = models.TextField()
+    hours_per_week = models.CharField(max_length=20, choices=HOURS_CHOICES)
+    evening_availability = models.CharField(max_length=20, choices=EVENING_CHOICES)
+    commitment_length = models.CharField(max_length=20, choices=COMMITMENT_CHOICES)
+    
+    cv_resume = models.FileField(
+        upload_to="volunteers/cvs/",
+        blank=True,
+        null=True,
+        validators=[validate_pdf_upload],
+        help_text="Upload CV / Resume (PDF, max 10 MB)",
+    )
+    additional_comments = models.TextField(blank=True)
+
+    # Admin Management Fields
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('under_review', 'Under Review'),
+        ('interview', 'Interviewing'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+        ('waitlisted', 'Waitlisted'),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', db_index=True)
+    internal_score = models.IntegerField(default=0, help_text="Score from 1 to 5")
+    admin_notes = models.TextField(blank=True, help_text="Private internal notes")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Volunteer Application'
+        verbose_name_plural = 'Volunteer Applications'
+
+    def __str__(self):
+        return f"{self.full_name} — {self.email}"
+
+    def get_expertise_list(self):
+        # Already a list because of JSONField, but map to readable names
+        expertise = self.areas_of_expertise if isinstance(self.areas_of_expertise, list) else []
+        mapping = dict(self.EXPERTISE_CHOICES)
+        return [mapping.get(i, i) for i in expertise]

@@ -1,0 +1,12 @@
+Hi {{ full_name }},
+
+Thank you for taking the time to apply for the {{ role_interest }} volunteer position with the Zero to Hero Program.
+
+We were incredibly inspired by your passion and willingness to give back. However, we have received a large number of applications and, after careful consideration, we are unable to offer you a position at this time.
+
+Please know that this decision does not reflect on your skills or potential. We will keep your application on file and may reach out if future opportunities arise that align with your background.
+
+Thank you again for your interest in supporting our mission.
+
+Best regards,
+The Zero to Hero Team

@@ -1,0 +1,13 @@
+Hi {{ full_name }},
+
+Congratulations! We are thrilled to offer you a volunteer position as a {{ role_interest }} with the Zero to Hero Mentorship Program.
+
+Your application stood out, and we believe your skills and passion will make a significant impact on our mentees and the broader community.
+
+Next Steps:
+We will be hosting an onboarding session soon. Keep an eye on your inbox for an invitation with the date and time.
+
+If you have any immediate questions, please reply to this email. We can't wait to start working with you!
+
+Best regards,
+The Zero to Hero Team

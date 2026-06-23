@@ -1,0 +1,731 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>"From Zero to Hero" — Volunteer Application</title>
+  <meta name="description"
+    content="Apply to volunteer as a Mentor, Teaching Assistant, or Career Coach for the free 5-month Python Zero to Hero Mentorship Program. Make a real impact by mentoring underrepresented talents across Africa." />
+  <meta name="keywords"
+    content="Python mentorship, volunteer mentor, teach Python, career coach, technical writer, zero to hero" />
+  <link rel="canonical" href="{{ safe_base_url }}{% url 'core:volunteer_application_form' %}" />
+
+  <meta property="og:title" content='"From Zero to Hero" Volunteer Application' />
+  <meta property="og:description"
+    content="Make a real impact by mentoring underrepresented talents across Africa. Apply to volunteer." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ safe_base_url }}{% url 'core:volunteer_application_form' %}" />
+  <meta property="og:image"
+    content="{{ safe_base_url }}{% static 'frontend/assets/img/zerotohero_logo3.webp' %}" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content='"From Zero to Hero" Volunteer Application' />
+  <meta name="twitter:description"
+    content="Make a real impact by mentoring underrepresented talents across Africa. Apply to volunteer." />
+  <meta name="twitter:image"
+    content="{{ safe_base_url }}{% static 'frontend/assets/img/zerotohero_logo3.webp' %}" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --green-dark: #0F6E56;
+      --green-mid: #1D9E75;
+      --green-light: #E1F5EE;
+      --green-pale: #f0faf6;
+      --gray-ink: #1a1a1a;
+      --gray-mid: #555;
+      --gray-line: #e8e8e8;
+      --red-err: #dc2626;
+      --white: #ffffff;
+      --font-display: 'Sora', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--gray-ink);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--green-dark);
+      padding: 2.5rem 1.5rem 2rem;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #9FE1CB;
+      margin-bottom: 0.75rem;
+    }
+
+    header h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.25;
+      max-width: 680px;
+      margin: 0 auto 1rem;
+    }
+
+    header h1 span {
+      color: #5DCAA5;
+    }
+
+    .header-desc {
+      font-size: 0.925rem;
+      color: #9FE1CB;
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .header-desc a {
+      color: #5DCAA5;
+    }
+
+    /* ── Outer form section ── */
+    .form-section {
+      max-width: 760px;
+      margin: 2.5rem auto;
+      padding: 0 1.25rem 3rem;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-mid);
+      margin-bottom: 1rem;
+      display: block;
+      text-align: center;
+    }
+
+    .form-wrapper {
+      border: 1px solid var(--gray-line);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ── Loading overlay ── */
+    .loading-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.88);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      border-radius: 12px;
+      z-index: 10;
+    }
+
+    .loading-overlay.active {
+      display: flex;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--green-light);
+      border-top-color: var(--green-dark);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-overlay p {
+      font-size: 14px;
+      color: var(--green-dark);
+      font-weight: 500;
+    }
+
+    /* ── Form body ── */
+    .form-body {
+      padding: 2rem;
+      background: var(--white);
+    }
+
+    /* ── Section titles ── */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green-dark);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--green-light);
+      margin: 2rem 0 1.25rem;
+    }
+
+    .section-title:first-of-type {
+      margin-top: 0;
+    }
+
+    /* ── Field layout ── */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .field-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-ink);
+    }
+
+    .field-hint {
+      font-size: 12px;
+      color: var(--gray-mid);
+      line-height: 1.45;
+    }
+
+    /* ── Text inputs / selects / textareas ── */
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--gray-ink);
+      border: 1px solid var(--gray-line);
+      border-radius: 8px;
+      background: var(--green-pale);
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--green-mid);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.12);
+    }
+
+    textarea.form-control {
+      resize: vertical;
+    }
+
+    /* ── Radio / Checkbox widgets ─────────────────────────────────────────
+       Django renders RadioSelect / CheckboxSelectMultiple as:
+         <div id="id_field">
+           <div><label><input type="radio|checkbox"> Label text</label></div>
+           ...
+         </div>
+       We wrap that output in .radio-field / .checkbox-field to scope styles.
+    ── */
+    .radio-field>div>div,
+    .checkbox-field>div>div {
+      margin-bottom: 0.15rem;
+    }
+
+    .radio-field label,
+    .checkbox-field label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      padding: 0.45rem 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--gray-ink);
+      transition: background 0.15s;
+    }
+
+    .radio-field label:hover,
+    .checkbox-field label:hover {
+      background: var(--green-pale);
+    }
+
+    .radio-field label:has(input:checked),
+    .checkbox-field label:has(input:checked) {
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-weight: 500;
+    }
+
+    .radio-field input[type="radio"],
+    .checkbox-field input[type="checkbox"] {
+      accent-color: var(--green-dark);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── Errors ── */
+    ul.errorlist {
+      list-style: none;
+      color: var(--red-err);
+      font-size: 12px;
+      margin-top: 0.3rem;
+    }
+
+    .alert-error {
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      background: #fee2e2;
+      color: #b91c1c;
+      font-size: 14px;
+      font-weight: 500;
+      border-left: 3px solid #dc2626;
+    }
+
+    /* ── Agreement block ── */
+    .agreement-block {
+      margin-top: 1.75rem;
+      border: 1px solid var(--green-light);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      background: var(--green-pale);
+    }
+
+    .agreement-block>label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 14px;
+      color: var(--gray-ink);
+      cursor: pointer;
+      font-weight: 400;
+      line-height: 1.55;
+    }
+
+    .agreement-block input[type="checkbox"] {
+      accent-color: var(--green-dark);
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── Submit button ── */
+    .submit-btn {
+      width: 100%;
+      margin-top: 1.75rem;
+      padding: 1rem;
+      background: var(--green-dark);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .submit-btn:hover {
+      background: var(--green-mid);
+    }
+
+    .submit-btn:active {
+      transform: scale(0.99);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--green-pale);
+      border-top: 1px solid var(--gray-line);
+      padding: 1.25rem;
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray-mid);
+    }
+
+    footer a {
+      color: var(--green-dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      header {
+        padding: 2rem 1rem 1.5rem;
+      }
+
+      .form-section {
+        padding: 0 0.75rem 2rem;
+      }
+
+      .form-body {
+        padding: 1.25rem;
+      }
+
+      .field-row-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── Motivation section ── */
+    .motivation-section {
+      max-width: 760px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.25rem;
+    }
+
+    .motivation-card {
+      background: var(--green-dark);
+      border-radius: 14px;
+      padding: 2rem 2.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle decorative ring */
+    .motivation-card::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      pointer-events: none;
+    }
+
+    .motivation-intro {
+      font-size: 0.975rem;
+      color: #c8f0e3;
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+    }
+
+    .motivation-intro strong {
+      color: var(--white);
+    }
+
+    .why-title {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #5DCAA5;
+      margin-bottom: 0.9rem;
+    }
+
+    .why-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem 1.5rem;
+    }
+
+    .why-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.55rem;
+      font-size: 0.875rem;
+      color: #ddf4ec;
+      line-height: 1.5;
+    }
+
+    .why-list li svg {
+      flex-shrink: 0;
+      margin-top: 3px;
+      width: 15px;
+      height: 15px;
+      stroke: #5DCAA5;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    @media (max-width: 600px) {
+      .motivation-card {
+        padding: 1.5rem 1.25rem;
+      }
+      .why-list {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a href="{% url 'core:index' %}">
+      <img src="{% static 'frontend/assets/img/zerotohero_logo3.webp' %}" alt="From Zero to Hero Logo"
+        style="max-width: 220px; margin: 0 auto 1.5rem; display: block;" />
+    </a>
+
+    <h1>"From Zero to Hero"<br><span>Volunteer Application</span></h1>
+
+  </header>
+
+  <!-- ── Motivation / Why Volunteer ── -->
+  <div class="motivation-section">
+    <div class="motivation-card">
+      <p class="motivation-intro">
+        We are currently recruiting <strong>passionate industry professionals</strong> to join us as volunteers
+        in the second cohort of the <strong>From Zero to Hero Python Mentorship Program</strong>.
+        This is a unique opportunity to give back by mentoring the next generation of African Python developers.
+      </p>
+
+      <p class="why-title">Why you should volunteer</p>
+
+      <ul class="why-list">
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Make a real impact by mentoring underrepresented talents across Africa.
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Gain leadership &amp; mentoring experience valued by top tech companies.
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Expand your professional network with industry experts and 200+ ambitious mentees.
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Receive public recognition — certificates, LinkedIn features, and shout-outs.
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Access to a strong talent pipeline for future hiring or collaboration.
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Join a growing movement building the future of tech in Africa.
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="form-section">
+    <span class="form-label">Complete the form below to apply — fields marked * are required</span>
+    <div class="form-wrapper">
+
+      <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Submitting your application…</p>
+      </div>
+
+      <form method="post" action="{% url 'core:volunteer_application_form' %}" class="form-body" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="alert-error">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        {% if form.errors and not form.non_field_errors %}
+        <div class="alert-error">Please correct the errors highlighted below.</div>
+        {% endif %}
+
+        <!-- ── Section 1: Personal Information ── -->
+        <p class="section-title">Personal Information</p>
+
+        <div class="form-group">
+          <label for="{{ form.full_name.id_for_label }}">Full Name *</label>
+          {{ form.full_name }}
+          <span class="field-hint">Please provide your full name as you'd like it to appear on your certificate.</span>
+          {{ form.full_name.errors }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.email.id_for_label }}">Email Address *</label>
+          {{ form.email }}
+          <span class="field-hint">We'll use this email to contact you about your application and program updates.</span>
+          {{ form.email.errors }}
+        </div>
+
+        <div class="field-row-2">
+          <div class="form-group">
+            <label for="{{ form.phone_number.id_for_label }}">Phone Number / WhatsApp *</label>
+            {{ form.phone_number }}
+            <span class="field-hint">Include your country code (e.g. +234).</span>
+            {{ form.phone_number.errors }}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.country.id_for_label }}">Country of Residence *</label>
+            {{ form.country }}
+            <span class="field-hint">Helps us understand your time zone for scheduling.</span>
+            {{ form.country.errors }}
+          </div>
+        </div>
+        
+        <div class="field-row-2">
+          <div class="form-group">
+            <label for="{{ form.linkedin_profile.id_for_label }}">LinkedIn Profile *</label>
+            {{ form.linkedin_profile }}
+            {{ form.linkedin_profile.errors }}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.github_profile.id_for_label }}">GitHub / Portfolio Link</label>
+            {{ form.github_profile }}
+            {{ form.github_profile.errors }}
+          </div>
+        </div>
+
+        <!-- ── Section 2: Role Interest ── -->
+        <p class="section-title">Role Interest</p>
+
+        <div class="form-group">
+          <label>Position You Want to Volunteer For *</label>
+          <div class="radio-field">{{ form.role_interest }}</div>
+          {{ form.role_interest.errors }}
+        </div>
+
+        <div class="form-group" id="role-other-field" style="display:none;">
+          <label for="{{ form.role_other.id_for_label }}">Please specify *</label>
+          {{ form.role_other }}
+          {{ form.role_other.errors }}
+        </div>
+
+        <!-- ── Section 3: Professional Background ── -->
+        <p class="section-title">Professional Background</p>
+
+        <div class="field-row-2">
+          <div class="form-group">
+            <label for="{{ form.job_title_company.id_for_label }}">Current Job Title & Company/Organization *</label>
+            {{ form.job_title_company }}
+            {{ form.job_title_company.errors }}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.years_of_experience.id_for_label }}">Years of Professional Experience *</label>
+            {{ form.years_of_experience }}
+            {{ form.years_of_experience.errors }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Areas of Expertise *</label>
+          <span class="field-hint" style="margin-bottom:0.5rem;">Select all that apply.</span>
+          <div class="checkbox-field">{{ form.areas_of_expertise }}</div>
+          {{ form.areas_of_expertise.errors }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.professional_bio.id_for_label }}">Brief Professional Bio *</label>
+          {{ form.professional_bio }}
+          <span class="field-hint">(150–300 words)</span>
+          {{ form.professional_bio.errors }}
+        </div>
+
+        <!-- ── Section 4: Motivation & Commitment ── -->
+        <p class="section-title">Motivation &amp; Commitment</p>
+
+        <div class="form-group">
+          <label for="{{ form.motivation.id_for_label }}">Why do you want to volunteer with the From Zero to Hero Program? *</label>
+          {{ form.motivation }}
+          {{ form.motivation.errors }}
+        </div>
+
+        <div class="form-group">
+          <label>How many hours per week can you realistically commit? *</label>
+          <div class="radio-field">{{ form.hours_per_week }}</div>
+          {{ form.hours_per_week.errors }}
+        </div>
+
+        <div class="form-group">
+          <label>Are you available for evening classes (Mondays, Wednesdays, Saturdays 8:00 PM – 10:00 PM WAT)? *</label>
+          <div class="radio-field">{{ form.evening_availability }}</div>
+          {{ form.evening_availability.errors }}
+        </div>
+
+        <div class="form-group">
+          <label>How long are you willing to commit? *</label>
+          <div class="radio-field">{{ form.commitment_length }}</div>
+          {{ form.commitment_length.errors }}
+        </div>
+
+        <!-- ── Section 5: Additional Information ── -->
+        <p class="section-title">Additional Information</p>
+
+        <div class="form-group">
+          <label for="{{ form.cv_resume.id_for_label }}">Upload CV / Resume (PDF)</label>
+          {{ form.cv_resume }}
+          <span class="field-hint">Optional. PDF only, max 10 MB.</span>
+          {{ form.cv_resume.errors }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.additional_comments.id_for_label }}">Any questions or additional comments?</label>
+          {{ form.additional_comments }}
+          {{ form.additional_comments.errors }}
+        </div>
+
+        {% if not debug %}
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <div class="g-recaptcha mb-3" data-sitekey="{{ RECAPTCHA_SITE_KEY }}"></div>
+        {% endif %}
+
+        <button type="submit" id="submitBtn" class="submit-btn">Submit Application</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    Questions? Contact us at <a href="tel:+2348115897450">+234 811 589 7450</a>
+  </footer>
+
+  <script>
+    // ── Conditional field visibility ──────────────────────────────────────
+    function bindConditional(radioName, targetId, triggerValue) {
+      var target = document.getElementById(targetId);
+      var radios = document.querySelectorAll('input[name="' + radioName + '"]');
+
+      function update() {
+        var checked = document.querySelector('input[name="' + radioName + '"]:checked');
+        target.style.display = (checked && checked.value === triggerValue) ? 'block' : 'none';
+      }
+
+      radios.forEach(function (r) { r.addEventListener('change', update); });
+      update(); // set correct state on page load (handles form re-render with errors)
+    }
+
+    bindConditional('role_interest', 'role-other-field', 'other');
+
+    // ── Loading overlay — only fires after browser validates the form ─────
+    document.querySelector('form').addEventListener('submit', function () {
+      document.getElementById('loadingOverlay').classList.add('active');
+    });
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+Hi {{ full_name }},
+
+Thank you for your application to volunteer as a {{ role_interest }} with the Zero to Hero Program!
+
+We loved your application and would like to invite you to a short introductory interview. This is a chance for us to get to know you better, discuss the role, and answer any questions you might have.
+
+Please book a time that works for you using our scheduling link:
+{{ booking_link }}
+
+If none of the available times work, please reply to this email to make alternative arrangements.
+
+We look forward to speaking with you!
+
+Best regards,
+The Zero to Hero Team

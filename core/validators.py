@@ -4,6 +4,7 @@ Enforces extension, content-type, and size limits on all uploaded files.
 """
 from django.core.exceptions import ValidationError
 import filetype
+import mutagen
 
 ALLOWED_IMAGE_EXTENSIONS = {'jpg', 'jpeg', 'png', 'webp', 'gif'}
 ALLOWED_IMAGE_CONTENT_TYPES = {
@@ -11,11 +12,16 @@ ALLOWED_IMAGE_CONTENT_TYPES = {
 }
 MAX_IMAGE_SIZE = 5 * 1024 * 1024   # 5 MB
 
+ALLOWED_PDF_EXTENSIONS = {'pdf'}
+ALLOWED_PDF_CONTENT_TYPES = {'application/pdf'}
+MAX_PDF_SIZE = 10 * 1024 * 1024  # 10 MB
+PDF_MAGIC_BYTES = b'%PDF'
+
 ALLOWED_VIDEO_EXTENSIONS = {'mp4', 'webm', 'ogg', 'mov'}
 ALLOWED_VIDEO_CONTENT_TYPES = {
     'video/mp4', 'video/webm', 'video/ogg', 'video/quicktime',
 }
-MAX_VIDEO_SIZE = 50 * 1024 * 1024  # 50 MB
+MAX_VIDEO_SIZE = 150 * 1024 * 1024  # 150 MB
 
 
 def validate_image_upload(file):
@@ -56,7 +62,7 @@ def validate_video_upload(file):
 
     if file.size > MAX_VIDEO_SIZE:
         raise ValidationError(
-            f"Video file must be under 50MB. Current size: {file.size / (1024 * 1024):.1f}MB"
+            f"Video file must be under 150MB. Current size: {file.size / (1024 * 1024):.1f}MB"
         )
 
     ext = file.name.rsplit('.', 1)[-1].lower() if '.' in file.name else ''
@@ -73,6 +79,48 @@ def validate_video_upload(file):
     file.seek(0)
     kind = filetype.guess(file.read(2048))
     mime = kind.mime if kind else None
-    file.seek(0)
     if mime not in ALLOWED_VIDEO_CONTENT_TYPES:
         raise ValidationError(f"Invalid file content type '{mime}'. Only video files are allowed.")
+        
+    try:
+        file.seek(0)
+        media_info = mutagen.File(file)
+        if media_info and media_info.info and hasattr(media_info.info, 'length'):
+            length = media_info.info.length
+            if length > 120:
+                raise ValidationError(f"Video cannot exceed 2 minutes. Current length: {int(length)}s.")
+    except ValidationError:
+        raise
+    except Exception:
+        pass
+    finally:
+        file.seek(0)
+
+
+def validate_pdf_upload(file):
+    """Validate that an uploaded file is a legitimate PDF within size limits."""
+    if not file:
+        return
+
+    if file.size > MAX_PDF_SIZE:
+        raise ValidationError(
+            f"File size cannot exceed 10MB. Current size: {file.size / (1024 * 1024):.1f}MB"
+        )
+
+    ext = file.name.rsplit('.', 1)[-1].lower() if '.' in file.name else ''
+    if ext not in ALLOWED_PDF_EXTENSIONS:
+        raise ValidationError(
+            f"Unsupported file type '.{ext}'. Only PDF files are allowed."
+        )
+
+    if hasattr(file, 'content_type') and file.content_type not in ALLOWED_PDF_CONTENT_TYPES:
+        raise ValidationError(
+            f"Invalid file content type '{file.content_type}'. Only PDF files are allowed."
+        )
+
+    # Verify magic bytes — a real PDF starts with %PDF
+    file.seek(0)
+    header = file.read(1024)
+    file.seek(0)
+    if not header.startswith(PDF_MAGIC_BYTES):
+        raise ValidationError("The uploaded file is not a valid PDF document.")

@@ -40,6 +40,16 @@
               {% if form.image.errors %}<div class="invalid-feedback d-block">{{ form.image.errors|join:', ' }}</div>{% endif %}
             </div>
             <div class="mb-3">
+              <label class="form-label">LinkedIn URL</label>
+              {{ form.linkedin_url }}
+              {% if form.linkedin_url.errors %}<div class="invalid-feedback d-block">{{ form.linkedin_url.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Twitter/X URL</label>
+              {{ form.twitter_url }}
+              {% if form.twitter_url.errors %}<div class="invalid-feedback d-block">{{ form.twitter_url.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="mb-3">
               <label class="form-label">Rating (1–5)</label>
               {{ form.rating }}
               {% if form.rating.errors %}<div class="invalid-feedback d-block">{{ form.rating.errors|join:', ' }}</div>{% endif %}
@@ -70,6 +80,12 @@
               {{ form.video_file }}
               <div class="form-text">{{ form.video_file.help_text }}</div>
               {% if form.video_file.errors %}<div class="invalid-feedback d-block">{{ form.video_file.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div id="field-video_thumbnail" class="mb-3 d-none">
+              <label class="form-label">Video Thumbnail (Optional)</label>
+              {{ form.video_thumbnail }}
+              <div class="form-text">{{ form.video_thumbnail.help_text }}</div>
+              {% if form.video_thumbnail.errors %}<div class="invalid-feedback d-block">{{ form.video_thumbnail.errors|join:', ' }}</div>{% endif %}
             </div>
 
             <div class="mb-3 form-check">
@@ -142,6 +158,7 @@
     document.getElementById('field-review_text').classList.toggle('d-none', val === 'screenshot' || val === 'video');
     document.getElementById('field-chat_screenshot').classList.toggle('d-none', val !== 'screenshot');
     document.getElementById('field-video_file').classList.toggle('d-none', val !== 'video');
+    document.getElementById('field-video_thumbnail').classList.toggle('d-none', val !== 'video');
   }
 
   sel.addEventListener('change', () => toggle(sel.value));

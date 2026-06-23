@@ -1,5 +1,5 @@
 from django import forms
-from .models import Contact, ContactReply, SiteSettings, MentorshipApplication
+from .models import Contact, ContactReply, SiteSettings, MentorshipApplication, SponsorshipTier, SponsorshipInquiry, VolunteerApplication
 
 class MentorshipApplicationForm(forms.ModelForm):
     # Overridden as a standalone field so we get CheckboxSelectMultiple
@@ -141,6 +141,7 @@ class SiteSettingsForm(forms.ModelForm):
             'instagram_url',
             'linkedin_url',
             'youtube_url',
+            'interview_booking_link',
         ]
 
 
@@ -153,8 +154,6 @@ class ContactReplyForm(forms.ModelForm):
             'body': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Your reply...'}),
         }
 
-
-from .models import SponsorshipTier, SponsorshipInquiry
 
 
 class SponsorshipTierForm(forms.ModelForm):
@@ -203,4 +202,63 @@ class SponsorshipDashboardForm(forms.ModelForm):
             'message': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'status': forms.Select(attrs={'class': 'form-select'}),
             'internal_notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-        }
+        }
+
+
+class VolunteerApplicationForm(forms.ModelForm):
+    areas_of_expertise = forms.MultipleChoiceField(
+        choices=VolunteerApplication.EXPERTISE_CHOICES,
+        widget=forms.CheckboxSelectMultiple(),
+        label='Areas of Expertise',
+        error_messages={'required': 'Please select at least one area of expertise.'},
+    )
+
+    class Meta:
+        model = VolunteerApplication
+        fields = [
+            'full_name', 'email', 'phone_number', 'country',
+            'linkedin_profile', 'github_profile',
+            'role_interest', 'role_other',
+            'job_title_company', 'years_of_experience',
+            'areas_of_expertise', 'professional_bio',
+            'motivation', 'hours_per_week', 'evening_availability', 'commitment_length',
+            'cv_resume', 'additional_comments'
+        ]
+        widgets = {
+            'full_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full Name'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number / WhatsApp'}),
+            'country': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Country of Residence'}),
+            'linkedin_profile': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://linkedin.com/in/...'}),
+            'github_profile': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://github.com/... (Optional)'}),
+            'role_interest': forms.RadioSelect(),
+            'role_other': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Please specify if Other'}),
+            'job_title_company': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Current Job Title & Company/Organization'}),
+            'years_of_experience': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. 5 years'}),
+            'professional_bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Brief Professional Bio (150–300 words)'}),
+            'motivation': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Why do you want to volunteer with the From Zero to Hero Program?'}),
+            'hours_per_week': forms.RadioSelect(),
+            'evening_availability': forms.RadioSelect(),
+            'commitment_length': forms.RadioSelect(),
+            'cv_resume': forms.FileInput(attrs={'class': 'form-control', 'accept': '.pdf'}),
+            'additional_comments': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Any questions or additional comments?'}),
+        }
+
+    def clean(self):
+        cleaned = super().clean()
+
+        # Enforce max length on TextFields (no model-level limit)
+        max_lengths = {
+            'professional_bio': 5000,
+            'motivation': 5000,
+            'additional_comments': 3000,
+        }
+        for field, max_len in max_lengths.items():
+            val = cleaned.get(field, '')
+            if len(val) > max_len:
+                self.add_error(field, f'This field is too long. Maximum {max_len} characters.')
+
+        if cleaned.get('role_interest') == 'other' and not cleaned.get('role_other', '').strip():
+            self.add_error('role_other', 'Please specify your role interest.')
+
+        return cleaned

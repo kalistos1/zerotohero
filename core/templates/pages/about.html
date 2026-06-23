@@ -48,10 +48,11 @@ Python developer through structured cohort mentorship.{% endblock %}
                     <div class="section-header wow fadeInDown" data-wow-duration="1s">
                         <div class="sub-title shape-bg"> About Us <span class="line"></span> </div>
                         {% if about and about.description %}
-                            {{ about.description|safe }}
+                        {{ about.description|safe }}
                         {% else %}
-                            <h2 class="section-title">Growing Stronger Together</h2>
-                            <p>We believe mentorship is more than just teaching code. It’s about complete transformation from beginner to expert and bridging the gap between learning and the job.</p>
+                        <h2 class="section-title">Growing Stronger Together</h2>
+                        <p>We believe mentorship is more than just teaching code. It’s about complete transformation
+                            from beginner to expert and bridging the gap between learning and the job.</p>
                         {% endif %}
                     </div>
 
@@ -162,6 +163,86 @@ Python developer through structured cohort mentorship.{% endblock %}
     <img src="{% static 'frontend/assets/img/bg/mission-img-3.png' %}" alt="img" class="img-fluid img-3">
 </section>
 <!-- End Mission -->
+<!-- Start Service Section -->
+<section class="about-section-two section ">
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-lg-5">
+
+                <!-- Section Header -->
+                <div class="section-header section-header-two text-start">
+                    <h2 class="section-title">A Platform Built for <span class="text-gradient">Your Success</span></h2>
+                    <p class="sub-title">We connect learners with industry leading mentors who provide real-world
+                        guidance, practical insights, and personalised support to help you grow faster.</p>
+                </div>
+                <!-- End Section Header -->
+
+                <div class="about-list">
+                    <div class="about-item-two wow fadeInUp" data-wow-duration="1s"
+                        style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+                        <div class="about-icon">
+                            <img src="{% static 'frontend/assets/img/icon/about-01.svg' %}" alt="icon"
+                                class="img-fluid">
+                        </div>
+                        <div>
+                            <h3 class="custom-title">Expertise</h3>
+                            <p>Access top mentors with years of hands on experience and proven knowledge.</p>
+                        </div>
+                    </div>
+                    <div class="about-item-two about-middle wow fadeInUp" data-wow-duration="1s"
+                        style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+                        <div class="about-icon">
+                            <img src="{% static 'frontend/assets/img/icon/about-02.svg' %}" alt="icon"
+                                class="img-fluid">
+                        </div>
+                        <div>
+                            <h3 class="custom-title">Structured Learning, Built to Success</h3>
+                            <p>Courses are broken into clear sessions and modules, each loaded with video lessons, PDF
+                                guides, and slide resources. Practice exercises follow every session, and real-world
+                                individual and team projects close out every module.</p>
+                        </div>
+                    </div>
+                    <div class="about-item-two wow fadeInUp" data-wow-duration="1s"
+                        style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+                        <div class="about-icon">
+                            <img src="{% static 'frontend/assets/img/icon/about-03.svg' %}" alt="icon"
+                                class="img-fluid">
+                        </div>
+                        <div>
+                            <h3 class="custom-title">Mentorship Without Borders</h3>
+                            <p>A complete 5-month mentorship programme with three live, instructor-led classes every
+                                week. Beyond the classroom, you become part of a thriving mentor-mentee community
+                                spanning Discord, LinkedIn, and WhatsApp — plus local offline communities that connect
+                                you with peers in your city.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-7">
+                <div class="about-image-two wow fadeInUp" data-wow-duration="1s"
+                    style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
+                    <img src="{% static 'frontend/assets/img/about/about-02.jpg' %}" alt="about"
+                        class="img-fluid about-02">
+                    <div class="about-img-01">
+                        <img src="{% static 'frontend/assets/img/about/about-01.jpg' %}" alt="about"
+                            class="img-fluid about-01">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <img src="{% static 'frontend/assets/img/bg/about-bg.png' %}" alt="bg" class="img-fluid about-bg-01">
+
+</section>
+
+<!-- End Service Section -->
 
 <!-- Start team -->
 <section class="team-section-five section pb-0">
@@ -178,7 +259,8 @@ Python developer through structured cohort mentorship.{% endblock %}
             {% for member in team_members %}
             <!-- Dynamic Item -->
             <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                <div class="team-item-five">
+                <div class="team-item-five" style="cursor: pointer;" data-bs-toggle="modal"
+                    data-bs-target="#teamModal{{ member.pk }}">
                     <div class="team-overlay">
                         <div class="team-img">
                             {% if member.image %}
@@ -211,6 +293,51 @@ Python developer through structured cohort mentorship.{% endblock %}
                     </div>
                 </div>
             </div>
+
+
+
+            <!-- Team Member Modal -->
+            <div class="modal fade" id="teamModal{{ member.pk }}" tabindex="-1"
+                aria-labelledby="teamModalLabel{{ member.pk }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header border-0 pb-0">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center pt-0 pb-5 px-4">
+                            {% if member.image %}
+                            <img src="{{ member.image.url }}" alt="{{ member.name }}" class="rounded-circle mb-3 shadow"
+                                style="width: 150px; height: 150px; object-fit: cover;">
+                            {% else %}
+                            <img src="{% static 'frontend/assets/img/teams/team-img-1.jpg' %}" alt="{{ member.name }}"
+                                class="rounded-circle mb-3 shadow"
+                                style="width: 150px; height: 150px; object-fit: cover;">
+                            {% endif %}
+                            <h3 class="mb-1">{{ member.name }}</h3>
+                            <p class="text-primary fw-bold mb-3">{{ member.role }}</p>
+
+                            {% if member.bio %}
+                            <div class="text-start text-muted mb-4 px-md-4">
+                                {{ member.bio|linebreaks }}
+                            </div>
+                            {% endif %}
+
+                            <div class="social-icon d-flex justify-content-center gap-3">
+                                {% if member.linkedin_url %}
+                                <a href="{{ member.linkedin_url }}" target="_blank"
+                                    class="btn btn-outline-primary rounded-circle d-flex align-items-center justify-content-center"
+                                    style="width: 40px; height: 40px;"><i class="fa-brands fa-linkedin-in"></i></a>
+                                {% endif %}
+                                {% if member.twitter_url %}
+                                <a href="{{ member.twitter_url }}" target="_blank"
+                                    class="btn btn-outline-dark rounded-circle d-flex align-items-center justify-content-center"
+                                    style="width: 40px; height: 40px;"><i class="fa-brands fa-x-twitter"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
             {% endif %}
         </div>
@@ -221,50 +348,7 @@ Python developer through structured cohort mentorship.{% endblock %}
 <!-- End team -->
 
 
-<!-- Start Faq Section -->
-<section class="testimonial-section testimonial-section-five section">
-    <div class="container">
 
-        <div class="section-header text-center wow fadeInDown" data-wow-duration="1s">
-            <h2 class="section-title">Testimonials</h2>
-            <p>A passionate team of mentors, designers, and innovators committed to creating real human impact.</p>
-        </div>
-
-        {% if testimonials %}
-        <div class="testimonial-five-slider">
-            {% for t in testimonials %}
-            <div class="testimonial-item-five">
-                <div class="testimonial-content">
-                    <div class="description">
-                        {{ t.review_text|safe }}
-                    </div>
-                    <img src="{% static 'frontend/assets/img/icon/qutation-icon-1.svg' %}" alt="quatation"
-                        class="img-fluid img-1">
-                </div>
-                <div class="testimonial-author">
-                    <a href="javascript:void(0);" class="author-name">{{ t.name }}</a>
-                    <p>{{ t.role }}</p>
-                    <div class="review-star">
-                        {% for _ in t.get_rating_range %}
-                        <i class="fas fa-star"></i>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% if t.image %}
-                <img src="{{ t.image.url }}" alt="testimonial"
-                    class="img-fluid img-2" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
-                {% else %}
-                <img src="{% static 'frontend/assets/img/teams/testimonial-img-1.png' %}" alt="testimonial"
-                    class="img-fluid img-2">
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-    </div>
-</section>
-<!-- Start Faq Section -->
 
 
 {% endblock %}

@@ -8,19 +8,19 @@ from django.shortcuts import redirect, render
 from django.views.decorators.csrf import requires_csrf_token
 from django_ratelimit.decorators import ratelimit
 
-from .forms import ContactForm, MentorshipApplicationForm
+from .forms import ContactForm, MentorshipApplicationForm, SponsorshipInquiryForm, VolunteerApplicationForm
 from .utils import verify_recaptcha
-from .models import FAQ, AboutPage, Event, SiteSettings, Testimonial, TeamMember
+from .models import FAQ, AboutPage, Event, SiteSettings, SponsorshipTier, Testimonial, TeamMember
 from blog.models import Post
 
 logger = logging.getLogger(__name__)
 
 
 def index(request, slug=None):
-    team_members = TeamMember.objects.filter(is_active=True).order_by('created_at')
+    team_members = TeamMember.objects.filter(is_active=True).order_by('created_at')[:4]
     testimonials = Testimonial.objects.filter(is_active=True).only(
         'name', 'role', 'image', 'rating', 'review_text', 'media_type', 'chat_screenshot', 'video_file'
-    ).order_by('-created_at')
+    ).order_by('-created_at')[:4]
     latest_posts = Post.objects.filter(status="PUBLISHED").only(
         'title', 'slug', 'image', 'thumbnail', 'body', 'date_created'
     ).order_by('-date_created')[:4]
@@ -31,6 +31,17 @@ def index(request, slug=None):
         'latest_posts': latest_posts,
     }
     return render(request, 'pages/index.html', context)
+
+
+def team(request, slug=None):
+    team_members = TeamMember.objects.filter(is_active=True).order_by('created_at')
+
+    context = {
+        'team_members': team_members,
+      
+    }
+    return render(request, 'pages/team.html', context)
+
 
 
 def about_us(request):
@@ -209,9 +220,6 @@ def csrf_failure(request, reason=""):
     }, status=403)
 
 
-from .forms import SponsorshipInquiryForm
-from .models import SponsorshipTier
-
 
 def sponsorship_landing(request):
     tiers = SponsorshipTier.objects.all()
@@ -245,3 +253,41 @@ def sponsorship_apply(request):
         form = SponsorshipInquiryForm(initial=initial_data)
     
     return render(request, 'core/sponsorship.html', {'form': form})
+
+
+@ratelimit(key='ip', rate='5/m', method='POST', block=True)
+def volunteer_application_form(request):
+    if request.method == "POST":
+        form = VolunteerApplicationForm(request.POST, request.FILES)
+        is_valid = form.is_valid()
+
+        ip = request.META.get('REMOTE_ADDR', '') or ''
+        recaptcha_token = request.POST.get('g-recaptcha-response', '')
+        if not settings.DEBUG and not verify_recaptcha(recaptcha_token, ip):
+            form.add_error(None, 'reCAPTCHA verification failed. Please try again.')
+            is_valid = False
+
+        if is_valid:
+            try:
+                form.save()
+            except IntegrityError:
+                form.add_error('email', 'An application with this email address has already been submitted.')
+                return render(request, 'application_form/volunteer.html', {'form': form})
+                
+            request.session['volunteer_application_submitted'] = True
+            messages.success(request, 'Your volunteer application has been submitted successfully!')
+            return redirect('core:volunteer_application_thank_you')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = VolunteerApplicationForm()
+        
+    return render(request, 'application_form/volunteer.html', {'form': form})
+
+
+def volunteer_application_thank_you(request):
+    if not request.session.pop('volunteer_application_submitted', False):
+        return redirect('core:volunteer_application_form')
+        
+    share_url = request.build_absolute_uri('/volunteer/apply/')
+    return render(request, 'application_form/volunteer_thankyou.html', {'share_url': share_url})

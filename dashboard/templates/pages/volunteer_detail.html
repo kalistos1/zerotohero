@@ -1,0 +1,202 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Review Volunteer Application — Zero to Hero{% endblock %}
+{% block page_title %}Review Volunteer: {{ app.full_name }}{% endblock %}
+{% block content %}
+<div class="container-xxl">
+  <div class="mb-3">
+    <a href="{% url 'dashboard:volunteer-list' %}" class="btn btn-sm btn-outline-secondary">
+      <i class="bx bx-arrow-back me-1"></i> Back to List
+    </a>
+  </div>
+
+  {% if messages %}{% for m in messages %}
+  <div class="alert alert-{{ m.tags }} alert-dismissible fade show">{{ m }}<button class="btn-close" data-bs-dismiss="alert"></button></div>
+  {% endfor %}{% endif %}
+
+  <div class="row g-4">
+    {# ── Left Column: Application Details ── #}
+    <div class="col-lg-8">
+      <div class="card mb-4">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Applicant Information</h5>
+          {% if app.cv_resume %}
+          <a href="{{ app.cv_resume.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+            <iconify-icon icon="solar:document-text-bold-duotone" class="me-1"></iconify-icon> View CV / Resume
+          </a>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-sm-4 text-muted">Full Name</div>
+            <div class="col-sm-8 fw-bold">{{ app.full_name }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-sm-4 text-muted">Email</div>
+            <div class="col-sm-8"><a href="mailto:{{ app.email }}">{{ app.email }}</a></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-sm-4 text-muted">Phone Number</div>
+            <div class="col-sm-8">{{ app.phone_number }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-sm-4 text-muted">Location</div>
+            <div class="col-sm-8">{{ app.country }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-sm-4 text-muted">LinkedIn Profile</div>
+            <div class="col-sm-8"><a href="{{ app.linkedin_profile }}" target="_blank">{{ app.linkedin_profile }}</a></div>
+          </div>
+          {% if app.github_profile %}
+          <div class="row mb-3">
+            <div class="col-sm-4 text-muted">GitHub / Portfolio</div>
+            <div class="col-sm-8"><a href="{{ app.github_profile }}" target="_blank">{{ app.github_profile }}</a></div>
+          </div>
+          {% endif %}
+          <hr>
+          <div class="row mb-3">
+            <div class="col-sm-4 text-muted">Role Interest</div>
+            <div class="col-sm-8 fw-bold">
+              {{ app.get_role_interest_display }}
+              {% if app.role_other %} - {{ app.role_other }}{% endif %}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-sm-4 text-muted">Current Job Title</div>
+            <div class="col-sm-8">{{ app.job_title_company }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-sm-4 text-muted">Years of Experience</div>
+            <div class="col-sm-8">{{ app.years_of_experience }}</div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-sm-4 text-muted">Areas of Expertise</div>
+            <div class="col-sm-8">
+              {% for exp in app.get_expertise_list %}
+                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle me-1 mb-1">{{ exp }}</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header bg-light"><h5 class="card-title mb-0">Detailed Responses</h5></div>
+        <div class="card-body">
+          
+          <h6 class="text-muted mb-2">Professional Bio</h6>
+          <p class="bg-light p-3 rounded">{{ app.professional_bio|linebreaksbr }}</p>
+
+          <h6 class="text-muted mt-4 mb-2">Motivation to Volunteer</h6>
+          <p class="bg-light p-3 rounded">{{ app.motivation|linebreaksbr }}</p>
+
+          <h6 class="text-muted mt-4 mb-2">Additional Comments</h6>
+          <p class="bg-light p-3 rounded">{{ app.additional_comments|default:"None provided."|linebreaksbr }}</p>
+
+          <hr class="my-4">
+          
+          <div class="row text-sm">
+            <div class="col-md-4 mb-3">
+              <strong>Hours per week:</strong><br>{{ app.get_hours_per_week_display }}
+            </div>
+            <div class="col-md-4 mb-3">
+              <strong>Evening Availability:</strong><br>{{ app.get_evening_availability_display }}
+            </div>
+            <div class="col-md-4 mb-3">
+              <strong>Commitment Length:</strong><br>{{ app.get_commitment_length_display }}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    {# ── Right Column: Admin Panel ── #}
+    <div class="col-lg-4">
+      <div class="card border-primary mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="card-title text-white mb-0">Admin Review Panel</h5>
+        </div>
+        <div class="card-body">
+          <form method="post" action="{% url 'dashboard:volunteer-detail' app.pk %}">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+              <label class="form-label fw-bold">Pipeline Status</label>
+              <select name="status" class="form-select">
+                <option value="pending" {% if app.status == 'pending' %}selected{% endif %}>Pending</option>
+                <option value="under_review" {% if app.status == 'under_review' %}selected{% endif %}>Under Review</option>
+                <option value="interview" {% if app.status == 'interview' %}selected{% endif %}>Interviewing</option>
+                <option value="accepted" {% if app.status == 'accepted' %}selected{% endif %}>Accepted</option>
+                <option value="waitlisted" {% if app.status == 'waitlisted' %}selected{% endif %}>Waitlisted</option>
+                <option value="rejected" {% if app.status == 'rejected' %}selected{% endif %}>Rejected</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">Internal Score (1-5)</label>
+              <select name="internal_score" class="form-select">
+                <option value="0" {% if app.internal_score == 0 %}selected{% endif %}>Not Rated</option>
+                <option value="1" {% if app.internal_score == 1 %}selected{% endif %}>1 - Poor</option>
+                <option value="2" {% if app.internal_score == 2 %}selected{% endif %}>2 - Below Average</option>
+                <option value="3" {% if app.internal_score == 3 %}selected{% endif %}>3 - Average</option>
+                <option value="4" {% if app.internal_score == 4 %}selected{% endif %}>4 - Good</option>
+                <option value="5" {% if app.internal_score == 5 %}selected{% endif %}>5 - Excellent</option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-bold">Admin Notes</label>
+              <textarea name="admin_notes" class="form-control" rows="6" placeholder="Private internal notes... Only visible to admins.">{{ app.admin_notes }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Save Review</button>
+          </form>
+
+          <hr class="my-4">
+          <h6 class="mb-3 text-muted">Email Notifications</h6>
+          <div class="d-grid gap-2">
+            <form method="post" action="{% url 'dashboard:volunteer-send-email' app.pk 'interview' %}" onsubmit="return confirm('Are you sure you want to send the Interview email to {{ app.email }}?');">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-warning w-100 text-start text-dark">
+                <iconify-icon icon="solar:calendar-date-bold-duotone" class="me-2 align-middle"></iconify-icon> Send Interview Email
+              </button>
+            </form>
+            <form method="post" action="{% url 'dashboard:volunteer-send-email' app.pk 'accepted' %}" onsubmit="return confirm('Are you sure you want to send the Acceptance email to {{ app.email }}? This cannot be undone.');">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-success w-100 text-start">
+                <iconify-icon icon="solar:letter-opened-bold-duotone" class="me-2 align-middle"></iconify-icon> Send Acceptance Email
+              </button>
+            </form>
+            <form method="post" action="{% url 'dashboard:volunteer-send-email' app.pk 'rejected' %}" onsubmit="return confirm('Are you sure you want to send the Rejection email to {{ app.email }}? This cannot be undone.');">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-danger w-100 text-start">
+                <iconify-icon icon="solar:letter-opened-bold-duotone" class="me-2 align-middle"></iconify-icon> Send Rejection Email
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+      
+      {% if app.status == 'accepted' %}
+      <div class="card border-success">
+        <div class="card-header bg-success text-white">
+          <h5 class="card-title text-white mb-0">Team Management</h5>
+        </div>
+        <div class="card-body">
+          <p class="small text-muted">This applicant has been accepted. You can quickly add them to the public Team page.</p>
+          <form method="post" action="{% url 'dashboard:volunteer-convert-to-team' app.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success w-100">
+              <iconify-icon icon="solar:user-plus-bold-duotone" class="me-1 align-middle"></iconify-icon> Add to Team Page
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+      
+    </div>
+
+  </div>
+</div>
+{% endblock %}

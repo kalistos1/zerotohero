@@ -20,7 +20,7 @@
   <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:about-page' %}">
     {% csrf_token %}
     <div class="row g-3">
-      <div class="col-lg-8">
+      <div class="col-lg-12">
         <div class="card">
           <div class="card-header"><h5 class="card-title mb-0">Hero Section</h5></div>
           <div class="card-body row g-3">
@@ -46,52 +46,6 @@
             <div class="col-md-6">
               <label class="form-label">Image 2</label>
               {{ form.image_2 }}
-            </div>
-          </div>
-        </div>
-
-        <div class="card mt-3">
-          <div class="card-header"><h5 class="card-title mb-0">Highlights</h5></div>
-          <div class="card-body row g-3">
-            <div class="col-md-6">
-              <label class="form-label">Highlight 1 Title</label>
-              {{ form.highlight_1_title }}
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Highlight 1 Description</label>
-              {{ form.highlight_1_description }}
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Highlight 2 Title</label>
-              {{ form.highlight_2_title }}
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Highlight 2 Description</label>
-              {{ form.highlight_2_description }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4">
-        <div class="card">
-          <div class="card-header"><h5 class="card-title mb-0">CEO / Leadership</h5></div>
-          <div class="card-body">
-            <div class="mb-3">
-              <label class="form-label">CEO Name</label>
-              {{ form.ceo_name }}
-            </div>
-            <div class="mb-3">
-              <label class="form-label">CEO Title</label>
-              {{ form.ceo_title }}
-            </div>
-            <div class="mb-3">
-              <label class="form-label">CEO Photo</label>
-              {{ form.ceo_image }}
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Signature Image</label>
-              {{ form.signature_image }}
             </div>
           </div>
         </div>

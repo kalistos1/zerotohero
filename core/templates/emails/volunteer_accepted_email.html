@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #4CAF50; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
+        .content { padding: 20px; background-color: #f9f9f9; border: 1px solid #ddd; border-top: none; }
+        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #777; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Welcome to the Team!</h2>
+        </div>
+        <div class="content">
+            <p>Hi {{ full_name }},</p>
+            <p>Congratulations! We are thrilled to offer you a volunteer position as a <strong>{{ role_interest }}</strong> with the Zero to Hero Mentorship Program.</p>
+            <p>Your application stood out, and we believe your skills and passion will make a significant impact on our mentees and the broader community.</p>
+            <p><strong>Next Steps:</strong></p>
+            <p>We will be hosting an onboarding session soon. Keep an eye on your inbox for an invitation with the date and time.</p>
+            <p>If you have any immediate questions, please reply to this email. We can't wait to start working with you!</p>
+            <p>Best regards,<br>The Zero to Hero Team</p>
+        </div>
+        <div class="footer">
+            <p>You received this email because you applied to volunteer with the Zero to Hero Program.</p>
+        </div>
+    </div>
+</body>
+</html>

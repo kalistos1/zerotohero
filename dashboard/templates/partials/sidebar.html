@@ -173,10 +173,26 @@
                </li>
 
                <li class="nav-item">
+                    <a class="nav-link {% if 'team' in request.resolver_match.url_name %}active{% endif %}"
+                       href="{% url 'dashboard:team-list' %}">
+                         <span class="nav-icon"><iconify-icon icon="solar:users-group-rounded-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">Team Members</span>
+                    </a>
+               </li>
+
+               <li class="nav-item">
                     <a class="nav-link {% if 'mentorship' in request.resolver_match.url_name %}active{% endif %}"
                        href="{% url 'dashboard:mentorship-list' %}">
                          <span class="nav-icon"><iconify-icon icon="solar:star-fall-minimalistic-bold-duotone"></iconify-icon></span>
                          <span class="nav-text">Mentorship Apps</span>
+                    </a>
+               </li>
+
+               <li class="nav-item">
+                    <a class="nav-link {% if 'volunteer' in request.resolver_match.url_name %}active{% endif %}"
+                       href="{% url 'dashboard:volunteer-list' %}">
+                         <span class="nav-icon"><iconify-icon icon="solar:users-group-two-rounded-bold-duotone"></iconify-icon></span>
+                         <span class="nav-text">Volunteers</span>
                     </a>
                </li>
 

@@ -12,6 +12,7 @@ from .models import (
     Testimonial,
     TeamMember,
     MentorshipApplication,
+    VolunteerApplication,
 )
 
 @admin.register(MentorshipApplication)
@@ -106,7 +107,7 @@ class GalleryAdmin(admin.ModelAdmin):
 
 @admin.register(AboutPage)
 class AboutPageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'subtitle', 'ceo_name', 'updated_at')
+    list_display = ('title', 'subtitle', 'updated_at')
     readonly_fields = ('updated_at',)
 
     def has_add_permission(self, request):
@@ -148,3 +149,17 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         if SiteSettings.objects.exists():
             return False
         return super().has_add_permission(request)
+
+
+@admin.register(VolunteerApplication)
+class VolunteerApplicationAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'email', 'role_interest', 'country', 'status', 'display_expertise', 'created_at')
+    list_filter = ('role_interest', 'status', 'hours_per_week', 'evening_availability', 'commitment_length', 'created_at')
+    search_fields = ('full_name', 'email', 'phone_number', 'country', 'job_title_company')
+    readonly_fields = ('created_at',)
+    list_editable = ('status',)
+
+    def display_expertise(self, obj):
+        return ', '.join(obj.get_expertise_list())
+    display_expertise.short_description = 'Expertise'
+
